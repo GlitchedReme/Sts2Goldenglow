@@ -1,0 +1,14 @@
+[remap]
+
+importer="spine.skel"
+type="SpineSkeletonFileResource"
+uid="uid://chpnj6h5o8uvk"
+path="res://.godot/imported/char_377_gdglow_sanrio_1.skel-c1d8ec8b2b42c7a2c5aa90f9dece2599.spskel"
+
+[deps]
+
+source_file="res://Goldenglow/image/character/char_377_gdglow_sanrio_1.skel"
+dest_files=["res://.godot/imported/char_377_gdglow_sanrio_1.skel-c1d8ec8b2b42c7a2c5aa90f9dece2599.spskel"]
+
+[params]
+

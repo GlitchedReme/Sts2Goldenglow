@@ -1,0 +1,22 @@
+# Local machine paths (copy from local.props.template)
+local.props
+
+# Godot 4+ specific ignores
+.godot/
+/android/
+
+# IDE specific ignores
+.vscode/
+.idea/
+.zed/
+.cursor/
+.claude/
+.opencode/
+.atomcode/
+
+# C# specific ignores
+bin/
+obj/
+
+# Nonproject
+vfx_data/

@@ -1,0 +1,16 @@
+[remap]
+
+importer="spine.atlas"
+type="SpineAtlasResource"
+uid="uid://brl1705rqw52n"
+path="res://.godot/imported/char_377_gdglow.atlas-817ad2d1b49abf8ede36420052b5aeab.spatlas"
+
+[deps]
+
+source_file="res://Goldenglow/image/character/char_377_gdglow.atlas"
+dest_files=["res://.godot/imported/char_377_gdglow.atlas-817ad2d1b49abf8ede36420052b5aeab.spatlas"]
+
+[params]
+
+normal_map_prefix="n"
+specular_map_prefix="s"

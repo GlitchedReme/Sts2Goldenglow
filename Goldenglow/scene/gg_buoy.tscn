@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://dc8tpyo4k3fy4"]
+
+[ext_resource type="Texture2D" uid="uid://28hyx4dl5byg" path="res://Goldenglow/image/orb/buoy_default.png" id="1_c45v2"]
+[ext_resource type="Script" uid="uid://damrwanrnfcwk" path="res://GoldenglowScripts/Orb/NBuoyOrb.cs" id="1_q05sn"]
+
+[node name="BuoyOrb" type="Node2D"]
+
+[node name="Buoy" type="Sprite2D" parent="."]
+scale = Vector2(0.8125, 0.8125)
+texture = ExtResource("1_c45v2")
+script = ExtResource("1_q05sn")
+
+[node name="SpineSkeleton" type="SpineSprite" parent="."]

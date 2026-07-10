@@ -1,0 +1,14 @@
+[remap]
+
+importer="spine.skel"
+type="SpineSkeletonFileResource"
+uid="uid://dfrekavyf2lxb"
+path="res://.godot/imported/build_char_377_gdglow.skel-9962be23e7b727fc8f5ff47924c19251.spskel"
+
+[deps]
+
+source_file="res://Goldenglow/image/character/build_char_377_gdglow.skel"
+dest_files=["res://.godot/imported/build_char_377_gdglow.skel-9962be23e7b727fc8f5ff47924c19251.spskel"]
+
+[params]
+

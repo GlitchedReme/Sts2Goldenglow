@@ -1,0 +1,10 @@
+{
+  "GOLDENGLOW_KEYWORD_ATTRACT.description": "将弃牌堆顶的牌加入手中。",
+  "GOLDENGLOW_KEYWORD_ATTRACT.title": "吸引",
+  "GOLDENGLOW_KEYWORD_PULSE.description": "对随机敌人造成伤害，本场对战所有[gold]脉冲[/gold]的伤害提高1点。",
+  "GOLDENGLOW_KEYWORD_PULSE.title": "脉冲",
+  "GOLDENGLOW_KEYWORD_STATIC.description": "打出后叠加一次额外效果。回合开始时重置。",
+  "GOLDENGLOW_KEYWORD_STATIC.title": "静电",
+  "GOLDENGLOW_KEYWORD_TRANSFER.description": "如果目标是玩家，则将其最左侧的充能球交给随机敌人，否则将其交给自己。",
+  "GOLDENGLOW_KEYWORD_TRANSFER.title": "转移"
+}

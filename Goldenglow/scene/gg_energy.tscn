@@ -1,0 +1,569 @@
+[gd_scene load_steps=31 format=3 uid="uid://doslxbt5bkslr"]
+
+[ext_resource type="Texture2D" uid="uid://c4olr455dy86w" path="res://Goldenglow/image/character/layer6.png" id="1_1ex18"]
+[ext_resource type="Texture2D" uid="uid://4lvnjxye0rkq" path="res://Goldenglow/image/vfx/common_glow.png" id="1_24wqq"]
+[ext_resource type="Texture2D" uid="uid://g75uwkyelv3" path="res://Goldenglow/image/vfx/common_glow_speck.png" id="2_yqqp2"]
+[ext_resource type="Shader" uid="uid://bewom3mv4bb05" path="res://Goldenglow/shader/flipbook.gdshader" id="3_kr5ew"]
+[ext_resource type="Texture2D" uid="uid://dhx0weqxim5yu" path="res://Goldenglow/image/vfx/lightning_flipbook_1.png" id="4_5i2af"]
+[ext_resource type="Texture2D" uid="uid://b1b1b5kek4a0t" path="res://Goldenglow/image/vfx/lightning_flipbook_2.png" id="5_5i2af"]
+
+[sub_resource type="Shader" id="Shader_iifnb"]
+code = "shader_type canvas_item;
+render_mode blend_mix;
+
+uniform vec2 pivot_offset = vec2(0.0, 0.0);
+
+uniform sampler2D lut;
+
+varying vec4 vertex_color;
+
+void vertex() {
+	vertex_color = COLOR;
+	VERTEX += pivot_offset * (1.0/TEXTURE_PIXEL_SIZE);
+}
+
+void fragment() {
+	vec4 grayscale = texture(TEXTURE, UV);
+
+	vec4 lut_tex = texture(lut, vec2(grayscale.r));
+	vec4 color_sub = lut_tex * vertex_color;
+
+	COLOR = vec4(color_sub.rgb, vertex_color.a * grayscale.r);
+}
+"
+
+[sub_resource type="Gradient" id="Gradient_yqqp2"]
+offsets = PackedFloat32Array(1)
+colors = PackedColorArray(1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_etunt"]
+gradient = SubResource("Gradient_yqqp2")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kr5ew"]
+shader = SubResource("Shader_iifnb")
+shader_parameter/pivot_offset = Vector2(0, 0)
+shader_parameter/lut = SubResource("GradientTexture1D_etunt")
+
+[sub_resource type="Curve" id="Curve_5i2af"]
+_data = [Vector2(0, 0.24455202), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_yqqp2"]
+curve = SubResource("Curve_5i2af")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_etunt"]
+particle_flag_disable_z = true
+gravity = Vector3(0, 0, 0)
+scale_min = 3.5
+scale_max = 3.5
+alpha_curve = SubResource("CurveTexture_yqqp2")
+
+[sub_resource type="Shader" id="Shader_etunt"]
+code = "shader_type canvas_item;
+render_mode blend_mix;
+
+uniform vec2 pivot_offset = vec2(0.0, 0.0);
+
+uniform sampler2D lut;
+
+varying vec4 vertex_color;
+
+void vertex() {
+	vertex_color = COLOR;
+	VERTEX += pivot_offset * (1.0/TEXTURE_PIXEL_SIZE);
+}
+
+void fragment() {
+	vec4 grayscale = texture(TEXTURE, UV);
+
+	vec4 lut_tex = texture(lut, vec2(grayscale.r));
+	vec4 color_sub = lut_tex * vertex_color;
+
+	COLOR = vec4(color_sub.rgb, vertex_color.a * grayscale.r);
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_20nmi"]
+shader = SubResource("Shader_etunt")
+shader_parameter/pivot_offset = Vector2(0, 0)
+
+[sub_resource type="Curve" id="Curve_yqqp2"]
+_data = [Vector2(0, 0.72457623), 0.0, 0.0, 0, 0, Vector2(0.50437313, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.7324455), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_etunt"]
+curve = SubResource("Curve_yqqp2")
+
+[sub_resource type="Curve" id="Curve_ur0v1"]
+_limits = [0.0, 3.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.025423765), -3.1144085, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_20nmi"]
+_limits = [0.0, 5.0, 0.0, 1.0]
+_data = [Vector2(0, 0.9866829), 0.0, 0.0, 0, 0, Vector2(1, 2.9539952), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_7km6r"]
+_limits = [0.0, 3.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_2ss07"]
+curve_x = SubResource("Curve_ur0v1")
+curve_y = SubResource("Curve_20nmi")
+curve_z = SubResource("Curve_7km6r")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_7km6r"]
+particle_flag_align_y = true
+particle_flag_disable_z = true
+particle_flag_damping_as_friction = true
+spread = 180.0
+flatness = 1.0
+initial_velocity_min = 191.65999
+initial_velocity_max = 209.47
+orbit_velocity_min = 0.1320001
+orbit_velocity_max = 0.1840001
+gravity = Vector3(0, 0, 0)
+radial_accel_min = -240.0
+radial_accel_max = -240.0
+damping_max = 0.010000001
+scale_min = 0.5
+scale_max = 0.59999996
+scale_curve = SubResource("CurveTexture_etunt")
+scale_over_velocity_max = 650.26996
+scale_over_velocity_curve = SubResource("CurveXYZTexture_2ss07")
+color = Color(1, 0.9115, 0.90999997, 1)
+hue_variation_min = -0.020000022
+hue_variation_max = 0.059999976
+turbulence_noise_strength = 10.31
+
+[sub_resource type="Shader" id="Shader_gg2mq"]
+code = "shader_type canvas_item;
+
+// 暴露给外部的参数
+uniform vec2 iResolution = vec2(800.0, 800.0);
+uniform float speed = 1.1;
+uniform float brightness = 1.3;
+uniform vec3 innerBgColor = vec3(0.0125, 0.0, 0.025);
+uniform float innerBgAlpha = 1.0;
+uniform vec3 boltHueShift = vec3(0.0, 0.0, 0.0);
+uniform vec3 reflectColor1 = vec3(0.12, 0.12, 0.5);
+uniform vec3 reflectColor2 = vec3(0.55, 0.2, 0.55);
+uniform float rayCount = 13.0;
+uniform float rayThickness = 0.011;
+const float NUM_RAYS = 13.0;
+const int VOLUMETRIC_STEPS = 19;
+const int MAX_ITER = 35;
+const float FAR = 6.0;
+
+// 旋转矩阵
+const mat3 m3 = mat3(
+	vec3( 0.00,  0.80,  0.60),
+	vec3(-0.80,  0.36, -0.48),
+	vec3(-0.60, -0.48,  0.64)
+);
+
+// 基础哈希与噪声函数
+float hash(float n) {
+	return fract(sin(n) * 43758.5453);
+}
+
+float hash21(vec2 p) {
+	p = fract(p * vec2(234.34, 435.345));
+	p += dot(p, p + 19.19);
+	return fract(p.x * p.y);
+}
+
+float noise1D(float x) {
+	float sx = x * 0.01;
+	float i = floor(sx);
+	float f = fract(sx);
+	float u = f * f * (3.0 - 2.0 * f);
+	return mix(hash(i), hash(i + 1.0), u);
+}
+
+float noise2D(vec2 p) {
+	vec2 i = floor(p);
+	vec2 f = fract(p);
+	f = f * f * (3.0 - 2.0 * f);
+	float a = hash21(i);
+	float b = hash21(i + vec2(1.0, 0.0));
+	float c = hash21(i + vec2(0.0, 1.0));
+	float d = hash21(i + vec2(1.0, 1.0));
+	return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
+}
+
+float noise3D(vec3 p) {
+	vec3 ip = floor(p);
+	vec3 fp = fract(p);
+	fp = fp * fp * (3.0 - 2.0 * fp);
+	
+	vec2 uv = ip.xy + vec2(37.0, 17.0) * ip.z + fp.xy;
+	float n0 = noise2D(uv);
+	float n1 = noise2D(uv + vec2(0.5));
+	return mix(n0, n1, fp.z);
+}
+
+mat2 mm2(float a) {
+	float c = cos(a);
+	float s = sin(a);
+	return mat2(vec2(c, -s), vec2(s, c));
+}
+
+float flow(vec3 p, float t, float time_val) {
+	float z = 2.0;
+	float rz = 0.0;
+	vec3 bp = p;
+	for (float i = 1.0; i < 5.0; i++) {
+		p += time_val * 0.1;
+		rz += (sin(noise3D(p + t * 0.8) * 6.0) * 0.5 + 0.5) / z;
+		p = mix(bp, p, 0.6);
+		z *= 2.0;
+		p *= 2.01;
+		p = p * m3;
+	}
+	return rz;	
+}
+
+float sins(float x, float time_val) {
+	float rz = 0.0;
+	float z = 2.0;
+	for (float i = 0.0; i < 3.0; i++) {
+		rz += abs(fract(x * 1.4) - 0.5) / z;
+		x *= 1.3;
+		z *= 1.15;
+		x -= time_val * 0.65 * z;
+	}
+	return rz;
+}
+
+float segm(vec3 p, vec3 a, vec3 b) {
+	vec3 pa = p - a;
+	vec3 ba = b - a;
+	float h = clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0);	
+	return length(pa - ba * h) * 0.5;
+}
+
+vec3 path(float i, float d, float time_val) {
+	vec3 en = vec3(0.0, 0.0, 1.0);
+	float sns2 = sins(d + i * 0.5, time_val) * 0.22;
+	float sns = sins(d + i * 0.6, time_val) * 0.21;
+	en.xz = en.xz * mm2((hash(i * 10.569) - 0.5) * 6.2 + sns2);
+	en.xy = en.xy * mm2((hash(i * 4.732) - 0.5) * 6.2 + sns);
+	return en;
+}
+
+vec2 map(vec3 p, float i, float time_val) {
+	float lp = length(p);
+	vec3 bg = vec3(0.0);   
+	vec3 en = path(i, lp, time_val);
+	
+	float ins = smoothstep(0.11, 0.46, lp);
+	float outs = 0.15 + smoothstep(0.0, 0.15, abs(lp - 1.0));
+	p *= ins * outs;
+	float id = ins * outs;
+	
+	float rz = segm(p, bg, en) - rayThickness;
+	return vec2(rz, id);
+}
+
+float march(vec3 ro, vec3 rd, float startf, float maxd, float j, float time_val) {
+	float precis = 0.001;
+	float h = 0.5;
+	float d = startf;
+	for (int i = 0; i < MAX_ITER; i++) {
+		if (abs(h) < precis || d > maxd) break;
+		d += h * 1.2;
+		float res = map(ro + rd * d, j, time_val).x;
+		h = res;
+	}
+	return d;
+}
+
+vec3 vmarch(vec3 ro, vec3 rd, float j, vec3 orig, float time_val) {   
+	vec3 p = ro;
+	vec2 r = vec2(0.0);
+	vec3 sum = vec3(0.0);
+	for (int i = 0; i < VOLUMETRIC_STEPS; i++) {
+		r = map(p, j, time_val);
+		p += rd * 0.03;
+		float lp = length(p);
+		
+		vec3 col = sin((vec3(1.05, 2.5, 1.52) + boltHueShift) * 3.94 + r.y) * 0.85 + 0.4;
+		col.rgb *= smoothstep(0.0, rayThickness * 1.4, -r.x);
+		col *= smoothstep(0.04, 0.2, abs(lp - 1.1));
+		col *= smoothstep(0.1, 0.34, lp);
+		sum += abs(col) * 5.0 * (1.2 - noise1D(lp * 2.0 + j * 13.0 + time_val * 5.0) * 1.1) / (log(distance(p, orig) - 2.0) + 0.75);
+	}
+	return sum;
+}
+
+vec2 iSphere2(vec3 ro, vec3 rd) {
+	vec3 oc = ro;
+	float b = dot(oc, rd);
+	float c = dot(oc, oc) - 1.0;
+	float h = b * b - c;
+	if (h < 0.0) return vec2(-1.0);
+	else return vec2((-b - sqrt(h)), (-b + sqrt(h)));
+}
+
+void fragment() {
+	// 将渲染范围映射到以中心为原点的 UV 坐标
+	vec2 p = UV - 0.5;
+	p.x *= iResolution.x / iResolution.y;
+	
+	float time_val = TIME * speed;
+	
+	// 相机定义
+	vec3 ro = vec3(0.0, 0.0, 5.0);
+	vec3 rd = normalize(vec3(p * 0.7, -1.5));
+	
+	// 自动旋转视口
+	mat2 mx = mm2(time_val * 0.4);
+	mat2 my = mm2(time_val * 0.3);
+	ro.xz = ro.xz * mx;
+	rd.xz = rd.xz * mx;
+	ro.xy = ro.xy * my;
+	rd.xy = rd.xy * my;
+	
+	vec3 bro = ro;
+	vec3 brd = rd;
+	
+	vec3 col = innerBgColor;
+	
+	// 渲染闪电光束
+	for (float j = 1.0; j < NUM_RAYS + 1.0; j++) {
+		if (j > rayCount) continue;
+		ro = bro;
+		rd = brd;
+		mat2 mm = mm2((time_val * 0.1 + ((j + 1.0) * 5.1)) * j * 0.25);
+		ro.xy = ro.xy * mm;
+		rd.xy = rd.xy * mm;
+		ro.xz = ro.xz * mm;
+		rd.xz = rd.xz * mm;
+		float rz = march(ro, rd, 2.5, FAR, j, time_val);
+		if (rz >= FAR) continue;
+		vec3 pos = ro + rz * rd;
+		col = max(col, vmarch(pos, rd, j, bro, time_val));
+	}
+	
+	// 渲染球体玻璃外壳
+	ro = bro;
+	rd = brd;
+	vec2 sph = iSphere2(ro, rd);
+
+	vec3 boltCol = col;  // 纯闪电层，不含反射
+	
+	if (sph.x > 0.0) {
+		vec3 pos = ro + rd * sph.x;
+		vec3 pos2 = ro + rd * sph.y;
+		vec3 rf = reflect(rd, pos);
+		vec3 rf2 = reflect(rd, pos2);
+		float nz = (-log(abs(flow(rf * 1.2, time_val, time_val) - 0.01)));
+		float nz2 = (-log(abs(flow(rf2 * 1.2, -time_val, time_val) - 0.01)));
+		col += (0.1 * nz * nz * reflectColor1 + 0.05 * nz2 * nz2 * reflectColor2) * 0.8;
+	}
+	
+	if (sph.x < 0.0) {
+		COLOR = vec4(0.0, 0.0, 0.0, 0.0);
+	} else {
+		float hasBolt = max(max(boltCol.r - innerBgColor.r, boltCol.g - innerBgColor.g), boltCol.b - innerBgColor.b);
+		float alpha = mix(innerBgAlpha, 1.0, smoothstep(0.0, 0.005, hasBolt));
+		COLOR = vec4(col * brightness, alpha);
+	}
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1ex18"]
+shader = SubResource("Shader_gg2mq")
+shader_parameter/iResolution = Vector2(800, 800)
+shader_parameter/speed = 0.6
+shader_parameter/brightness = 1.86
+shader_parameter/innerBgColor = Vector3(0.143, 0.13, 0.12)
+shader_parameter/innerBgAlpha = 0.6
+shader_parameter/boltHueShift = Vector3(0, 0, 0)
+shader_parameter/reflectColor1 = Vector3(0.475, 0.135, 0.24)
+shader_parameter/reflectColor2 = Vector3(1.015, 0.395, 0.83)
+shader_parameter/rayCount = 24.0
+shader_parameter/rayThickness = 0.02
+
+[sub_resource type="Curve" id="Curve_kr5ew"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 1, Vector2(1, 1), 1.0, 0.0, 1, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_5i2af"]
+curve = SubResource("Curve_kr5ew")
+
+[sub_resource type="Gradient" id="Gradient_etunt"]
+offsets = PackedFloat32Array(1)
+colors = PackedColorArray(1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ur0v1"]
+gradient = SubResource("Gradient_etunt")
+use_hdr = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ur0v1"]
+shader = ExtResource("3_kr5ew")
+shader_parameter/pivot_offset = Vector2(0, 0)
+shader_parameter/lut = SubResource("GradientTexture1D_ur0v1")
+shader_parameter/frame_count = 9.0
+shader_parameter/flipbook_size = Vector2(3, 3)
+shader_parameter/flipbook_curve = SubResource("CurveTexture_5i2af")
+shader_parameter/use_erosion_texture = 0.0
+shader_parameter/erosion_offset = 0.1
+shader_parameter/use_hue_shift = 0.0
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_20nmi"]
+lifetime_randomness = 0.2
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 43.6
+angle_min = 1.0728835e-05
+angle_max = 360.00003
+gravity = Vector3(0, 0, 0)
+scale_min = 0.29999998
+scale_max = 0.5
+
+[node name="TestEnergyCounter" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 128.0
+offset_bottom = 128.0
+metadata/_edit_lock_ = true
+
+[node name="EnergyVfxBack" type="Node2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(64, 64)
+
+[node name="GPUParticlesGlow" type="GPUParticles2D" parent="EnergyVfxBack"]
+self_modulate = Color(0.95598954, 0.6564979, 0.8969676, 1)
+material = SubResource("ShaderMaterial_kr5ew")
+emitting = false
+amount = 1
+texture = ExtResource("1_24wqq")
+one_shot = true
+fixed_fps = 60
+process_material = SubResource("ParticleProcessMaterial_etunt")
+
+[node name="GPUParticlesPart" type="GPUParticles2D" parent="EnergyVfxBack"]
+material = SubResource("ShaderMaterial_20nmi")
+emitting = false
+amount = 6
+texture = ExtResource("2_yqqp2")
+lifetime = 1.5
+one_shot = true
+speed_scale = 2.0
+explosiveness = 1.0
+randomness = 0.5
+trail_lifetime = 0.85
+trail_sections = 3
+trail_section_subdivisions = 22
+process_material = SubResource("ParticleProcessMaterial_7km6r")
+
+[node name="Layer1" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_1ex18")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Layers" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="RotationLayers" type="Control" parent="Layers"]
+unique_name_in_owner = true
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="Layers"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -14.0
+offset_top = -14.0
+offset_right = 14.0
+offset_bottom = 14.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_1ex18")
+
+[node name="EnergyVfxFront" type="Node2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(64, 64)
+
+[node name="GPUParticlesLighting1" type="GPUParticles2D" parent="EnergyVfxFront"]
+self_modulate = Color(0.9530105, 0.8901599, 0.94909936, 1)
+material = SubResource("ShaderMaterial_ur0v1")
+emitting = false
+amount = 1
+texture = ExtResource("4_5i2af")
+lifetime = 0.3
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 60
+local_coords = true
+trail_lifetime = 3.13
+process_material = SubResource("ParticleProcessMaterial_20nmi")
+
+[node name="GPUParticlesLighting2" type="GPUParticles2D" parent="EnergyVfxFront"]
+self_modulate = Color(0.9530105, 0.8901599, 0.94909936, 1)
+material = SubResource("ShaderMaterial_ur0v1")
+emitting = false
+amount = 1
+texture = ExtResource("5_5i2af")
+lifetime = 0.3
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 60
+local_coords = true
+trail_lifetime = 3.13
+process_material = SubResource("ParticleProcessMaterial_20nmi")
+
+[node name="GPUParticlesPart" type="GPUParticles2D" parent="EnergyVfxFront"]
+material = SubResource("ShaderMaterial_20nmi")
+emitting = false
+amount = 6
+texture = ExtResource("2_yqqp2")
+lifetime = 1.5
+one_shot = true
+speed_scale = 2.0
+explosiveness = 1.0
+randomness = 0.5
+trail_lifetime = 0.85
+trail_sections = 3
+trail_section_subdivisions = 22
+process_material = SubResource("ParticleProcessMaterial_7km6r")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = -29.0
+offset_right = -16.0
+offset_bottom = 29.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 0.9647059, 0.8862745, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.1882353)
+theme_override_colors/font_outline_color = Color(0.1, 0.1, 0.8, 1)
+theme_override_constants/shadow_offset_x = 3
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 16
+theme_override_constants/shadow_outline_size = 16
+theme_override_font_sizes/font_size = 36
+text = "3/3"
+horizontal_alignment = 1
+vertical_alignment = 1

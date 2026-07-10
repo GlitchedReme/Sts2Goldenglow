@@ -1,0 +1,89 @@
+{
+  "GOLDENGLOW_POWER_ALTERNATOR_POWER.description": "你的回合开始时，随机一名角色获得一个充能球栏位。",
+  "GOLDENGLOW_POWER_ALTERNATOR_POWER.smartDescription": "你的回合开始时，随机[blue]{Amount}[/blue]名角色获得一个充能球栏位。",
+  "GOLDENGLOW_POWER_ALTERNATOR_POWER.title": "发电机",
+
+  "GOLDENGLOW_POWER_BATTERY_POWER.description": "在接下来的回合开始时，获得[E]。",
+  "GOLDENGLOW_POWER_BATTERY_POWER.smartDescription": "接下来[blue]{Amount}[/blue]个回合开始时，获得[E]。多个分开计算。",
+  "GOLDENGLOW_POWER_BATTERY_POWER.title": "蓄电池",
+
+  "GOLDENGLOW_POWER_BEAUTIFUL_HAIRSTYLE_POWER.description": "你的基础和普通牌的伤害和[gold]格挡[/gold]提高。",
+  "GOLDENGLOW_POWER_BEAUTIFUL_HAIRSTYLE_POWER.smartDescription": "你的基础和普通牌的伤害和[gold]格挡[/gold]提高[blue]{Amount}[/blue]点。",
+  "GOLDENGLOW_POWER_BEAUTIFUL_HAIRSTYLE_POWER.title": "漂亮发型",
+
+  "GOLDENGLOW_POWER_BEST_FRIENDS_POWER.description": "你带有[gold]消耗[/gold]的卡牌将被额外打出。",
+  "GOLDENGLOW_POWER_BEST_FRIENDS_POWER.smartDescription": "你带有[gold]消耗[/gold]的卡牌将被额外打出[blue]{Amount}[/blue]次。",
+  "GOLDENGLOW_POWER_BEST_FRIENDS_POWER.title": "知心之交",
+
+  "GOLDENGLOW_POWER_BLINK_POWER.description": "在你的回合开始时，将被[gold]闪烁[/gold]消耗的卡牌移回你的手中。",
+  "GOLDENGLOW_POWER_BLINK_POWER.smartDescription": "在你的回合开始时，将被[gold]闪烁[/gold]消耗的卡牌移回你的手中并失去该能力。",
+  "GOLDENGLOW_POWER_BLINK_POWER.title": "闪烁",
+
+  "GOLDENGLOW_POWER_BUOY_RECOVERY_POWER.description": "[gold]浮标[/gold]在敌人身上[gold]激发[/gold]后，你[gold]生成[/gold]一个[gold]浮标[/gold]。",
+  "GOLDENGLOW_POWER_BUOY_RECOVERY_POWER.smartDescription": "[gold]浮标[/gold]在敌人身上[gold]激发[/gold]后，你[gold]生成[/gold][blue]{Amount}[/blue]个[gold]浮标[/gold]。",
+  "GOLDENGLOW_POWER_BUOY_RECOVERY_POWER.title": "浮标回收",
+
+  "GOLDENGLOW_POWER_CAPACITY_EXPANSION_POWER.description": "手牌上限提高。",
+  "GOLDENGLOW_POWER_CAPACITY_EXPANSION_POWER.smartDescription": "手牌上限提高[blue]{Amount}[/blue]张。",
+
+  "GOLDENGLOW_POWER_TEMP_HAND_SIZE.description": "本回合手牌上限提高。",
+  "GOLDENGLOW_POWER_TEMP_HAND_SIZE.smartDescription": "本回合手牌上限提高[blue]{Amount}[/blue]张。",
+  "GOLDENGLOW_POWER_TEMP_HAND_SIZE.title": "扩容（临时）",
+  "GOLDENGLOW_POWER_CAPACITY_EXPANSION_POWER.title": "扩容",
+
+  "GOLDENGLOW_POWER_CHARGE_BALANCE_POWER.description": "每当[gold]激发[/gold]时，最左边的充能球的效果提高被[gold]激发[/gold]充能球的数值的一半。",
+  "GOLDENGLOW_POWER_CHARGE_BALANCE_POWER.smartDescription": "每当[gold]激发[/gold]时，最左边的充能球的效果提高被[gold]激发[/gold]充能球的数值的一半。",
+  "GOLDENGLOW_POWER_CHARGE_BALANCE_POWER.title": "电荷平衡",
+
+  "GOLDENGLOW_POWER_DRONE_CASTER_POWER.description": "[gold]浮标[/gold]在造成伤害后，其数值提高。",
+  "GOLDENGLOW_POWER_DRONE_CASTER_POWER.smartDescription": "[gold]浮标[/gold]在造成伤害后，其数值提高[blue]{Amount}[/blue]点。",
+  "GOLDENGLOW_POWER_DRONE_CASTER_POWER.title": "驭械",
+
+  "GOLDENGLOW_POWER_EXCITATION_POWER.description": "[gold]浮标[/gold]在你身上[gold]激发[/gold]后，对所有敌人造成伤害。",
+  "GOLDENGLOW_POWER_EXCITATION_POWER.smartDescription": "[gold]浮标[/gold]在你身上[gold]激发[/gold]后，对所有敌人造成[blue]{Amount}[/blue]点伤害。",
+  "GOLDENGLOW_POWER_EXCITATION_POWER.title": "励电器",
+
+  "GOLDENGLOW_POWER_FRESH_PERFUME_POWER.description": "在接下来的回合开始时，抽一张牌。",
+  "GOLDENGLOW_POWER_FRESH_PERFUME_POWER.smartDescription": "接下来[blue]{Amount}[/blue]个回合开始时，抽一张牌。多个分开计算。",
+  "GOLDENGLOW_POWER_FRESH_PERFUME_POWER.title": "清新香水",
+
+  "GOLDENGLOW_POWER_LIQUID_SOAP_POWER.description": "每当你打出基础或普通牌，抽一张牌。",
+  "GOLDENGLOW_POWER_LIQUID_SOAP_POWER.smartDescription": "每当你打出[blue]{BaseCards}[/blue]张基础或普通牌，抽[blue]{Amount}[/blue]张牌。",
+  "GOLDENGLOW_POWER_LIQUID_SOAP_POWER.title": "源石云洗手液",
+
+  "GOLDENGLOW_POWER_RADIATION_LAMP_POWER.description": "每当一个角色获得充能球时，使其效果提高。",
+  "GOLDENGLOW_POWER_RADIATION_LAMP_POWER.smartDescription": "每当一个角色获得充能球时，使其效果提高[blue]{Amount}[/blue]点。",
+  "GOLDENGLOW_POWER_RADIATION_LAMP_POWER.title": "放射灯",
+
+  "GOLDENGLOW_POWER_SADNESS_OVERLOAD_POWER.description": "每当你的手牌加入带有[gold]静电[/gold]的牌时，静电数量提高。",
+  "GOLDENGLOW_POWER_SADNESS_OVERLOAD_POWER.smartDescription": "每当你的手牌加入带有[gold]静电[/gold]的牌时，静电数量提高[blue]{Amount}[/blue]。",
+  "GOLDENGLOW_POWER_SADNESS_OVERLOAD_POWER.title": "悲伤过载",
+
+  "GOLDENGLOW_POWER_SCATTER_SPARKS_POWER.description": "每当你洗牌时，对所有敌人造成伤害。",
+  "GOLDENGLOW_POWER_SCATTER_SPARKS_POWER.smartDescription": "每当你洗牌时，对所有敌人造成[blue]{Amount}[/blue]点伤害。",
+  "GOLDENGLOW_POWER_SCATTER_SPARKS_POWER.title": "火花四溅",
+
+  "GOLDENGLOW_POWER_SPARK_COUNTERATTACK_POWER.description": "每当你受到攻击伤害时，给予伤害来源一个[gold]浮标[/gold]。",
+  "GOLDENGLOW_POWER_SPARK_COUNTERATTACK_POWER.smartDescription": "每当你受到攻击伤害时，给予伤害来源[blue]{Amount}[/blue]个[gold]浮标[/gold]。",
+  "GOLDENGLOW_POWER_SPARK_COUNTERATTACK_POWER.title": "火花反击",
+
+  "GOLDENGLOW_POWER_STABLE_CASTING_POWER.description": "你的回合开始时，进行一次[gold]脉冲[/gold]。",
+  "GOLDENGLOW_POWER_STABLE_CASTING_POWER.smartDescription": "你的回合开始时，进行[blue]{Amount}[/blue]次[gold]脉冲[/gold]。",
+  "GOLDENGLOW_POWER_STABLE_CASTING_POWER.title": "压电效应",
+
+  "GOLDENGLOW_POWER_TARGET_LOCK_ON_POWER.description": "本回合内，每当你打出消耗牌，抽一张牌。",
+  "GOLDENGLOW_POWER_TARGET_LOCK_ON_POWER.smartDescription": "本回合内，每当你打出消耗牌，抽[blue]{Amount}[/blue]张牌。",
+  "GOLDENGLOW_POWER_TARGET_LOCK_ON_POWER.title": "锁定攻击",
+
+  "GOLDENGLOW_POWER_ELECTROSTATIC_FIELD_POWER.description": "每当你造成一次伤害，获得[gold]格挡[/gold]。",
+  "GOLDENGLOW_POWER_ELECTROSTATIC_FIELD_POWER.smartDescription": "每当你造成一次伤害，获得[blue]{Amount}[/blue]点[gold]格挡[/gold]。",
+  "GOLDENGLOW_POWER_ELECTROSTATIC_FIELD_POWER.title": "静电场",
+
+  "GOLDENGLOW_POWER_SUBHARMONIC_RESONANCE_POWER.description": "你每打出2张牌，[gold]脉冲[/gold]一次。",
+  "GOLDENGLOW_POWER_SUBHARMONIC_RESONANCE_POWER.smartDescription": "你每打出[blue]{Amount}[/blue]张牌，[gold]脉冲[/gold]一次。",
+  "GOLDENGLOW_POWER_SUBHARMONIC_RESONANCE_POWER.title": "亚谐共振",
+
+  "GOLDENGLOW_POWER_TECHNIQUE_POWER.description": "每隔一个你的回合开始时，打出一张耗能为0的牌的复制。",
+  "GOLDENGLOW_POWER_TECHNIQUE_POWER.smartDescription": "每隔一个你的回合开始时，打出一张耗能为0的牌的复制。",
+  "GOLDENGLOW_POWER_TECHNIQUE_POWER.title": "手法"
+}

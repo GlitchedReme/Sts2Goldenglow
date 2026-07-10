@@ -1,0 +1,14 @@
+[remap]
+
+importer="spine.skel"
+type="SpineSkeletonFileResource"
+uid="uid://js104rry0nbo"
+path="res://.godot/imported/char_377_gdglow_summer_12.skel-e3ecc1a8e7acc6614c2b310319b0b375.spskel"
+
+[deps]
+
+source_file="res://Goldenglow/image/character/char_377_gdglow_summer_12.skel"
+dest_files=["res://.godot/imported/char_377_gdglow_summer_12.skel-e3ecc1a8e7acc6614c2b310319b0b375.spskel"]
+
+[params]
+
