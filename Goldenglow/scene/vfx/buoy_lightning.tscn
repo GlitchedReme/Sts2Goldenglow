@@ -1,0 +1,50 @@
+[gd_scene load_steps=10 format=3 uid="uid://da2c46c5wpaie"]
+
+[ext_resource type="Script" uid="uid://ck46y1rejj0ye" path="res://GoldenglowScripts/Vfx/BuoyLightning.cs" id="1_83w0l"]
+[ext_resource type="Shader" uid="uid://bewom3mv4bb05" path="res://Goldenglow/shader/flipbook.gdshader" id="1_wrw5i"]
+[ext_resource type="Texture2D" uid="uid://cwyj5dbvuukl0" path="res://Goldenglow/image/vfx/char_gdglow_02.png" id="2_83w0l"]
+
+[sub_resource type="Curve" id="Curve_wrw5i"]
+_data = [Vector2(0, 0), 0.0, -0.29416576, 0, 0, Vector2(0.3042254, 0.7134571), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_83w0l"]
+curve = SubResource("Curve_wrw5i")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gm2o1"]
+shader = ExtResource("1_wrw5i")
+shader_parameter/pivot_offset = Vector2(0, 0)
+shader_parameter/frame_count = 8.0
+shader_parameter/flipbook_size = Vector2(2, 4)
+shader_parameter/flipbook_curve = SubResource("CurveTexture_83w0l")
+shader_parameter/use_erosion_texture = 0.0
+shader_parameter/erosion_offset = 0.1
+shader_parameter/use_hue_shift = 0.0
+
+[sub_resource type="Curve" id="Curve_gm2o1"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.081632644, 1), 0.0, 0.0, 0, 0, Vector2(0.5072886, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_1kdul"]
+curve = SubResource("Curve_gm2o1")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_1kdul"]
+particle_flag_disable_z = true
+gravity = Vector3(0, 0, 0)
+alpha_curve = SubResource("CurveTexture_1kdul")
+
+[node name="BuoyLightning" type="Node2D"]
+script = ExtResource("1_83w0l")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+self_modulate = Color(1, 0.53, 0.73366666, 1)
+material = SubResource("ShaderMaterial_gm2o1")
+position = Vector2(266, 0)
+emitting = false
+amount = 1
+texture = ExtResource("2_83w0l")
+one_shot = true
+speed_scale = 2.0
+fixed_fps = 60
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_1kdul")

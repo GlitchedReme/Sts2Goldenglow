@@ -5,7 +5,6 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Interop.AutoRegistration;
-using STS2RitsuLib.Scaffolding.Content;
 
 namespace Goldenglow.Card;
 
@@ -14,7 +13,7 @@ public class StaticMagneticTrap() : AbstractGoldenglowCard(1, CardType.Attack, C
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         GoldenglowUtils.CreateAttractVar(99),
-        new DamageVar(10, ValueProp.Move)
+        new DamageVar(12, ValueProp.Move)
     ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

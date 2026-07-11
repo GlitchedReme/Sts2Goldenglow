@@ -20,8 +20,7 @@ public sealed class ElectrostaticFieldPower : ModPowerTemplate
 
     public override async Task AfterDamageGiven(PlayerChoiceContext choiceContext, Creature? dealer, DamageResult result, ValueProp props, Creature target, CardModel? cardSource)
     {
-        if (dealer != Owner) return;
-        if (result.UnblockedDamage + result.BlockedDamage <= 0) return;
+        if (dealer != Owner || result.TotalDamage <= 0 || !props.HasFlag(ValueProp.Move)) return;
 
         await CreatureCmd.GainBlock(Owner, Amount, ValueProp.Move, null);
         Flash();

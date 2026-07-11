@@ -1,39 +1,46 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using Goldenglow.Patch;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
-using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
-using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Scaffolding.Content;
 
 namespace Goldenglow.Power;
 
-/// <summary>
-/// After every 3 Basic or Common cards played by the owner, draw cards.
-/// Amount = cards to draw per 3-card cycle (stacks).
-/// </summary>
 [RegisterPower]
-public sealed class LiquidSoapPower : ModPowerTemplate
+public sealed class LiquidSoapPower : ModPowerTemplate, IPowerCustomTextProvider
 {
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;
 
-    private int _counter;
+    public string CustomText => $"{Counter}/3";
+
+    private int Counter
+    {
+        get => (int)DynamicVars["Counter"].BaseValue;
+        set => DynamicVars["Counter"].BaseValue = value;
+    }
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => [
+        new DynamicVar("BaseCards", 3),
+        new DynamicVar("Counter", 0),
+    ];
 
     public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        if (cardPlay.Card.Owner != base.Owner.Player) return;
+        if (cardPlay.Card.Owner != Owner.Player) return;
         if (cardPlay.Card.Rarity != CardRarity.Basic && cardPlay.Card.Rarity != CardRarity.Common) return;
 
-        _counter++;
-        if (_counter >= 3)
+        Counter++;
+        InvokeDisplayAmountChanged();
+        if (Counter >= 3)
         {
-            _counter = 0;
-            await CardPileCmd.Draw(choiceContext, Amount, base.Owner.Player);
+            Counter = 0;
+            await CardPileCmd.Draw(choiceContext, Amount, Owner.Player);
             Flash();
+            InvokeDisplayAmountChanged();
         }
     }
 }

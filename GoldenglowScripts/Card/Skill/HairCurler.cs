@@ -1,11 +1,9 @@
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using STS2RitsuLib.Interop.AutoRegistration;
 using Goldenglow.Core;
-using MegaCrit.Sts2.Core.HoverTips;
-using System.Collections.Generic;
-using STS2RitsuLib.Scaffolding.Content;
 
 namespace Goldenglow.Card;
 
@@ -14,7 +12,7 @@ public class HairCurler() : AbstractGoldenglowCard(0, CardType.Skill, CardRarity
 {
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        GoldenglowUtils.CreateAttractVar(1)
+        GoldenglowUtils.CreateAttractVar(2),
     ];
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];

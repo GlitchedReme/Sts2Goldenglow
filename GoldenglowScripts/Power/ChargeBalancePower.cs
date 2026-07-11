@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Goldenglow.Capabilities;
+using Goldenglow.Card;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -11,9 +12,6 @@ using STS2RitsuLib.Scaffolding.Content;
 
 namespace Goldenglow.Power;
 
-/// <summary>
-/// Whenever the owner evokes an orb, all their orbs gain +2 evoke bonus.
-/// </summary>
 [RegisterPower]
 public sealed class ChargeBalancePower : ModPowerTemplate
 {
@@ -22,16 +20,18 @@ public sealed class ChargeBalancePower : ModPowerTemplate
 
     public override async Task AfterOrbEvoked(PlayerChoiceContext choiceContext, OrbModel orb, IEnumerable<Creature> targets)
     {
-        if (orb.Owner?.Creature != base.Owner) return;
+        if (orb.Owner?.Creature != Owner) return;
 
-        var orbQueue = orb.Owner.PlayerCombatState?.OrbQueue;
-        if (orbQueue == null) return;
+        var orbs = orb.Owner.PlayerCombatState?.OrbQueue.Orbs ?? GoldenglowOrbCmd.GetMonsterOrbManager(orb.Owner.Creature)?.GetOrbs();
+        if (orbs == null) return;
 
-        for (int i = 0; i < orbQueue.Orbs.Count; i++)
+        for (int i = 0; i < orbs.Count; i++)
         {
-            orbQueue.Orbs[i].GetOrCreateCapability<OrbBoostCapability>().BonusEvoke += 2;
+            var o = orbs[i];
+            var cap = ModelCapabilityRegistry.Create<OrbBoostCapability>();
+            cap.DynamicVars["Amount"].BaseValue = Amount;
+            o.AddCapability(cap);
         }
         Flash();
-        await Task.CompletedTask;
     }
 }

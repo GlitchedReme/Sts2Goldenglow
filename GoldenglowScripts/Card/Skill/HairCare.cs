@@ -4,7 +4,6 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Interop.AutoRegistration;
-using STS2RitsuLib.Scaffolding.Content;
 
 using Goldenglow.Power;
 
@@ -15,8 +14,8 @@ public class HairCare() : AbstractGoldenglowCard(1, CardType.Skill, CardRarity.U
 {
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new BlockVar(5, ValueProp.Move),
-        new DynamicVar("Buff", 2)
+        new BlockVar(6, ValueProp.Move),
+        new DynamicVar("Buff", 1)
     ];
 
     public override bool GainsBlock => true;
@@ -30,6 +29,6 @@ public class HairCare() : AbstractGoldenglowCard(1, CardType.Skill, CardRarity.U
     protected override void OnUpgrade()
     {
         DynamicVars.Block.UpgradeValueBy(1);
-        DynamicVars["Buff"].UpgradeValueBy(2);
+        DynamicVars["Buff"].UpgradeValueBy(1);
     }
 }

@@ -4,8 +4,6 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Interop.AutoRegistration;
-using STS2RitsuLib.Scaffolding.Content;
-using System.Collections.Generic;
 
 namespace Goldenglow.Card;
 
@@ -14,7 +12,8 @@ public class HairComb() : AbstractGoldenglowCard(0, CardType.Skill, CardRarity.U
 {
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new BlockVar(13, ValueProp.Move)
+        new BlockVar(13, ValueProp.Move),
+        new CardsVar(1)
     ];
 
     public override bool GainsBlock => true;
@@ -25,6 +24,7 @@ public class HairComb() : AbstractGoldenglowCard(0, CardType.Skill, CardRarity.U
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, cardPlay);
+        await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.BaseValue, Owner);
     }
 
     protected override void OnUpgrade()

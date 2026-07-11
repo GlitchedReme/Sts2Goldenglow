@@ -1,18 +1,19 @@
+using MegaCrit.Sts2.Core.Commands;
 using Goldenglow.Orb;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using STS2RitsuLib.Interop.AutoRegistration;
-using STS2RitsuLib.Scaffolding.Content;
+using STS2RitsuLib.Combat.CardTargeting;
 
 namespace Goldenglow.Card;
 
 [RegisterCard(typeof(GoldenglowCardPool))]
-public class AlertTactics() : AbstractGoldenglowCard(0, CardType.Skill, CardRarity.Common, TargetType.AnyEnemy)
+public class AlertTactics() : AbstractGoldenglowCard(0, CardType.Skill, CardRarity.Common, CustomTargetType.Anyone)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DynamicVar("Buoy", 2)
+        new DynamicVar("Buoy", 2),
     ];
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
@@ -24,7 +25,6 @@ public class AlertTactics() : AbstractGoldenglowCard(0, CardType.Skill, CardRari
         int count = (int)DynamicVars["Buoy"].BaseValue;
         await GoldenglowOrbCmd.ChannelBuoy(cardPlay.Target!, count);
     }
-
     protected override void OnUpgrade()
     {
         DynamicVars["Buoy"].UpgradeValueBy(1);

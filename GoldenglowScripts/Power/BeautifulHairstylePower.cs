@@ -17,17 +17,17 @@ public sealed class BeautifulHairstylePower : ModPowerTemplate
 
     public override decimal ModifyDamageAdditive(Creature? target, decimal amount, ValueProp props, Creature? dealer, CardModel? cardSource, CardPlay? cardPlay)
     {
-        if (dealer != Owner) return amount;
-        if (cardSource == null) return amount;
-        if (cardSource.Rarity != CardRarity.Basic && cardSource.Rarity != CardRarity.Common) return amount;
-        return amount + Amount;
+        if (dealer != Owner) return 0;
+        if (cardSource == null) return 0;
+        if (cardSource.Rarity != CardRarity.Basic && cardSource.Rarity != CardRarity.Common) return 0;
+        return Amount;
     }
 
     public override decimal ModifyBlockAdditive(Creature target, decimal block, ValueProp props, CardModel? cardSource, CardPlay? cardPlay)
     {
-        if (cardSource == null) return block;
-        if (cardSource.Owner != Owner.Player) return block;
-        if (cardSource.Rarity != CardRarity.Basic && cardSource.Rarity != CardRarity.Common) return block;
-        return block + Amount;
+        if (cardSource == null) return 0;
+        if (cardSource.Owner != Owner.Player) return 0;
+        if (cardSource.Rarity != CardRarity.Basic && cardSource.Rarity != CardRarity.Common) return 0;
+        return Amount;
     }
 }

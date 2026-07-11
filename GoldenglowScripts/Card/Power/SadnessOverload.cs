@@ -3,11 +3,9 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using STS2RitsuLib.Interop.AutoRegistration;
-using STS2RitsuLib.Scaffolding.Content;
 
 using Goldenglow.Power;
 using Goldenglow.Core;
-using System.Collections.Generic;
 using MegaCrit.Sts2.Core.HoverTips;
 
 namespace Goldenglow.Card;
@@ -27,6 +25,7 @@ public class SadnessOverload() : AbstractGoldenglowCard(2, CardType.Power, CardR
     }
 
     protected override void OnUpgrade()
-    {        EnergyCost.UpgradeBy(-1);
+    {
+        EnergyCost.UpgradeBy(-1);
     }
 }

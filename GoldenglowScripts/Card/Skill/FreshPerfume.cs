@@ -14,7 +14,8 @@ public class FreshPerfume() : AbstractGoldenglowCard(0, CardType.Skill, CardRari
 {
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DynamicVar("Turns", 3)
+        new DynamicVar("Turns", 3),
+        new CardsVar(1)
     ];
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
@@ -22,6 +23,7 @@ public class FreshPerfume() : AbstractGoldenglowCard(0, CardType.Skill, CardRari
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await PowerCmd.Apply<FreshPerfumePower>(choiceContext, Owner.Creature, DynamicVars["Turns"].BaseValue, Owner.Creature, this);
+        await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.BaseValue, Owner);
     }
 
     protected override void OnUpgrade()

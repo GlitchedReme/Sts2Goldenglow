@@ -25,7 +25,10 @@ public static class GoldenglowOrbCmd
             var mgr = GetOrCreateMonsterOrbManager(target);
             var orbs = mgr.GetOrbs();
             if (mgr.Capacity > 0 && orbs.Count >= mgr.Capacity)
+            {
                 await orbs[0].Evoke(new ThrowingPlayerChoiceContext());
+                mgr.EvokeOrb(orbs[0]);
+            }
             orb.Owner = null!;
             MonsterOrbPatch.OwnerState[orb] = target;
             mgr.ChannelOrb(orb);
@@ -48,7 +51,10 @@ public static class GoldenglowOrbCmd
                 var mgr = GetOrCreateMonsterOrbManager(target);
                 var orbs = mgr.GetOrbs();
                 if (mgr.Capacity > 0 && orbs.Count >= mgr.Capacity)
+                {
                     await orbs[0].Evoke(new ThrowingPlayerChoiceContext());
+                    mgr.EvokeOrb(orbs[0]);
+                }
                 var orb = ModelDb.Orb<TOrb>().ToMutable();
                 orb.Owner = null!;
                 MonsterOrbPatch.OwnerState[orb] = target;

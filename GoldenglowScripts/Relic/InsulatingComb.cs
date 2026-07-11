@@ -1,20 +1,25 @@
 using Goldenglow.Card;
+using Goldenglow.Orb;
 using MegaCrit.Sts2.Core.Entities.Relics;
+using MegaCrit.Sts2.Core.HoverTips;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Scaffolding.Content;
 
 namespace Goldenglow.Relic;
 
 [RegisterRelic(typeof(GoldenglowRelicPool))]
-public class InsulatedScissors : ModRelicTemplate
+[RegisterTouchOfOrobasRefinement(typeof(InsulatingScissors))]
+public class InsulatingComb : ModRelicTemplate
 {
     public override RelicRarity Rarity => RelicRarity.Starter;
 
     public override RelicAssetProfile AssetProfile => new(
-        IconPath: "res://Goldenglow/images/relics/InsulatedScissors.png",
-        IconOutlinePath: "res://Goldenglow/images/relics/InsulatedScissors.png",
-        BigIconPath: "res://Goldenglow/images/relics/InsulatedScissors.png"
+        IconPath: "res://Goldenglow/images/relics/InsulatingComb.png",
+        IconOutlinePath: "res://Goldenglow/images/relics/InsulatingComb.png",
+        BigIconPath: "res://Goldenglow/images/relics/InsulatingComb.png"
     );
+
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips => [HoverTipFactory.FromOrb<BuoyOrb>()];
 
     public override async Task BeforeCombatStart()
     {

@@ -4,9 +4,7 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using Goldenglow.Orb;
 using MegaCrit.Sts2.Core.HoverTips;
-using System.Collections.Generic;
 using STS2RitsuLib.Interop.AutoRegistration;
-using STS2RitsuLib.Scaffolding.Content;
 
 using Goldenglow.Power;
 

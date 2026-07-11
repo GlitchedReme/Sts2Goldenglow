@@ -6,6 +6,8 @@ using MegaCrit.Sts2.Core.HoverTips;
 using STS2RitsuLib.Utils;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Localization;
+using MegaCrit.Sts2.Core.Hooks;
+using MegaCrit.Sts2.Core.Combat;
 
 namespace Goldenglow.Patch;
 
@@ -65,5 +67,41 @@ internal class OrbTipOnMonsterPatch : IPatchMethod
         }
         __result = list;
         return false;
+    }
+}
+
+internal class MonsterOrbModifyValuePatch : IPatchMethod
+{
+    public static string PatchId => "goldenglow_monster_orb_modify_value_patch";
+    public static string PatchDescription => "Modify orb values for monsters";
+
+    public static ModPatchTarget[] GetTargets() => [new(typeof(OrbModel), "ModifyOrbValue", [typeof(decimal)])];
+
+    internal static bool Prefix(OrbModel __instance, decimal result, ref decimal __result)
+    {
+        if (__instance.Owner == null && MonsterOrbPatch.OwnerState.TryGetValue(__instance, out var owner) && owner != null && owner.CombatState != null)
+        {
+            __result = Hook.ModifyOrbValue(owner.CombatState, __instance, result);
+            return false;
+        }
+        return true;
+    }
+}
+
+internal class MonsterOrbCombatStatePatch : IPatchMethod
+{
+    public static string PatchId => "goldenglow_monster_orb_combat_state_patch";
+    public static string PatchDescription => "Modify orb combat state for monsters";
+
+    public static ModPatchTarget[] GetTargets() => [new(typeof(OrbModel), "CombatState", MethodType.Getter)];
+
+    internal static bool Prefix(OrbModel __instance, ref ICombatState __result)
+    {
+        if (__instance.Owner == null && MonsterOrbPatch.OwnerState.TryGetValue(__instance, out var owner) && owner != null && owner.CombatState != null)
+        {
+            __result = owner.CombatState;
+            return false;
+        }
+        return true;
     }
 }

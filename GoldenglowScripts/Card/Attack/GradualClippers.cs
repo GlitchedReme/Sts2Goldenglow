@@ -7,7 +7,6 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Interop.AutoRegistration;
-using STS2RitsuLib.Scaffolding.Content;
 
 namespace Goldenglow.Card;
 
@@ -17,7 +16,7 @@ public class GradualClippers() : AbstractGoldenglowCard(6, CardType.Attack, Card
     private int _turnReduction;
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DamageVar(32, ValueProp.Move)
+        new DamageVar(28, ValueProp.Move)
     ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -61,6 +60,7 @@ public class GradualClippers() : AbstractGoldenglowCard(6, CardType.Attack, Card
 
     protected override void OnUpgrade()
     {
+        DynamicVars.Damage.UpgradeValueBy(4);
         EnergyCost.UpgradeBy(-1);
     }
 }

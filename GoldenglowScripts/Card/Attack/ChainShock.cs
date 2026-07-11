@@ -1,19 +1,13 @@
-using System.Collections.Generic;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
-using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Interop.AutoRegistration;
-using STS2RitsuLib.Scaffolding.Content;
 
 namespace Goldenglow.Card;
 
-/// <summary>
-/// Deals {Damage} damage, then plays a random 0-cost card from the draw pile.
-/// </summary>
 [RegisterCard(typeof(GoldenglowCardPool))]
 public class ChainShock() : AbstractGoldenglowCard(0, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
 {
@@ -34,7 +28,7 @@ public class ChainShock() : AbstractGoldenglowCard(0, CardType.Attack, CardRarit
         for (int i = 0; i < drawPileCards.Count; i++)
         {
             var c = drawPileCards[i];
-            if (!c.EnergyCost.CostsX && c.EnergyCost.Canonical == 0)
+            if (!c.EnergyCost.CostsX && c.EnergyCost.GetAmountToSpend() == 0)
                 zeroCostCards.Add(c);
         }
 

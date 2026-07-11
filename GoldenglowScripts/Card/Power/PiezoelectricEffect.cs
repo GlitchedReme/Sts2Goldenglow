@@ -13,7 +13,7 @@ using Goldenglow.Power;
 namespace Goldenglow.Card;
 
 [RegisterCard(typeof(GoldenglowCardPool))]
-public class StableCasting() : AbstractGoldenglowCard(0, CardType.Power, CardRarity.Uncommon, TargetType.Self)
+public class PiezoelectricEffect() : AbstractGoldenglowCard(0, CardType.Power, CardRarity.Uncommon, TargetType.Self)
 {
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
@@ -23,7 +23,7 @@ public class StableCasting() : AbstractGoldenglowCard(0, CardType.Power, CardRar
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await PowerCmd.Apply<StableCastingPower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
+        await PowerCmd.Apply<PiezoelectricEffectPower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

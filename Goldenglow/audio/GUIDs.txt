@@ -12,7 +12,7 @@
 {9062adad-d974-41ef-b812-79c56bb6c25f} bus:/master/sfx_ducking_bass
 {bfa231d3-c7a0-4395-bb21-4afdf4149043} bus:/master/sfx_ducking_big
 {10d8690c-f03e-48c9-9590-642fa5c16879} event:/goldenglow/sfx/buoy_evoke
-{29451c5c-de6b-4ad7-b93a-27a149327f68} event:/goldenglow/sfx/char_sleect
+{29451c5c-de6b-4ad7-b93a-27a149327f68} event:/goldenglow/sfx/char_select
 {06cefc2c-7055-44b5-af2e-7652cd2414d6} parameter:/Progress
 {a36ba432-c5b1-44ff-b5e4-12f654cfa067} parameter:/sfx_duck
 {9fd4e212-6c2e-4b45-8a4b-942284c71171} parameter:/sfx_duck_big

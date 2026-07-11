@@ -39,14 +39,18 @@ public class GoldenglowSingleton() : HookedSingletonModel(HookType.Combat)
         {
             StaticCapability.ResetAll();
         }
+    }
 
+    public override async Task AfterSideTurnStart(CombatSide side, IReadOnlyList<Creature> participants, ICombatState combatState)
+    {
         if (side == CombatSide.Enemy)
         {
             foreach (var enemy in participants)
             {
+                if (enemy.IsDead) continue;
                 if (MonsterOrbManager.MonsterOrbManagerState.TryGetValue(enemy, out var manager) && manager != null)
                 {
-                    await manager.BeforeTurnEnd(choiceContext);
+                    await manager.BeforeTurnEnd(new ThrowingPlayerChoiceContext());
                 }
             }
         }

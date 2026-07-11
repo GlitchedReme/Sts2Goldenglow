@@ -1,9 +1,9 @@
+using MegaCrit.Sts2.Core.Commands;
 using Goldenglow.Core;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using STS2RitsuLib.Interop.AutoRegistration;
-using STS2RitsuLib.Scaffolding.Content;
 
 namespace Goldenglow.Card;
 
@@ -11,7 +11,8 @@ namespace Goldenglow.Card;
 public class HalfWaveRectifier() : AbstractGoldenglowCard(0, CardType.Attack, CardRarity.Common, TargetType.AllEnemies)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        GoldenglowUtils.CreatePulseVar()
+        GoldenglowUtils.CreatePulseVar(),
+        new CardsVar(0)
     ];
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
@@ -20,10 +21,13 @@ public class HalfWaveRectifier() : AbstractGoldenglowCard(0, CardType.Attack, Ca
     {
         for (int i = 0; i < 2; i++)
             await GoldenglowCmd.Pulse(Owner);
+        if (DynamicVars.Cards.BaseValue > 0)
+        await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.BaseValue, Owner);
     }
 
     protected override void OnUpgrade()
     {
-        EnergyCost.UpgradeBy(-1);
+        // EnergyCost.UpgradeBy(-1);
+        DynamicVars.Cards.UpgradeValueBy(1);
     }
 }

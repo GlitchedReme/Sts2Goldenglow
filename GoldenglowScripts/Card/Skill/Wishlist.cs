@@ -3,12 +3,12 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Factories;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Runs;
 using MegaCrit.Sts2.Core.Unlocks;
 using STS2RitsuLib.Interop.AutoRegistration;
-using STS2RitsuLib.Scaffolding.Content;
 using STS2RitsuLib.Utils;
 
 namespace Goldenglow.Card;
@@ -22,15 +22,26 @@ public class Wishlist() : AbstractGoldenglowCard(1, CardType.Skill, CardRarity.R
 
     private string _giftCardIdsBackup = "";
 
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips => [
+        ..GiftCards.Select(c => new CardHoverTip(c))
+    ];
+
     protected override void DeepCloneFields()
     {
         base.DeepCloneFields();
         GiftCardIds[this] = _giftCardIdsBackup;
+        Entry.Logger.Info($"[Wishlist] DeepCloneFields: backup='{_giftCardIdsBackup}'");
     }
 
     public override void AfterCreated()
     {
         CreateGifts(Owner);
+    }
+
+    protected override void AfterDeserialized()
+    {
+        _giftCardIdsBackup = GiftCardIds[this];
+        Entry.Logger.Info($"[Wishlist] AfterDeserialized: GiftCardIds='{GiftCardIds[this]}', backup='{_giftCardIdsBackup}'");
     }
 
     public bool OnGeneratedAsReward(Player player, CardCreationOptions options)
@@ -70,6 +81,8 @@ public class Wishlist() : AbstractGoldenglowCard(1, CardType.Skill, CardRarity.R
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
+        var ids = GiftCardIds.TryGetValue(this, out var v) ? v : "(none)";
+        Entry.Logger.Info($"[Wishlist] OnPlay: GiftCardIds='{ids}', GiftCards.Count={GiftCards.Count()}");
         if (!GiftCards.Any())
             return;
         foreach (var card in GiftCards.Select(c => Owner.Creature.CombatState?.CreateCard(c, Owner)))

@@ -87,7 +87,7 @@ public class Goldenglow : ModCharacterTemplate<GoldenglowCardPool, GoldenglowRel
     ];
 
     protected override IEnumerable<Type> StartingRelicTypes => [
-        typeof(InsulatedScissors)
+        typeof(InsulatingComb)
     ];
 
 #pragma warning restore CS0672

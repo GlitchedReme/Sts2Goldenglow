@@ -10,7 +10,7 @@ using STS2RitsuLib.Scaffolding.Content;
 namespace Goldenglow.Card;
 
 [RegisterCard(typeof(GoldenglowCardPool))]
-public class MindJump() : AbstractGoldenglowCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
+public class TeslaCoil() : AbstractGoldenglowCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
 {
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [

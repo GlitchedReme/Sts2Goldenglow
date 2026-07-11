@@ -24,6 +24,7 @@ public static class GoldenglowCmd
             var c = discardPile.Cards[discardPile.Cards.Count - 1];
             await CardPileCmd.Add(c, PileType.Hand);
             attracted.Add(c);
+            await NotifyAttracted(choiceContext, player);
         }
 
         foreach (var c in attracted.ToArray())
@@ -35,6 +36,15 @@ public static class GoldenglowCmd
         }
 
         return attracted;
+    }
+
+    internal static async Task NotifyAttracted(PlayerChoiceContext choiceContext, Player player)
+    {
+        foreach (var relic in player.Relics)
+        {
+            if (relic is IOnCardAttracted onCardAttracted)
+                await onCardAttracted.OnCardAttracted(choiceContext, player);
+        }
     }
 
     public static async Task Pulse(Player player)

@@ -35,7 +35,7 @@ public partial class MonsterOrbManager : Control
     /// </summary>
     public bool IsLocal { get; set; } = true;
 
-    private const float TotalSpread = 125f;
+    private const float TotalSpread = 90f;
     private const float MinRadius = 225f;
     private const float MaxRadius = 300f;
     private const float TweenSpeed = 0.45f;
@@ -70,6 +70,7 @@ public partial class MonsterOrbManager : Control
         base._EnterTree();
         CombatManager.Instance.StateTracker.CombatStateChanged += OnCombatStateChanged;
         CombatManager.Instance.CombatSetUp += OnCombatSetup;
+        SetOrbManagerPosition();
     }
 
     public override void _ExitTree()
@@ -159,7 +160,7 @@ public partial class MonsterOrbManager : Control
         var visuals = _creatureNode.Visuals;
         float absX = Mathf.Abs(visuals.Scale.X);
         Scale = (absX > 1f) ? Vector2.One : Vector2.One * Mathf.Lerp(absX, 1f, 0.5f);
-        Scale *= 0.9f;
+        Scale *= 0.85f;
         Position = visuals.OrbPosition.Position * Mathf.Min(visuals.Scale.X, 1.25f);
     }
 
@@ -180,12 +181,6 @@ public partial class MonsterOrbManager : Control
     /// <summary>Channel an orb visually. Evokes the oldest orb if capacity is full.</summary>
     public void ChannelOrb(OrbModel orb)
     {
-        if (_capacity > 0 && _orbs.Count >= _capacity)
-        {
-            var oldest = _orbs[0];
-            _orbs.RemoveAt(0);
-            EvokeOrbAnim(oldest);
-        }
         _orbs.Add(orb);
         AddOrbAnim();
     }
@@ -255,14 +250,18 @@ public partial class MonsterOrbManager : Control
     /// </summary>
     private void AddOrbAnim()
     {
+        if (_orbNodes.Count == 0) return;
+
         var model = _orbs.Count > 0 ? _orbs[^1] : null;
 
         var empty = _orbNodes.Find(n => n.Model == null);
         if (empty == null)
         {
             var first = _orbNodes.Find(n => n.Model != null);
-            EvokeOrbAnim(first!.Model!);
-            empty = _orbNodes.Find(n => n.Model == null)!;
+            if (first?.Model == null) return;
+            EvokeOrbAnim(first.Model);
+            empty = _orbNodes.Find(n => n.Model == null);
+            if (empty == null) return;
         }
 
         var fresh = NOrb.Create(true, model);
@@ -289,8 +288,11 @@ public partial class MonsterOrbManager : Control
         tween.Chain().TweenCallback(Callable.From(() =>
         {
             int idx = _orbNodes.IndexOf(target);
-            target.QueueFreeSafely();
-            _orbNodes.RemoveAt(idx);
+            if (idx >= 0)
+            {
+                target.QueueFreeSafely();
+                _orbNodes.RemoveAt(idx);
+            }
             TweenLayout();
         }));
 
@@ -335,7 +337,7 @@ public partial class MonsterOrbManager : Control
 
         for (int i = 0; i < _capacity && i < _orbNodes.Count; i++)
         {
-            float deg = -25f - TotalSpread + step * i;
+            float deg = -87.5f - TotalSpread / 2f + step * i;
             float rad = float.DegreesToRadians(deg);
             var pos = new Vector2(-Mathf.Cos(rad) * flipX, Mathf.Sin(rad)) * radius;
             _curTween.TweenProperty(_orbNodes[i], "position", pos, TweenSpeed)

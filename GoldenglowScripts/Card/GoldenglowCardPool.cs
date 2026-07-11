@@ -1,9 +1,10 @@
 using Godot;
+using STS2RitsuLib.Scaffolding.Characters;
 using STS2RitsuLib.Scaffolding.Content;
 using STS2RitsuLib.Utils;
 namespace Goldenglow.Card;
 
-public class GoldenglowCardPool : TypeListCardPoolModel
+public class GoldenglowCardPool : TypeListCardPoolModel, IModColorfulPhilosophersCardPool
 {
     public override string Title => "goldenglow";
     public override string EnergyColorName => "goldenglow";

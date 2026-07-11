@@ -15,7 +15,7 @@ namespace Goldenglow.Card;
 public class RageOfTheBeacons() : AbstractGoldenglowCard(0, CardType.Skill, CardRarity.Rare, CustomTargetType.Anyone)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        ModCardVars.Computed("Buoy", 1, card => 1 + GoldenglowCmd.GetStaticStacks(card))
+        ModCardVars.Computed("Buoy", 1, card => DynamicVars["Buoy"].BaseValue + GoldenglowCmd.GetStaticStacks(card))
     ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips => [GoldenglowUtils.Static, HoverTipFactory.FromOrb<BuoyOrb>()];

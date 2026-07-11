@@ -22,4 +22,17 @@ public static class GodotExtension
         }
         return null;
     }
+
+    public static void PlayAllParticles(this Node2D node)
+    {
+        foreach (var particle in node.GetChildren().OfType<CpuParticles2D>())
+        {
+            particle.Emitting = true;
+        }
+        
+        foreach (var particle in node.GetChildren().OfType<GpuParticles2D>())
+        {
+            particle.Emitting = true;
+        }
+    }
 }

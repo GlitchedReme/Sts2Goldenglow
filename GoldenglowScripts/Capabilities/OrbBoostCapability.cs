@@ -1,23 +1,21 @@
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Models;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Models.Capabilities;
 
 namespace Goldenglow.Capabilities;
 
-/// <summary>
-/// Mutable evoke/passive bonus stored on an orb model.
-/// Set by RadiationLamp/DroneCaster powers; consumed during Evoke.
-/// </summary>
 [RegisterModelCapability]
 public sealed class OrbBoostCapability : OrbCapability
 {
-    public int BonusEvoke { get; set; }
+    protected override IEnumerable<DynamicVar> CanonicalVars => [
+        new DynamicVar("Amount", 1)
+    ];
 
-    /// <summary>
-    /// DroneCaster: after this orb evokes (deals damage), boost future evokes by 1.
-    /// </summary>
-    protected override Task OnOwnerOrbEvoked(OrbEvokeContext context)
+    public override decimal ModifyOrbValue(OrbModel orb, decimal value)
     {
-        BonusEvoke += 1;
-        return Task.CompletedTask;
+        if (Owner != orb)
+            return value;
+        return Math.Max(value + DynamicVars["Amount"].BaseValue, 0m);
     }
 }

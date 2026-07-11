@@ -1,8 +1,5 @@
-using System.Threading.Tasks;
 using Goldenglow.Capabilities;
-using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
-using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.Models;
@@ -20,10 +17,10 @@ public sealed class RadiationLampPower : ModPowerTemplate
 
     public override async Task AfterOrbChanneled(PlayerChoiceContext choiceContext, Player player, OrbModel orb)
     {
-        if (player != base.Owner.Player) return;
-        var cap = orb.GetOrCreateCapability<OrbBoostCapability>();
-        cap.BonusEvoke += Amount;
+        if (player != Owner.Player) return;
+        var cap = ModelCapabilityRegistry.Create<OrbBoostCapability>();
+        cap.DynamicVars["Amount"].BaseValue = Amount;
+        this.AddCapability(cap);
         Flash();
-        await Task.CompletedTask;
     }
 }

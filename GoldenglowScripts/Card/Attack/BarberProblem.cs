@@ -27,14 +27,14 @@ public class BarberProblem() : AbstractGoldenglowCard(1, CardType.Attack, CardRa
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new DynamicVar("Multiplier", 6),
-        ModCardVars.ComputedDamage("damage", 6,
+        ModCardVars.ComputedDamage("Damage", 0,
             card => PileType.Exhaust.GetPile(card!.Owner).Cards.Count * card.DynamicVars["Multiplier"].BaseValue,
             ValueProp.Move)
     ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await DamageCmd.Attack(((ComputedDynamicVar)DynamicVars["damage"]).Calculate())
+        await DamageCmd.Attack(DynamicVars.ComputeDynamicValue("Damage"))
             .FromCard(this, cardPlay)
             .TargetingAllOpponents(CombatState!)
             .Execute(choiceContext);
