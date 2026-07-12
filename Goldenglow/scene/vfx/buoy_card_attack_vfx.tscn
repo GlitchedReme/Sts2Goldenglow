@@ -1,0 +1,227 @@
+[gd_scene load_steps=23 format=3 uid="uid://br00johjd46ur"]
+
+[ext_resource type="Texture2D" uid="uid://28hyx4dl5byg" path="res://Goldenglow/image/orb/buoy_default.png" id="1_b6t3y"]
+[ext_resource type="Script" uid="uid://dlj4jrdpy3jhd" path="res://GoldenglowScripts/Vfx/BuoyCardAttackVfx.cs" id="1_hnf6h"]
+[ext_resource type="Texture2D" uid="uid://b4nbji3fjveqg" path="res://Goldenglow/image/vfx/common/common_impact_flare_flipbook.png" id="2_glxk2"]
+[ext_resource type="Shader" uid="uid://bewom3mv4bb05" path="res://Goldenglow/shaders/flipbook.gdshader" id="3_5sxrl"]
+[ext_resource type="Texture2D" uid="uid://dhx0weqxim5yu" path="res://Goldenglow/image/vfx/lightning_flipbook_1.png" id="4_kx07l"]
+[ext_resource type="Texture2D" uid="uid://b1b1b5kek4a0t" path="res://Goldenglow/image/vfx/lightning_flipbook_2.png" id="5_x3qvf"]
+
+[sub_resource type="Shader" id="S_flipbook"]
+code = "shader_type canvas_item;
+render_mode blend_mix;
+vec2 flipbook(vec2 uv, vec2 size, float progress) {
+    progress = floor(mod(progress, (size.x * size.y)));
+    vec2 frame_size = vec2(1.0, 1.0) / vec2(size.x, size.y);
+    vec2 frame = fract(uv / size) + frame_size;
+    frame.x += ((progress / size.x) - frame_size.x * floor(progress / size.x) * size.x) - frame_size.x;
+    frame.y += (frame_size.y * floor(progress / size.x)) - frame_size.y;
+    return frame;
+}
+vec4 shift_hue(in vec4 color, in float shift) {
+    vec3 gray = vec3(0.57735);
+    vec3 projection = gray * dot(gray, color.rgb);
+    vec3 U = color.rgb - projection;
+    vec3 V = cross(gray, U);
+    vec3 shifted = U * cos(shift * 2.0 * PI) + V * sin(shift * 2.0 * PI) + projection;
+    return vec4(shifted, color.a);
+}
+float erosion_from_factors(vec2 factors, float input) {
+    return smoothstep(factors.x, factors.x + factors.y, input);
+}
+uniform vec2 pivot_offset = vec2(0.0, 0.0);
+uniform sampler2D lut : repeat_disable;
+uniform float frame_count = 9;
+uniform vec2 flipbook_size = vec2(3, 3);
+uniform sampler2D flipbook_curve : repeat_disable, hint_default_black;
+uniform float use_erosion_texture = 0.0;
+uniform sampler2D erosion_texture : repeat_disable;
+uniform sampler2D erosion_curve : hint_default_black;
+uniform float erosion_offset = 0.1;
+uniform float use_hue_shift = 0.0;
+uniform sampler2D hue_shift_curve : repeat_disable, hint_default_black;
+varying float lifetime;
+varying float flipbook_offset;
+varying vec4 vertex_color;
+varying vec2 flipbook_uv;
+void vertex() {
+    vertex_color = COLOR;
+    lifetime = INSTANCE_CUSTOM.y / INSTANCE_CUSTOM.w;
+    flipbook_offset = INSTANCE_CUSTOM.z;
+    VERTEX += pivot_offset * (1.0 / TEXTURE_PIXEL_SIZE);
+    float flipbook_progress = textureLod(flipbook_curve, vec2(lifetime), 0.0).r;
+    flipbook_uv = flipbook(UV, flipbook_size, ((frame_count * flipbook_offset) + (frame_count * flipbook_progress)) * 0.99);
+}
+void fragment() {
+    vec4 flipbook_texture_color = texture(TEXTURE, flipbook_uv);
+    vec4 erosion_color = texture(erosion_texture, UV);
+    float erosion_curve_val = texture(erosion_curve, vec2(lifetime)).r;
+    float erosion_val = erosion_from_factors(vec2(erosion_curve_val, erosion_offset), erosion_color.r);
+    float erosion = mix(1.0, erosion_val, use_erosion_texture);
+    float alpha = flipbook_texture_color.a * vertex_color.a * erosion;
+    vec4 lut_color = texture(lut, flipbook_texture_color.rr);
+    vec4 initial_color = lut_color * vertex_color;
+    float hue_shift_val = texture(hue_shift_curve, flipbook_texture_color.rr).r;
+    vec4 shifted_color = shift_hue(initial_color, hue_shift_val);
+    vec4 final_color = mix(initial_color, shifted_color, use_hue_shift);
+    COLOR = vec4(final_color.rgb, alpha);
+}"
+
+[sub_resource type="Gradient" id="Gradient_orkba"]
+offsets = PackedFloat32Array(0.85752, 0.902375)
+colors = PackedColorArray(1, 1, 1, 1, 1.8247963, 1.8247963, 1.8247963, 1)
+
+[sub_resource type="GradientTexture1D" id="GT1_flare_lut"]
+gradient = SubResource("Gradient_orkba")
+use_hdr = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4gs56"]
+shader = SubResource("S_flipbook")
+shader_parameter/pivot_offset = Vector2(0, 0)
+shader_parameter/lut = SubResource("GT1_flare_lut")
+shader_parameter/frame_count = 4.0
+shader_parameter/flipbook_size = Vector2(2, 2)
+shader_parameter/use_erosion_texture = 0.0
+shader_parameter/erosion_offset = 0.1
+shader_parameter/use_hue_shift = 0.0
+
+[sub_resource type="Curve" id="Curve_gpfsx"]
+_limits = [0.0, 3.0, 0.0, 1.0]
+_data = [Vector2(0, 3), 0.0, -5.74391, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CT_flare_emission"]
+curve = SubResource("Curve_gpfsx")
+
+[sub_resource type="Curve" id="Curve_583yv"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -2.41411, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CT_flare_scale"]
+curve = SubResource("Curve_583yv")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_7bhbj"]
+particle_flag_disable_z = true
+angle_min = -1000.0
+angle_max = 1000.0
+gravity = Vector3(0, 0, 0)
+scale_min = 1.4
+scale_max = 1.75
+scale_curve = SubResource("CT_flare_scale")
+color = Color(1, 1, 1, 0.2509804)
+emission_curve = SubResource("CT_flare_emission")
+anim_offset_max = 1.0
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_885jw"]
+particle_flag_disable_z = true
+angle_min = -1000.0
+angle_max = 1000.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.79999995
+scale_curve = SubResource("CT_flare_scale")
+emission_curve = SubResource("CT_flare_emission")
+anim_offset_max = 1.0
+
+[sub_resource type="Curve" id="Curve_fwwnl"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 1, Vector2(1, 1), 1.0, 0.0, 1, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_5i2af"]
+curve = SubResource("Curve_fwwnl")
+
+[sub_resource type="Gradient" id="Gradient_fdnif"]
+offsets = PackedFloat32Array(1)
+colors = PackedColorArray(1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ur0v1"]
+gradient = SubResource("Gradient_fdnif")
+use_hdr = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xk58y"]
+shader = ExtResource("3_5sxrl")
+shader_parameter/pivot_offset = Vector2(0, 0)
+shader_parameter/lut = SubResource("GradientTexture1D_ur0v1")
+shader_parameter/frame_count = 9.0
+shader_parameter/flipbook_size = Vector2(3, 3)
+shader_parameter/flipbook_curve = SubResource("CurveTexture_5i2af")
+shader_parameter/use_erosion_texture = 0.0
+shader_parameter/erosion_offset = 0.1
+shader_parameter/use_hue_shift = 0.0
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_2gauq"]
+lifetime_randomness = 0.2
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 43.6
+angle_min = 1.0728835e-05
+angle_max = 360.00003
+gravity = Vector3(0, 0, 0)
+scale_min = 0.19999999
+scale_max = 0.29999998
+
+[node name="BuoyCardAttackVfx" type="Node2D"]
+script = ExtResource("1_hnf6h")
+
+[node name="Particles" type="Node2D" parent="."]
+unique_name_in_owner = true
+
+[node name="vfx_common_hit_flare_transparent" type="GPUParticles2D" parent="Particles"]
+self_modulate = Color(0.5, 0.11500001, 0.41658333, 1)
+material = SubResource("ShaderMaterial_4gs56")
+position = Vector2(0, -2)
+scale = Vector2(0.9999999, 0.9999999)
+emitting = false
+amount = 4
+texture = ExtResource("2_glxk2")
+lifetime = 0.17
+one_shot = true
+fixed_fps = 60
+process_material = SubResource("ParticleProcessMaterial_7bhbj")
+
+[node name="vfx_common_hit_flare" type="GPUParticles2D" parent="Particles"]
+self_modulate = Color(0.36, 0.08280001, 0.29994002, 1)
+z_index = 1
+material = SubResource("ShaderMaterial_4gs56")
+position = Vector2(0, -2)
+scale = Vector2(0.9999999, 0.9999999)
+emitting = false
+amount = 4
+texture = ExtResource("2_glxk2")
+lifetime = 0.17
+one_shot = true
+fixed_fps = 60
+process_material = SubResource("ParticleProcessMaterial_885jw")
+
+[node name="vfx_lightning1" type="GPUParticles2D" parent="Particles"]
+self_modulate = Color(0.9530105, 0.8901599, 0.94909936, 1)
+z_index = 1
+material = SubResource("ShaderMaterial_xk58y")
+emitting = false
+amount = 1
+texture = ExtResource("4_kx07l")
+lifetime = 0.3
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 60
+local_coords = true
+trail_lifetime = 3.13
+process_material = SubResource("ParticleProcessMaterial_2gauq")
+
+[node name="vfx_lightning2" type="GPUParticles2D" parent="Particles"]
+self_modulate = Color(0.9530105, 0.8901599, 0.94909936, 1)
+z_index = 1
+material = SubResource("ShaderMaterial_xk58y")
+emitting = false
+amount = 1
+texture = ExtResource("5_x3qvf")
+lifetime = 0.3
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 60
+local_coords = true
+trail_lifetime = 3.13
+process_material = SubResource("ParticleProcessMaterial_2gauq")
+
+[node name="Buoy" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+texture = ExtResource("1_b6t3y")

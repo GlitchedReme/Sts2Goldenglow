@@ -1,28 +1,30 @@
+using Godot;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
-using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Helpers;
+using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Nodes.Rooms;
 using MegaCrit.Sts2.Core.ValueProps;
+using Goldenglow.Core;
+using Goldenglow.Vfx;
 using STS2RitsuLib.Cards.DynamicVars;
 using STS2RitsuLib.Interop.AutoRegistration;
-using Goldenglow.Core;
-using System.Collections.Generic;
-using MegaCrit.Sts2.Core.HoverTips;
-using STS2RitsuLib.Scaffolding.Content;
 
 namespace Goldenglow.Card;
 
 [RegisterCard(typeof(GoldenglowCardPool))]
 public class CrystalClearSparkle() : AbstractGoldenglowCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.RandomEnemy)
 {
+    private const float StaggerInterval = 0.1f;
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         ModCardVars.ComputedDamage("Damage", 2,
-            card => 2 + GoldenglowCmd.GetStaticStacks(card!),
+            card => 2 + GoldenglowCmd.GetStaticStacks(card),
             ValueProp.Move),
         ModCardVars.Computed("Repeat", 2,
-            card => 2 + GoldenglowCmd.GetStaticStacks(card!))
+            card => 2 + GoldenglowCmd.GetStaticStacks(card))
     ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips => [GoldenglowUtils.Static];
@@ -35,16 +37,36 @@ public class CrystalClearSparkle() : AbstractGoldenglowCard(1, CardType.Attack, 
         var rng = Owner.RunState.Rng.CombatTargets;
         int hits = (int)((ComputedDynamicVar)DynamicVars["Repeat"]).Calculate();
 
+        var delay = 0f;
+        var tasks = new List<Task>();
         for (int i = 0; i < hits; i++)
         {
             var target = rng.NextItem(enemies);
-            if (target != null)
+            if (target == null) continue;
+
+            var targetNode = NCombatRoom.Instance?.GetCreatureNode(target);
+            var pos = (targetNode?.VfxSpawnPosition ?? Vector2.Zero)
+                + Vector2.Right.Rotated(MathF.PI + Random.Shared.NextSingle() * MathF.PI) * (200f + Random.Shared.NextSingle() * 200f);
+
+            var vfx = BuoyCardAttackVfx.Create(pos, target, async () =>
+            {
                 await DamageCmd.Attack(((ComputedDynamicVar)DynamicVars["Damage"]).Calculate())
                     .FromCard(this, cardPlay)
                     .Targeting(target)
                     .Execute(choiceContext);
+            }, delay);
+
+            if (vfx != null)
+            {
+                NCombatRoom.Instance?.CombatVfxContainer.AddChildSafely(vfx);
+                tasks.Add(vfx.CompletionTask!);
+            }
+
+            delay += StaggerInterval;
         }
-        GoldenglowCmd.ApplyStatic(cardPlay.Card);
+        await GoldenglowCmd.ApplyStatic(cardPlay.Card);
+
+        await Task.WhenAll(tasks);
     }
 
     protected override void OnUpgrade()

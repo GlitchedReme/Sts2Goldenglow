@@ -20,7 +20,7 @@ public class HalfWaveRectifier() : AbstractGoldenglowCard(0, CardType.Attack, Ca
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         for (int i = 0; i < 2; i++)
-            await GoldenglowCmd.Pulse(Owner);
+            await GoldenglowCmd.Pulse(Owner, this, cardPlay);
         if (DynamicVars.Cards.BaseValue > 0)
         await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.BaseValue, Owner);
     }

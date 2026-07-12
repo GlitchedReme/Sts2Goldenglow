@@ -5,6 +5,7 @@ using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Hooks;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
 
@@ -18,6 +19,7 @@ public static class GoldenglowOrbCmd
         {
             var player = target.Player;
             if (player == null) return;
+            orb.Owner = null!;
             await OrbCmd.Channel(new ThrowingPlayerChoiceContext(), orb, player);
         }
         else
@@ -26,7 +28,8 @@ public static class GoldenglowOrbCmd
             var orbs = mgr.GetOrbs();
             if (mgr.Capacity > 0 && orbs.Count >= mgr.Capacity)
             {
-                await orbs[0].Evoke(new ThrowingPlayerChoiceContext());
+                await EvokeOldestOrb(orbs[0], target);
+                if (target.IsDead) return;
                 mgr.EvokeOrb(orbs[0]);
             }
             orb.Owner = null!;
@@ -48,11 +51,13 @@ public static class GoldenglowOrbCmd
         {
             for (int i = 0; i < count; i++)
             {
+                if (target.IsDead) return;
                 var mgr = GetOrCreateMonsterOrbManager(target);
                 var orbs = mgr.GetOrbs();
                 if (mgr.Capacity > 0 && orbs.Count >= mgr.Capacity)
                 {
-                    await orbs[0].Evoke(new ThrowingPlayerChoiceContext());
+                    await EvokeOldestOrb(orbs[0], target);
+                    if (target.IsDead) return;
                     mgr.EvokeOrb(orbs[0]);
                 }
                 var orb = ModelDb.Orb<TOrb>().ToMutable();
@@ -61,6 +66,16 @@ public static class GoldenglowOrbCmd
                 mgr.ChannelOrb(orb);
             }
         }
+    }
+
+    private static async Task EvokeOldestOrb(OrbModel orb, Creature monster)
+    {
+        var ctx = new ThrowingPlayerChoiceContext();
+        if (await VanillaOrbMonsterHandler.TryHandleEvoke(orb, monster, ctx))
+            return;
+        var targets = await orb.Evoke(ctx);
+        if (monster.CombatState != null)
+            await Hook.AfterOrbEvoked(ctx, monster.CombatState, orb, targets);
     }
 
     /// <summary>
@@ -112,7 +127,7 @@ public static class GoldenglowOrbCmd
             var orbMgr = NCombatRoom.Instance?.GetCreatureNode(source)?.OrbManager;
             for (int i = 0; i < n; i++)
             {
-                var orb = orbs[orbs.Count - 1];
+                var orb = orbs[0];
                 orbQueue.Remove(orb);
                 orbMgr?.EvokeOrbAnim(orb);
                 result.Add(orb);
@@ -127,7 +142,7 @@ public static class GoldenglowOrbCmd
             var snapshot = orbs.ToList();
             for (int i = 0; i < n; i++)
             {
-                var orb = snapshot[snapshot.Count - 1 - i];
+                var orb = snapshot[i];
                 mgr.EvokeOrb(orb);
                 MonsterOrbPatch.OwnerState[orb] = null;
                 result.Add(orb);

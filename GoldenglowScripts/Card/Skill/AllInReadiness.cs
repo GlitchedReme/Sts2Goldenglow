@@ -10,7 +10,7 @@ using STS2RitsuLib.Interop.AutoRegistration;
 namespace Goldenglow.Card;
 
 [RegisterCard(typeof(GoldenglowCardPool))]
-public class AllInReadiness() : AbstractGoldenglowCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
+public class AllInReadiness() : AbstractGoldenglowCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new BlockVar(11, ValueProp.Move)

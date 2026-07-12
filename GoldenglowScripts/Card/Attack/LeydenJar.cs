@@ -23,7 +23,7 @@ public class LeydenJar() : AbstractGoldenglowCard(-1, CardType.Attack, CardRarit
     {
         var xValue = ResolveEnergyXValue();
         for (int i = 0; i < xValue + DynamicVars["Extra"].BaseValue; i++)
-            await GoldenglowCmd.Pulse(Owner);
+            await GoldenglowCmd.Pulse(Owner, this, cardPlay);
     }
 
     protected override void OnUpgrade()

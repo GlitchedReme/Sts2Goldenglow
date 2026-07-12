@@ -1,5 +1,4 @@
 using Goldenglow.Core;
-using System.Collections.Generic;
 using MegaCrit.Sts2.Core.HoverTips;
 using Goldenglow.Ui;
 using MegaCrit.Sts2.Core.Commands;
@@ -8,7 +7,6 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Interop.AutoRegistration;
-using STS2RitsuLib.Scaffolding.Content;
 
 namespace Goldenglow.Card;
 
@@ -33,9 +31,9 @@ public class PincerTactics() : AbstractGoldenglowCard(1, CardType.Attack, CardRa
         int targetOrbs = MonsterOrbManager.MonsterOrbManagerState[target]?.GetOrbs().Count ?? 0;
 
         if (playerOrbs > targetOrbs)
-            await GoldenglowOrbCmd.TransferOrbs(Owner.Creature, target, playerOrbs - targetOrbs);
+            await GoldenglowOrbCmd.TransferOrbs(Owner.Creature, target, playerOrbs);
         else if (targetOrbs > playerOrbs)
-            await GoldenglowOrbCmd.TransferOrbs(target, Owner.Creature, targetOrbs - playerOrbs);
+            await GoldenglowOrbCmd.TransferOrbs(target, Owner.Creature, targetOrbs);
     }
 
     protected override void OnUpgrade()

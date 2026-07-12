@@ -4,10 +4,8 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using Goldenglow.Orb;
 using MegaCrit.Sts2.Core.HoverTips;
-using System.Collections.Generic;
 using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Interop.AutoRegistration;
-using STS2RitsuLib.Scaffolding.Content;
 
 namespace Goldenglow.Card;
 
@@ -24,7 +22,10 @@ public class DroneStrike() : AbstractGoldenglowCard(1, CardType.Attack, CardRari
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, cardPlay).Targeting(cardPlay.Target!).Execute(choiceContext);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
+            .FromCard(this, cardPlay)
+            .Targeting(cardPlay.Target!)
+            .Execute(choiceContext);
         for (int j = 0; j < (int)DynamicVars["Buoy"].BaseValue; j++)
             await GoldenglowOrbCmd.ChannelBuoy(cardPlay.Target!, 1);
     }

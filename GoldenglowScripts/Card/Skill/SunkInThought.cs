@@ -3,7 +3,6 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using STS2RitsuLib.Interop.AutoRegistration;
-using STS2RitsuLib.Scaffolding.Content;
 
 namespace Goldenglow.Card;
 
@@ -20,7 +19,7 @@ public class SunkInThought() : AbstractGoldenglowCard(1, CardType.Skill, CardRar
         await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.BaseValue, Owner);
     }
 
-    protected override (PileType, CardPilePosition) GetResultPileTypeAndPositionForCardPlay() => (PileType.Draw, CardPilePosition.Random);
+    protected override (PileType, CardPilePosition) GetResultPileTypeAndPositionForCardPlay() => Keywords.Contains(CardKeyword.Exhaust) ? base.GetResultPileTypeAndPositionForCardPlay() : (PileType.Draw, CardPilePosition.Random);
 
     protected override void OnUpgrade()
     {

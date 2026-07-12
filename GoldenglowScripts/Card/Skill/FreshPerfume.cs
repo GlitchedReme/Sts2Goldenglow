@@ -3,8 +3,6 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using STS2RitsuLib.Interop.AutoRegistration;
-using STS2RitsuLib.Scaffolding.Content;
-
 using Goldenglow.Power;
 
 namespace Goldenglow.Card;
@@ -15,7 +13,7 @@ public class FreshPerfume() : AbstractGoldenglowCard(0, CardType.Skill, CardRari
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new DynamicVar("Turns", 3),
-        new CardsVar(1)
+        new CardsVar(0)
     ];
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
@@ -23,11 +21,12 @@ public class FreshPerfume() : AbstractGoldenglowCard(0, CardType.Skill, CardRari
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await PowerCmd.Apply<FreshPerfumePower>(choiceContext, Owner.Creature, DynamicVars["Turns"].BaseValue, Owner.Creature, this);
-        await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.BaseValue, Owner);
+        if (DynamicVars.Cards.BaseValue > 0)
+            await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.BaseValue, Owner);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars["Turns"].UpgradeValueBy(2);
+        DynamicVars.Cards.UpgradeValueBy(1);
     }
 }

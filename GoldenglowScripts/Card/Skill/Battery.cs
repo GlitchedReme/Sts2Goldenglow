@@ -14,7 +14,8 @@ public class Battery() : AbstractGoldenglowCard(0, CardType.Skill, CardRarity.Un
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new EnergyVar(1),
-        new DynamicVar("Turns", 3)
+        new DynamicVar("Turns", 3),
+        new CardsVar(0)
     ];
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
@@ -22,11 +23,12 @@ public class Battery() : AbstractGoldenglowCard(0, CardType.Skill, CardRarity.Un
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await PowerCmd.Apply<BatteryPower>(choiceContext, Owner.Creature, DynamicVars["Turns"].BaseValue, Owner.Creature, this);
-        // await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.BaseValue, Owner);
+        if (DynamicVars.Cards.BaseValue > 0)
+            await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.BaseValue, Owner);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars["Turns"].UpgradeValueBy(2);
+        DynamicVars.Cards.UpgradeValueBy(1);
     }
 }

@@ -12,12 +12,11 @@ public class HairComb() : AbstractGoldenglowCard(0, CardType.Skill, CardRarity.U
 {
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new BlockVar(13, ValueProp.Move),
+        new BlockVar(11, ValueProp.Move),
         new CardsVar(1)
     ];
 
     public override bool GainsBlock => true;
-
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 

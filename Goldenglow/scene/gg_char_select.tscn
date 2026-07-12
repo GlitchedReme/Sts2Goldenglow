@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://b4r4nf7whl3sq"]
+[gd_scene load_steps=3 format=3 uid="uid://b4r4nf7whl3sq"]
 
 [ext_resource type="Texture2D" uid="uid://lqyts8o1q7bk" path="res://Goldenglow/image/character/portrait.png" id="1_17863"]
+[ext_resource type="PackedScene" uid="uid://gwt4q11a23h" path="res://Goldenglow/scene/skin_select.tscn" id="2_358oh"]
 
 [node name="TestBg" type="Control"]
 layout_mode = 3
@@ -30,6 +31,7 @@ offset_right = 640.0
 offset_bottom = 478.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="ColorRect" type="ColorRect" parent="Control"]
 layout_mode = 1
@@ -53,3 +55,10 @@ grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.82, 0.82)
 texture = ExtResource("1_17863")
+
+[node name="SkinSelect" parent="." instance=ExtResource("2_358oh")]
+layout_mode = 1
+offset_left = 1206.0
+offset_top = 370.0
+offset_right = -861.0
+offset_bottom = -594.0

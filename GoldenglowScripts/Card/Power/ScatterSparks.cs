@@ -13,19 +13,19 @@ namespace Goldenglow.Card;
 public class ScatterSparks() : AbstractGoldenglowCard(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DynamicVar("Block", 4),
+        new DynamicVar("GainBlock", 4),
         new CardsVar(2)
     ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await PowerCmd.Apply<ScatterSparksBlockPower>(choiceContext, Owner.Creature, DynamicVars.Block.BaseValue, Owner.Creature, this);
+        await PowerCmd.Apply<ScatterSparksBlockPower>(choiceContext, Owner.Creature, DynamicVars["GainBlock"].BaseValue, Owner.Creature, this);
         await PowerCmd.Apply<ScatterSparksDiscardPower>(choiceContext, Owner.Creature, DynamicVars.Cards.BaseValue, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Block.UpgradeValueBy(2);
+        DynamicVars["GainBlock"].UpgradeValueBy(2);
         DynamicVars.Cards.UpgradeValueBy(1);
     }
 }

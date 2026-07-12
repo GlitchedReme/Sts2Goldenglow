@@ -2,23 +2,35 @@ using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using Goldenglow.Core;
 using Goldenglow.Power;
 using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace Goldenglow.Card;
 
 [RegisterCard(typeof(GoldenglowCardPool))]
-public class Technique() : AbstractGoldenglowCard(1, CardType.Power, CardRarity.Rare, TargetType.Self)
+public class Technique() : AbstractGoldenglowCard(2, CardType.Power, CardRarity.Rare, TargetType.Self)
 {
+    protected override bool IsPlayable
+    {
+        get
+        {
+            if (Owner == null) return false;
+            var hand = PileType.Hand.GetPile(Owner).Cards;
+            var candidates = hand.Where(GoldenglowUtils.IsZeroCost).ToList();
+            return candidates.Count > 0;
+        }
+    }
+
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var hand = PileType.Hand.GetPile(Owner).Cards;
-        var candidates = hand.Where(c => !c.EnergyCost.CostsX && c.EnergyCost.Canonical == 0).ToList();
+        var candidates = hand.Where(GoldenglowUtils.IsZeroCost).ToList();
         if (candidates.Count == 0) return;
 
         var selected = (await CardSelectCmd.FromHand(
             choiceContext, Owner, new CardSelectorPrefs(SelectionScreenPrompt, 1),
-            c => !c.EnergyCost.CostsX && c.EnergyCost.Canonical == 0, this
+            GoldenglowUtils.IsZeroCost, this
         )).FirstOrDefault();
         if (selected == null) return;
 

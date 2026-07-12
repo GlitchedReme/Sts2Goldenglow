@@ -8,7 +8,9 @@ using MegaCrit.Sts2.Core.Rooms;
 using MegaCrit.Sts2.Core.Runs;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Models;
+using STS2RitsuLib.Models.Capabilities;
 using Goldenglow.Capabilities;
+using Goldenglow.Patch;
 using Goldenglow.Ui;
 using Goldenglow.Card;
 
@@ -33,6 +35,22 @@ public class GoldenglowSingleton() : HookedSingletonModel(HookType.Combat)
         return hasModified;
     }
 
+    public override decimal ModifyOrbValue(OrbModel orb, decimal value)
+    {
+        if (!MonsterOrbPatch.OwnerState.TryGetValue(orb, out _))
+            return value;
+
+        if (!ModelCapabilities.TryGet(orb, out var caps))
+            return value;
+
+        foreach (var cap in caps.All)
+        {
+            if (cap is AbstractModel model)
+                value = model.ModifyOrbValue(orb, value);
+        }
+        return value;
+    }
+
     public override async Task BeforeSideTurnStart(PlayerChoiceContext choiceContext, CombatSide side, IReadOnlyList<Creature> participants, ICombatState combatState)
     {
         if (side == CombatSide.Player)
@@ -41,16 +59,20 @@ public class GoldenglowSingleton() : HookedSingletonModel(HookType.Combat)
         }
     }
 
-    public override async Task AfterSideTurnStart(CombatSide side, IReadOnlyList<Creature> participants, ICombatState combatState)
+    public override async Task AfterSideTurnEnd(PlayerChoiceContext choiceContext, CombatSide side, IEnumerable<Creature> participants)
     {
-        if (side == CombatSide.Enemy)
+        if (side == CombatSide.Player)
         {
-            foreach (var enemy in participants)
+            var combatState = participants.FirstOrDefault()?.CombatState;
+            if (combatState == null) return;
+            var enemies = combatState.GetCreaturesOnSide(CombatSide.Enemy).ToList();
+            foreach (var enemy in enemies)
             {
                 if (enemy.IsDead) continue;
                 if (MonsterOrbManager.MonsterOrbManagerState.TryGetValue(enemy, out var manager) && manager != null)
                 {
-                    await manager.BeforeTurnEnd(new ThrowingPlayerChoiceContext());
+                    await manager.BeforeTurnEnd(choiceContext);
+                    await manager.AfterTurnStart(choiceContext);
                 }
             }
         }

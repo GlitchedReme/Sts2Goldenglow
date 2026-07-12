@@ -1,0 +1,8 @@
+[gd_resource type="SpineSkeletonDataResource" load_steps=3 format=3 uid="uid://c5d52juyc7bsp"]
+
+[ext_resource type="SpineAtlasResource" uid="uid://bh3cfa6hb2jnu" path="res://Goldenglow/image/character/char_377_gdglow_snow_5.atlas" id="1_yhboo"]
+[ext_resource type="SpineSkeletonFileResource" uid="uid://oq2lfexlxjeu" path="res://Goldenglow/image/character/char_377_gdglow_snow_5.skel" id="2_emi44"]
+
+[resource]
+atlas_res = ExtResource("1_yhboo")
+skeleton_file_res = ExtResource("2_emi44")

@@ -24,9 +24,10 @@ public sealed class BuoyRecoveryPower : ModPowerTemplate
     {
         if (orb is not BuoyOrb buoy) return;
         if (buoy.Holder == null || buoy.Holder.IsPlayer) return;
+        if (Owner.Player == null) return;
 
         Flash();
-        if (base.Owner.Player == null) return;
-        await OrbCmd.Channel<BuoyOrb>(choiceContext, base.Owner.Player);
+        for (int i = 0; i < Amount; i++)
+            await OrbCmd.Channel<BuoyOrb>(choiceContext, Owner.Player);
     }
 }

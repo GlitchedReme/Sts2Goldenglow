@@ -1,4 +1,5 @@
 using Godot;
+using Goldenglow.Patch;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -70,7 +71,7 @@ public partial class MonsterOrbManager : Control
         base._EnterTree();
         CombatManager.Instance.StateTracker.CombatStateChanged += OnCombatStateChanged;
         CombatManager.Instance.CombatSetUp += OnCombatSetup;
-        SetOrbManagerPosition();
+        CallDeferred(nameof(SetOrbManagerPosition));
     }
 
     public override void _ExitTree()
@@ -100,20 +101,29 @@ public partial class MonsterOrbManager : Control
         return mgr;
     }
 
-    public async Task BeforeTurnEnd(PlayerChoiceContext choiceContext)
+    public async Task BeforeTurnEnd(PlayerChoiceContext choiceContext) => await TriggerOrbs(choiceContext, VanillaOrbMonsterHandler.TryHandleBeforeTurnEnd, o => o.BeforeTurnEndOrbTrigger(choiceContext));
+
+    public async Task AfterTurnStart(PlayerChoiceContext choiceContext) => await TriggerOrbs(choiceContext, VanillaOrbMonsterHandler.TryHandleAfterTurnStart, o => o.AfterTurnStartOrbTrigger(choiceContext));
+
+    private async Task TriggerOrbs(PlayerChoiceContext choiceContext,
+        Func<OrbModel, Creature, PlayerChoiceContext, Task<bool>> vanillaHandler,
+        Func<OrbModel, Task> trigger)
     {
-        if (Creature.CombatState == null)
-            return;
+        if (Creature.CombatState == null) return;
 
         foreach (OrbModel orb in _orbs.ToArray())
         {
             if (!_orbs.Contains(orb)) continue;
+
+            if (await vanillaHandler(orb, Creature, choiceContext))
+                continue;
+
             var triggerCount = Hook.ModifyOrbPassiveTriggerCount(Creature.CombatState, orb, 1, out List<AbstractModel> modifyingModels);
             await Hook.AfterModifyingOrbPassiveTriggerCount(Creature.CombatState, orb, modifyingModels);
             for (int i = 0; i < triggerCount; i++)
             {
                 if (!_orbs.Contains(orb)) break;
-                await orb.BeforeTurnEndOrbTrigger(choiceContext);
+                await trigger(orb);
                 await Cmd.Wait(0.05f);
             }
         }
@@ -157,7 +167,8 @@ public partial class MonsterOrbManager : Control
 
     private void SetOrbManagerPosition()
     {
-        var visuals = _creatureNode.Visuals;
+        var visuals = _creatureNode?.Visuals;
+        if (visuals?.OrbPosition == null) return;
         float absX = Mathf.Abs(visuals.Scale.X);
         Scale = (absX > 1f) ? Vector2.One : Vector2.One * Mathf.Lerp(absX, 1f, 0.5f);
         Scale *= 0.85f;

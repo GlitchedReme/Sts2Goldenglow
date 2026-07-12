@@ -17,7 +17,11 @@ public class LightningArrester() : AbstractGoldenglowCard(1, CardType.Attack, Ca
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, cardPlay).Targeting(cardPlay.Target!).Execute(choiceContext);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
+            .FromCard(this, cardPlay)
+            .Targeting(cardPlay.Target!)
+            .WithHitFx("vfx/vfx_attack_lightning")
+            .Execute(choiceContext);
         var drawPile = PileType.Draw.GetPile(Owner).Cards.ToList();
         foreach (var card in drawPile.Where(card => card.Type == CardType.Power))
         {

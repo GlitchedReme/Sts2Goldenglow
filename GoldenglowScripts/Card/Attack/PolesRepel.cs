@@ -1,11 +1,9 @@
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
-using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Interop.AutoRegistration;
-using STS2RitsuLib.Scaffolding.Content;
 
 namespace Goldenglow.Card;
 
@@ -27,6 +25,7 @@ public class PolesRepel() : AbstractGoldenglowCard(1, CardType.Attack, CardRarit
             await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
                 .FromCard(this, cardPlay)
                 .TargetingAllOpponents(CombatState!)
+                .WithHitFx("vfx/vfx_attack_lightning")
                 .Execute(choiceContext);
     }
 

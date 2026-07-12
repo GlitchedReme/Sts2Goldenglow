@@ -1,12 +1,12 @@
+using Goldenglow.Capabilities;
 using Goldenglow.Orb;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
-using System.Collections.Generic;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using STS2RitsuLib.Interop.AutoRegistration;
-using STS2RitsuLib.Scaffolding.Content;
+using STS2RitsuLib.Models.Capabilities;
 
 namespace Goldenglow.Card;
 
@@ -15,7 +15,7 @@ public class SparkAgglutination() : AbstractGoldenglowCard(1, CardType.Skill, Ca
 {
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DynamicVar("Buff", 3)
+        new DynamicVar("Buff", 1)
     ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips => [HoverTipFactory.FromOrb<BuoyOrb>()];
@@ -23,10 +23,20 @@ public class SparkAgglutination() : AbstractGoldenglowCard(1, CardType.Skill, Ca
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await OrbCmd.Channel<BuoyOrb>(choiceContext, Owner);
+
+        var queue = Owner.PlayerCombatState?.OrbQueue;
+        if (queue == null) return;
+        int buff = (int)DynamicVars["Buff"].BaseValue;
+        foreach (var orb in queue.Orbs)
+        {
+            var cap = ModelCapabilityRegistry.Create<OrbBoostCapability>();
+            cap.DynamicVars["Amount"].BaseValue = buff;
+            orb.AddCapability(cap);
+        }
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars["Buff"].UpgradeValueBy(2);
+        DynamicVars["Buff"].UpgradeValueBy(1);
     }
 }

@@ -24,7 +24,11 @@ public sealed class TechniquePower : ModPowerTemplate, IPowerCustomTextProvider
     private int TurnCounter
     {
         get => (int)DynamicVars["TurnCounter"].BaseValue;
-        set => DynamicVars["TurnCounter"].BaseValue = value;
+        set
+        {
+            DynamicVars["TurnCounter"].BaseValue = value;
+            InvokeDisplayAmountChanged();
+        }
     }
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
@@ -49,7 +53,7 @@ public sealed class TechniquePower : ModPowerTemplate, IPowerCustomTextProvider
         if (TurnCounter >= Amount)
         {
             TurnCounter = 0;
-            var clone = _storedCard.CreateClone();
+            var clone = _storedCard.CreateDupe();
             await CardCmd.AutoPlay(choiceContext, clone, target: null);
             Flash();
         }

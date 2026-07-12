@@ -4,6 +4,7 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
+using Goldenglow.Core;
 using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace Goldenglow.Card;
@@ -28,7 +29,7 @@ public class ChainShock() : AbstractGoldenglowCard(0, CardType.Attack, CardRarit
         for (int i = 0; i < drawPileCards.Count; i++)
         {
             var c = drawPileCards[i];
-            if (!c.EnergyCost.CostsX && c.EnergyCost.GetAmountToSpend() == 0)
+            if (GoldenglowUtils.IsZeroCost(c))
                 zeroCostCards.Add(c);
         }
 

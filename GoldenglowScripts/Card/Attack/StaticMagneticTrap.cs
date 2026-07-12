@@ -1,4 +1,6 @@
+using Godot;
 using Goldenglow.Core;
+using Goldenglow.Vfx;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -18,6 +20,14 @@ public class StaticMagneticTrap() : AbstractGoldenglowCard(1, CardType.Attack, C
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
+        if (cardPlay.Target is { } target)
+        {
+            var vfx = NSweepingBeamVfx.Create();
+            var pos = target.GetCreatureNode()?.VfxSpawnPosition + Vector2.Right.Rotated(Random.Shared.NextSingle() * MathF.PI * 2) * (MathF.Sqrt(Random.Shared.NextSingle()) * 80f);
+            if (vfx != null)
+                GoldenglowUtils.PlayVfx(target, vfx, pos);
+        }
+
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
             .FromCard(this, cardPlay)
             .Targeting(cardPlay.Target!)

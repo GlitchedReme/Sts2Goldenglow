@@ -17,7 +17,7 @@ namespace Goldenglow.Orb;
 [RegisterOrb]
 public class BuoyOrb : ModOrbTemplate
 {
-    public Creature? Holder => Owner?.Creature ?? MonsterOrbPatch.OwnerState[this];
+    public Creature? Holder => MonsterOrbPatch.OwnerState.TryGetValue(this, out var creature) && creature != null ? creature : Owner?.Creature;
 
     protected override string PassiveSfx => "event:/goldenglow/sfx/buoy_evoke";
 

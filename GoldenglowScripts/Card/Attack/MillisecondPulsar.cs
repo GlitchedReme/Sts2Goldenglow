@@ -21,7 +21,7 @@ public class MillisecondPulsar() : AbstractGoldenglowCard(0, CardType.Attack, Ca
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, cardPlay).Targeting(cardPlay.Target!).Execute(choiceContext);
-        await GoldenglowCmd.Pulse(Owner);
+        await GoldenglowCmd.Pulse(Owner, this, cardPlay);
     }
 
     protected override void OnUpgrade()

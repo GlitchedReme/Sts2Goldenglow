@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://c4olr455dy86w" path="res://Goldenglow/image/character/layer6.png" id="1_1ex18"]
 [ext_resource type="Texture2D" uid="uid://4lvnjxye0rkq" path="res://Goldenglow/image/vfx/common_glow.png" id="1_24wqq"]
 [ext_resource type="Texture2D" uid="uid://g75uwkyelv3" path="res://Goldenglow/image/vfx/common_glow_speck.png" id="2_yqqp2"]
-[ext_resource type="Shader" uid="uid://bewom3mv4bb05" path="res://Goldenglow/shader/flipbook.gdshader" id="3_kr5ew"]
+[ext_resource type="Shader" uid="uid://bewom3mv4bb05" path="res://Goldenglow/shaders/flipbook.gdshader" id="3_kr5ew"]
 [ext_resource type="Texture2D" uid="uid://dhx0weqxim5yu" path="res://Goldenglow/image/vfx/lightning_flipbook_1.png" id="4_5i2af"]
 [ext_resource type="Texture2D" uid="uid://b1b1b5kek4a0t" path="res://Goldenglow/image/vfx/lightning_flipbook_2.png" id="5_5i2af"]
 
@@ -390,24 +390,24 @@ shader_parameter/rayThickness = 0.02
 _data = [Vector2(0, 0), 0.0, 1.0, 0, 1, Vector2(1, 1), 1.0, 0.0, 1, 0]
 point_count = 2
 
-[sub_resource type="CurveTexture" id="CurveTexture_5i2af"]
+[sub_resource type="CurveTexture" id="CurveTexture_ur0v1"]
 curve = SubResource("Curve_kr5ew")
 
 [sub_resource type="Gradient" id="Gradient_etunt"]
 offsets = PackedFloat32Array(1)
 colors = PackedColorArray(1, 1, 1, 1)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_ur0v1"]
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_20nmi"]
 gradient = SubResource("Gradient_etunt")
 use_hdr = true
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ur0v1"]
 shader = ExtResource("3_kr5ew")
 shader_parameter/pivot_offset = Vector2(0, 0)
-shader_parameter/lut = SubResource("GradientTexture1D_ur0v1")
+shader_parameter/lut = SubResource("GradientTexture1D_20nmi")
 shader_parameter/frame_count = 9.0
 shader_parameter/flipbook_size = Vector2(3, 3)
-shader_parameter/flipbook_curve = SubResource("CurveTexture_5i2af")
+shader_parameter/flipbook_curve = SubResource("CurveTexture_ur0v1")
 shader_parameter/use_erosion_texture = 0.0
 shader_parameter/erosion_offset = 0.1
 shader_parameter/use_hue_shift = 0.0

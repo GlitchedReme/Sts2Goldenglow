@@ -27,7 +27,7 @@ public class NewLife() : AbstractGoldenglowCard(0, CardType.Attack, CardRarity.R
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        GoldenglowCmd.ApplyStatic(cardPlay.Card);
+        await GoldenglowCmd.ApplyStatic(cardPlay.Card);
 
         await DamageCmd.Attack(((ComputedDynamicVar)DynamicVars["Damage"]).Calculate())
             .FromCard(this, cardPlay)

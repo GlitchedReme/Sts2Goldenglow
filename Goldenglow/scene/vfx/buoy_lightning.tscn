@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=3 uid="uid://da2c46c5wpaie"]
 
 [ext_resource type="Script" uid="uid://ck46y1rejj0ye" path="res://GoldenglowScripts/Vfx/BuoyLightning.cs" id="1_83w0l"]
-[ext_resource type="Shader" uid="uid://bewom3mv4bb05" path="res://Goldenglow/shader/flipbook.gdshader" id="1_wrw5i"]
+[ext_resource type="Shader" uid="uid://bewom3mv4bb05" path="res://Goldenglow/shaders/flipbook.gdshader" id="1_wrw5i"]
 [ext_resource type="Texture2D" uid="uid://cwyj5dbvuukl0" path="res://Goldenglow/image/vfx/char_gdglow_02.png" id="2_83w0l"]
 
 [sub_resource type="Curve" id="Curve_wrw5i"]

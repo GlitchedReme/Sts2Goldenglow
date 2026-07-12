@@ -25,7 +25,7 @@ public class JacobsLadder() : AbstractGoldenglowCard(1, CardType.Attack, CardRar
             .Targeting(cardPlay.Target!)
             .Execute(choiceContext);
         for (int i = 0; i < DynamicVars.Repeat.BaseValue; i++)
-            await GoldenglowCmd.Pulse(Owner);
+            await GoldenglowCmd.Pulse(Owner, this, cardPlay);
     }
 
     protected override void OnUpgrade()

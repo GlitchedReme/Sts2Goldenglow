@@ -1,0 +1,159 @@
+[gd_scene load_steps=16 format=3 uid="uid://gwt4q11a23h"]
+
+[ext_resource type="Texture2D" uid="uid://b4ffylh" path="res://Goldenglow/image/ui/settings_tiny_left_arrow.tres" id="1_gpntl"]
+[ext_resource type="Script" uid="uid://v444vbqg7d2p" path="res://GoldenglowScripts/Ui/GGoldArrowButton.cs" id="1_kp7jd"]
+[ext_resource type="Texture2D" uid="uid://bvl313a8o75e5" path="res://Goldenglow/image/ui/tiny_nine_patch.png" id="2_kp7jd"]
+[ext_resource type="Texture2D" uid="uid://kjsi4o" path="res://Goldenglow/image/ui/settings_tiny_right_arrow.tres" id="3_6vig7"]
+[ext_resource type="SpineSkeletonDataResource" uid="uid://pd8kmolkrw6b" path="res://Goldenglow/image/character/default.tres" id="4_6vig7"]
+[ext_resource type="SpineSkeletonDataResource" uid="uid://c5d52juyc7bsp" path="res://Goldenglow/image/character/snow.tres" id="5_nl2m8"]
+[ext_resource type="Script" uid="uid://dbd4he18almqy" path="res://GoldenglowScripts/Ui/GMegaLabel.cs" id="5_t5xic"]
+[ext_resource type="SpineSkeletonDataResource" uid="uid://cpn2gh738frtb" path="res://Goldenglow/image/character/sanrio.tres" id="6_8qj7g"]
+[ext_resource type="Script" uid="uid://cfvup1836q4e3" path="res://GoldenglowScripts/Ui/SkinSelect.cs" id="7_qd4s2"]
+[ext_resource type="Shader" uid="uid://b1igbtqnks6lc" path="res://Goldenglow/shaders/utils/hsv.gdshader" id="8_4d2fq"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xt4q7"]
+resource_local_to_scene = true
+shader = ExtResource("8_4d2fq")
+shader_parameter/h = 1.0
+shader_parameter/s = 1.0
+shader_parameter/v = 0.9
+
+[sub_resource type="Gradient" id="Gradient_517xg"]
+offsets = PackedFloat32Array(0, 0.11904762, 0.88095236, 1)
+colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_nl2m8"]
+gradient = SubResource("Gradient_517xg")
+
+[sub_resource type="FontVariation" id="FontVariation_8qj7g"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yo8p3"]
+resource_local_to_scene = true
+shader = ExtResource("8_4d2fq")
+shader_parameter/h = 1.0
+shader_parameter/s = 1.0
+shader_parameter/v = 0.9
+
+[node name="SkinSelect" type="HBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("7_qd4s2")
+
+[node name="LeftButton" type="Control" parent="."]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+script = ExtResource("1_kp7jd")
+
+[node name="TextureRect" type="TextureRect" parent="LeftButton"]
+material = SubResource("ShaderMaterial_xt4q7")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.172
+anchor_top = 0.43500003
+anchor_right = 0.781
+anchor_bottom = 0.55600005
+offset_left = -0.016000748
+offset_top = 0.1199646
+offset_right = 0.03199768
+offset_bottom = -0.2880249
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_gpntl")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+self_modulate = Color(0, 0, 0, 0.47058824)
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("2_kp7jd")
+patch_margin_left = 12
+patch_margin_top = 12
+patch_margin_right = 12
+patch_margin_bottom = 12
+
+[node name="Mask" type="TextureRect" parent="NinePatchRect"]
+clip_children = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_nl2m8")
+
+[node name="Label" type="Label" parent="NinePatchRect/Mask"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.33400002
+anchor_top = 0.84300005
+anchor_right = 0.64400005
+anchor_bottom = 0.95100003
+offset_left = 0.4079895
+offset_top = -0.2640381
+offset_right = 0.12792969
+offset_bottom = -0.24804688
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = SubResource("FontVariation_8qj7g")
+text = "默认"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("5_t5xic")
+
+[node name="Node" type="Control" parent="NinePatchRect/Mask"]
+anchors_preset = 0
+
+[node name="SpineSprite" type="SpineSprite" parent="NinePatchRect/Mask/Node"]
+skeleton_data_res = ExtResource("4_6vig7")
+preview_skin = "Default"
+preview_animation = "Idle"
+preview_frame = false
+preview_time = 0.0
+position = Vector2(187, 182)
+scale = Vector2(0.35, 0.35)
+
+[node name="SpineSprite2" type="SpineSprite" parent="NinePatchRect/Mask/Node"]
+skeleton_data_res = ExtResource("5_nl2m8")
+preview_skin = "Default"
+preview_animation = "Idle"
+preview_frame = false
+preview_time = 0.0
+position = Vector2(341, 181)
+scale = Vector2(0.35, 0.35)
+
+[node name="SpineSprite3" type="SpineSprite" parent="NinePatchRect/Mask/Node"]
+skeleton_data_res = ExtResource("6_8qj7g")
+preview_skin = "Default"
+preview_animation = "Idle"
+preview_frame = false
+preview_time = 0.0
+position = Vector2(47.000004, 184)
+scale = Vector2(0.35, 0.35)
+
+[node name="RightButton" type="Control" parent="."]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+script = ExtResource("1_kp7jd")
+
+[node name="TextureRect" type="TextureRect" parent="RightButton"]
+material = SubResource("ShaderMaterial_yo8p3")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.172
+anchor_top = 0.43500003
+anchor_right = 0.781
+anchor_bottom = 0.55600005
+offset_left = -0.016000748
+offset_top = 0.1199646
+offset_right = 0.03199768
+offset_bottom = -0.2880249
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_6vig7")
+expand_mode = 1
+stretch_mode = 4

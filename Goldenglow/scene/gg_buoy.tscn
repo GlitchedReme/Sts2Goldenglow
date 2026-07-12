@@ -1,9 +1,52 @@
-[gd_scene load_steps=3 format=3 uid="uid://dc8tpyo4k3fy4"]
+[gd_scene load_steps=14 format=3 uid="uid://dc8tpyo4k3fy4"]
 
+[ext_resource type="Script" uid="uid://dvb4csb66uwb8" path="res://GoldenglowScripts/Orb/NBuoyVfx.cs" id="1_3uk34"]
 [ext_resource type="Texture2D" uid="uid://28hyx4dl5byg" path="res://Goldenglow/image/orb/buoy_default.png" id="1_c45v2"]
 [ext_resource type="Script" uid="uid://damrwanrnfcwk" path="res://GoldenglowScripts/Orb/NBuoyOrb.cs" id="1_q05sn"]
+[ext_resource type="Script" uid="uid://bvrdq4gobkuy4" path="res://GoldenglowScripts/Orb/GParticleContainers.cs" id="4_xo2yq"]
+[ext_resource type="Shader" uid="uid://bewom3mv4bb05" path="res://Goldenglow/shaders/flipbook.gdshader" id="5_q2l4s"]
+[ext_resource type="Texture2D" uid="uid://dhx0weqxim5yu" path="res://Goldenglow/image/vfx/lightning_flipbook_1.png" id="6_22fhs"]
+[ext_resource type="Texture2D" uid="uid://b1b1b5kek4a0t" path="res://Goldenglow/image/vfx/lightning_flipbook_2.png" id="7_erh8w"]
+
+[sub_resource type="Curve" id="Curve_8lptf"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 1, Vector2(1, 1), 1.0, 0.0, 1, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_q2l4s"]
+curve = SubResource("Curve_8lptf")
+
+[sub_resource type="Gradient" id="Gradient_uuel4"]
+offsets = PackedFloat32Array(1)
+colors = PackedColorArray(1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_22fhs"]
+gradient = SubResource("Gradient_uuel4")
+use_hdr = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_68qfr"]
+shader = ExtResource("5_q2l4s")
+shader_parameter/pivot_offset = Vector2(0, 0)
+shader_parameter/lut = SubResource("GradientTexture1D_22fhs")
+shader_parameter/frame_count = 9.0
+shader_parameter/flipbook_size = Vector2(3, 3)
+shader_parameter/flipbook_curve = SubResource("CurveTexture_q2l4s")
+shader_parameter/use_erosion_texture = 0.0
+shader_parameter/erosion_offset = 0.1
+shader_parameter/use_hue_shift = 0.0
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_0v6dg"]
+lifetime_randomness = 0.2
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 43.6
+angle_min = 1.0728835e-05
+angle_max = 360.00003
+gravity = Vector3(0, 0, 0)
+scale_min = 0.19999999
+scale_max = 0.29999998
 
 [node name="BuoyOrb" type="Node2D"]
+script = ExtResource("1_3uk34")
 
 [node name="Buoy" type="Sprite2D" parent="."]
 scale = Vector2(0.8125, 0.8125)
@@ -11,3 +54,63 @@ texture = ExtResource("1_c45v2")
 script = ExtResource("1_q05sn")
 
 [node name="SpineSkeleton" type="SpineSprite" parent="."]
+
+[node name="FocusedParticles" type="Node2D" parent="."]
+script = ExtResource("4_xo2yq")
+
+[node name="vfx_lightning1" type="GPUParticles2D" parent="FocusedParticles"]
+self_modulate = Color(0.9530105, 0.8901599, 0.94909936, 1)
+material = SubResource("ShaderMaterial_68qfr")
+emitting = false
+amount = 1
+texture = ExtResource("6_22fhs")
+lifetime = 0.3
+explosiveness = 1.0
+fixed_fps = 60
+local_coords = true
+trail_lifetime = 3.13
+process_material = SubResource("ParticleProcessMaterial_0v6dg")
+
+[node name="vfx_lightning2" type="GPUParticles2D" parent="FocusedParticles"]
+self_modulate = Color(0.9530105, 0.8901599, 0.94909936, 1)
+material = SubResource("ShaderMaterial_68qfr")
+emitting = false
+amount = 1
+texture = ExtResource("7_erh8w")
+lifetime = 0.3
+explosiveness = 1.0
+fixed_fps = 60
+local_coords = true
+trail_lifetime = 3.13
+process_material = SubResource("ParticleProcessMaterial_0v6dg")
+
+[node name="PassiveActivatedParticles" type="Node2D" parent="."]
+script = ExtResource("4_xo2yq")
+
+[node name="vfx_lightning1" type="GPUParticles2D" parent="PassiveActivatedParticles"]
+self_modulate = Color(0.9530105, 0.8901599, 0.94909936, 1)
+material = SubResource("ShaderMaterial_68qfr")
+emitting = false
+amount = 1
+texture = ExtResource("6_22fhs")
+lifetime = 0.3
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 60
+local_coords = true
+trail_lifetime = 3.13
+process_material = SubResource("ParticleProcessMaterial_0v6dg")
+
+[node name="vfx_lightning2" type="GPUParticles2D" parent="PassiveActivatedParticles"]
+self_modulate = Color(0.9530105, 0.8901599, 0.94909936, 1)
+material = SubResource("ShaderMaterial_68qfr")
+emitting = false
+amount = 1
+texture = ExtResource("7_erh8w")
+lifetime = 0.3
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 60
+local_coords = true
+trail_lifetime = 3.13
+process_material = SubResource("ParticleProcessMaterial_0v6dg")

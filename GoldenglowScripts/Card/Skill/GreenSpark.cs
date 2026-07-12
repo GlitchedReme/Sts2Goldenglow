@@ -1,10 +1,7 @@
-using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using STS2RitsuLib.Interop.AutoRegistration;
-using STS2RitsuLib.Scaffolding.Content;
-using System.Collections.Generic;
 
 namespace Goldenglow.Card;
 
@@ -30,6 +27,7 @@ public class GreenSpark() : AbstractGoldenglowCard(0, CardType.Skill, CardRarity
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Cards.UpgradeValueBy(1);
+        AddKeyword(CardKeyword.Innate);
+        // DynamicVars.Cards.UpgradeValueBy(1);
     }
 }

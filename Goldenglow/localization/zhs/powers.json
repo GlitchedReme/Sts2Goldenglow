@@ -31,8 +31,8 @@
   "GOLDENGLOW_POWER_TEMP_HAND_SIZE.title": "扩容（临时）",
   "GOLDENGLOW_POWER_CAPACITY_EXPANSION_POWER.title": "扩容",
 
-  "GOLDENGLOW_POWER_CHARGE_BALANCE_POWER.description": "每当[gold]激发[/gold]时，最左边的充能球的效果提高被[gold]激发[/gold]充能球的数值的一半。",
-  "GOLDENGLOW_POWER_CHARGE_BALANCE_POWER.smartDescription": "每当[gold]激发[/gold]时，最左边的充能球的效果提高被[gold]激发[/gold]充能球的数值的一半。",
+  "GOLDENGLOW_POWER_CHARGE_BALANCE_POWER.description": "每当[gold]激发[/gold]时，所有充能球的效果提高。",
+  "GOLDENGLOW_POWER_CHARGE_BALANCE_POWER.smartDescription": "每当[gold]激发[/gold]时，所有充能球的效果提高[blue]{Amount}[/blue]点。",
   "GOLDENGLOW_POWER_CHARGE_BALANCE_POWER.title": "电荷平衡",
 
   "GOLDENGLOW_POWER_DRONE_CASTER_POWER.description": "[gold]浮标[/gold]在造成伤害后，其数值提高。",

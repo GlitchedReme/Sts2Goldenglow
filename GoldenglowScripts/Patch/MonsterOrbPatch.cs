@@ -1,13 +1,15 @@
 using MegaCrit.Sts2.Core.Nodes.Combat;
 using STS2RitsuLib.Patching.Models;
+using STS2RitsuLib.Utils;
 using MegaCrit.Sts2.Core.Models;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.HoverTips;
-using STS2RitsuLib.Utils;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Hooks;
 using MegaCrit.Sts2.Core.Combat;
+using MegaCrit.Sts2.Core.Entities.Players;
+using System.Reflection;
 
 namespace Goldenglow.Patch;
 
@@ -15,8 +17,7 @@ internal static class MonsterOrbPatch
 {
     internal static AttachedState<OrbModel, Creature?> OwnerState = new(() => null);
 
-    internal static bool IsMonster(NCreature creature)
-        => !creature.Entity.IsPlayer && creature.Entity.PetOwner == null;
+    internal static bool IsMonster(NCreature creature) => !creature.Entity.IsPlayer && creature.Entity.PetOwner == null;
 }
 
 internal class InitializeOrbManagerPatch : IPatchMethod
@@ -79,7 +80,7 @@ internal class MonsterOrbModifyValuePatch : IPatchMethod
 
     internal static bool Prefix(OrbModel __instance, decimal result, ref decimal __result)
     {
-        if (__instance.Owner == null && MonsterOrbPatch.OwnerState.TryGetValue(__instance, out var owner) && owner != null && owner.CombatState != null)
+        if (MonsterOrbPatch.OwnerState.TryGetValue(__instance, out var owner) && owner != null && owner.CombatState != null)
         {
             __result = Hook.ModifyOrbValue(owner.CombatState, __instance, result);
             return false;
@@ -97,11 +98,39 @@ internal class MonsterOrbCombatStatePatch : IPatchMethod
 
     internal static bool Prefix(OrbModel __instance, ref ICombatState __result)
     {
-        if (__instance.Owner == null && MonsterOrbPatch.OwnerState.TryGetValue(__instance, out var owner) && owner != null && owner.CombatState != null)
+        if (MonsterOrbPatch.OwnerState.TryGetValue(__instance, out var owner) && owner != null && owner.CombatState != null)
         {
             __result = owner.CombatState;
             return false;
         }
         return true;
+    }
+}
+
+internal class MonsterOrbOwnerPatch : IPatchMethod
+{
+    public static string PatchId => "goldenglow_monster_orb_owner_patch";
+    public static string PatchDescription => "Return a valid Player owner for orbs on monsters so vanilla and modded orb Passive/Evoke logic works";
+
+    public static ModPatchTarget[] GetTargets() => [new(typeof(OrbModel), "Owner", MethodType.Getter)];
+
+    public static FieldInfo OwnerField = AccessTools.Field(typeof(OrbModel), "_owner");
+
+    internal static bool Prefix(OrbModel __instance, ref Player __result)
+    {
+        if (OwnerField.GetValue(__instance) is Player)
+            return true;
+
+        if (!MonsterOrbPatch.OwnerState.TryGetValue(__instance, out var creature) || creature == null)
+            return true;
+
+        var combatState = creature.CombatState;
+        if (combatState == null) return true;
+
+        var player = combatState.Players[0];
+        if (player == null) return true;
+
+        __result = player;
+        return false;
     }
 }

@@ -3,25 +3,26 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using STS2RitsuLib.Interop.AutoRegistration;
-using STS2RitsuLib.Scaffolding.Content;
-
 using Goldenglow.Power;
+using STS2RitsuLib.Combat.CardTargeting;
 
 namespace Goldenglow.Card;
 
 [RegisterCard(typeof(GoldenglowCardPool))]
-public class ChargeBalance() : AbstractGoldenglowCard(2, CardType.Power, CardRarity.Rare, TargetType.Self)
+public class ChargeBalance() : AbstractGoldenglowCard(2, CardType.Power, CardRarity.Rare, CustomTargetType.Anyone)
 {
-
     protected override IEnumerable<DynamicVar> CanonicalVars => [
+        new PowerVar<ChargeBalancePower>(2)
     ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await PowerCmd.Apply<ChargeBalancePower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
+        if (cardPlay.Target == null) return;
+        await PowerCmd.Apply<ChargeBalancePower>(choiceContext, cardPlay.Target, DynamicVars[nameof(ChargeBalancePower)].BaseValue, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()
-    {        EnergyCost.UpgradeBy(-1);
+    {
+        EnergyCost.UpgradeBy(-1);
     }
 }

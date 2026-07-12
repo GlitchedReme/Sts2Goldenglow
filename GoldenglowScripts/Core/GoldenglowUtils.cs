@@ -1,9 +1,11 @@
 using Godot;
+using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.TestSupport;
 using STS2RitsuLib.Cards.DynamicVars;
 using STS2RitsuLib.Content;
@@ -12,6 +14,9 @@ namespace Goldenglow.Core;
 
 public static class GoldenglowUtils
 {
+    public static bool IsZeroCost(CardModel card) =>
+        !card.EnergyCost.CostsX && card.EnergyCost.GetWithModifiers(CostModifiers.All) == 0;
+
     public static IHoverTip Attract => CreateStaticHoverTip("attract");
 
     public static IHoverTip Transfer => CreateStaticHoverTip("transfer");

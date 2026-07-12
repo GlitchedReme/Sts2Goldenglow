@@ -1,0 +1,8 @@
+[gd_resource type="SpineSkeletonDataResource" load_steps=3 format=3 uid="uid://cpn2gh738frtb"]
+
+[ext_resource type="SpineAtlasResource" uid="uid://c66kgdu21acpj" path="res://Goldenglow/image/character/char_377_gdglow_sanrio_1.atlas" id="1_xvoin"]
+[ext_resource type="SpineSkeletonFileResource" uid="uid://chpnj6h5o8uvk" path="res://Goldenglow/image/character/char_377_gdglow_sanrio_1.skel" id="2_yjoc7"]
+
+[resource]
+atlas_res = ExtResource("1_xvoin")
+skeleton_file_res = ExtResource("2_yjoc7")

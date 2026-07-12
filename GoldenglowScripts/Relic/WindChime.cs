@@ -1,5 +1,6 @@
 using Goldenglow.Card;
 using Goldenglow.Core;
+using Goldenglow.Patch;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
@@ -13,9 +14,12 @@ using STS2RitsuLib.Scaffolding.Content;
 namespace Goldenglow.Relic;
 
 [RegisterRelic(typeof(GoldenglowRelicPool))]
-public class WindChime : ModRelicTemplate
+public class WindChime : ModRelicTemplate, IRelicCustomTextProvider
 {
     public override RelicRarity Rarity => RelicRarity.Common;
+    public override bool ShowCounter => true;
+    public override int DisplayAmount => (int)DynamicVars["Counter"].BaseValue;
+    public string CustomText => $"{DisplayAmount}/3";
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new DynamicVar("Counter", 0)
@@ -34,14 +38,11 @@ public class WindChime : ModRelicTemplate
         if (player != Owner) return;
 
         DynamicVars["Counter"].BaseValue++;
+        InvokeDisplayAmountChanged();
         if (DynamicVars["Counter"].BaseValue < 3) return;
         DynamicVars["Counter"].BaseValue = 0;
 
-        var discardPile = PileType.Discard.GetPile(Owner);
-        if (discardPile.Cards.Count == 0) return;
-
-        var c = discardPile.Cards[^1];
-        await CardPileCmd.Add(c, PileType.Hand);
-        await GoldenglowCmd.NotifyAttracted(choiceContext, Owner);
+        await GoldenglowCmd.Attract(choiceContext, Owner);
+        InvokeDisplayAmountChanged();
     }
 }

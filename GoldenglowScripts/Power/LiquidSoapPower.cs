@@ -15,7 +15,9 @@ public sealed class LiquidSoapPower : ModPowerTemplate, IPowerCustomTextProvider
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;
 
-    public string CustomText => $"{Counter}/3";
+    public string CustomText => $"{Counter}/{Threshold}";
+
+    private int Threshold => (int)DynamicVars["BaseCards"].BaseValue;
 
     private int Counter
     {
@@ -35,12 +37,12 @@ public sealed class LiquidSoapPower : ModPowerTemplate, IPowerCustomTextProvider
 
         Counter++;
         InvokeDisplayAmountChanged();
-        if (Counter >= 3)
+        if (Counter >= Threshold)
         {
-            Counter = 0;
             await CardPileCmd.Draw(choiceContext, Amount, Owner.Player);
             Flash();
             InvokeDisplayAmountChanged();
+            Counter = 0;
         }
     }
 }

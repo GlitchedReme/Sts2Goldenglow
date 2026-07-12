@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Goldenglow.Card;
+using Goldenglow.Patch;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
@@ -10,29 +11,40 @@ using STS2RitsuLib.Scaffolding.Content;
 namespace Goldenglow.Power;
 
 [RegisterPower]
-public sealed class SubharmonicResonancePower : ModPowerTemplate
+public sealed class SubharmonicResonancePower : ModPowerTemplate, IPowerCustomTextProvider
 {
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;
 
-    private int _cardCounter;
+    public string CustomText => $"{Counter}/2";
+
+    private int Counter
+    {
+        get => (int)DynamicVars["Counter"].BaseValue;
+        set
+        {
+            DynamicVars["Counter"].BaseValue = value;
+            InvokeDisplayAmountChanged();
+        }
+
+    }
 
     public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         if (cardPlay.Card.Owner != Owner.Player) return;
 
-        _cardCounter++;
-        if (_cardCounter >= (int)Amount)
+        Counter++;
+        if (Counter >= Amount)
         {
-            _cardCounter -= (int)Amount;
-            await GoldenglowCmd.Pulse(Owner.Player!);
+            await GoldenglowCmd.Pulse(Owner.Player, null, null);
             Flash();
+            Counter -= Amount;
         }
     }
 
     public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
     {
         if (player != Owner.Player) return;
-        _cardCounter = 0;
+        Counter = 0;
     }
 }

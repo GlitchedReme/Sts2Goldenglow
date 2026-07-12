@@ -14,6 +14,7 @@ public class AlertTactics() : AbstractGoldenglowCard(0, CardType.Skill, CardRari
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new DynamicVar("Buoy", 2),
+        new CardsVar(0)
     ];
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
@@ -24,9 +25,12 @@ public class AlertTactics() : AbstractGoldenglowCard(0, CardType.Skill, CardRari
     {
         int count = (int)DynamicVars["Buoy"].BaseValue;
         await GoldenglowOrbCmd.ChannelBuoy(cardPlay.Target!, count);
+        if (DynamicVars.Cards.BaseValue > 0)
+            await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.BaseValue, Owner);
     }
+
     protected override void OnUpgrade()
     {
-        DynamicVars["Buoy"].UpgradeValueBy(1);
+        DynamicVars.Cards.UpgradeValueBy(1);
     }
 }

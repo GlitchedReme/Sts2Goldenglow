@@ -32,7 +32,7 @@ public class GiftBox() : AbstractGoldenglowCard(-2, CardType.Skill, CardRarity.U
 
     protected override void OnUpgrade()
     {
-        AddKeyword(CardKeyword.Retain);
+        // AddKeyword(CardKeyword.Retain);
         DynamicVars.Cards.UpgradeValueBy(1);
     }
 }

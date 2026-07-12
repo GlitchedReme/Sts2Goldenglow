@@ -35,7 +35,7 @@ public class ElectricShock() : AbstractGoldenglowCard(0, CardType.Attack, CardRa
             .Targeting(cardPlay.Target!)
             .Execute(choiceContext);
         await CreatureCmd.GainBlock(Owner.Creature, ((ComputedDynamicVar)DynamicVars["Block"]).Calculate(), ValueProp.Move, cardPlay);
-        GoldenglowCmd.ApplyStatic(cardPlay.Card);
+        await GoldenglowCmd.ApplyStatic(cardPlay.Card);
     }
 
     protected override void OnUpgrade()

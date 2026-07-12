@@ -1,0 +1,629 @@
+[gd_scene load_steps=76 format=3 uid="uid://crotjp0rqswct"]
+
+[ext_resource type="Script" uid="uid://ddlp1vsarjxjg" path="res://GoldenglowScripts/Vfx/NSweepingBeamVfx.cs" id="1_3c1y5"]
+[ext_resource type="Texture2D" uid="uid://dadfyhujvo47n" path="res://Goldenglow/image/vfx/common/common_ring_polar_b.png" id="2_ring"]
+[ext_resource type="Texture2D" uid="uid://b4nbji3fjveqg" path="res://Goldenglow/image/vfx/common/common_impact_flare_flipbook.png" id="4_flare"]
+[ext_resource type="Texture2D" uid="uid://4lvnjxye0rkq" path="res://Goldenglow/image/vfx/common_glow.png" id="5_glow"]
+[ext_resource type="Texture2D" uid="uid://g75uwkyelv3" path="res://Goldenglow/image/vfx/common_glow_speck.png" id="6_speck"]
+[ext_resource type="Shader" uid="uid://bewom3mv4bb05" path="res://Goldenglow/shaders/flipbook.gdshader" id="7_snetb"]
+[ext_resource type="Texture2D" uid="uid://dhx0weqxim5yu" path="res://Goldenglow/image/vfx/lightning_flipbook_1.png" id="8_d43am"]
+[ext_resource type="Texture2D" uid="uid://dosawroon5ofq" path="res://Goldenglow/image/vfx/hyperbeam_core.png" id="8_hyper"]
+[ext_resource type="Texture2D" uid="uid://b1b1b5kek4a0t" path="res://Goldenglow/image/vfx/lightning_flipbook_2.png" id="9_2mk5l"]
+
+[sub_resource type="Shader" id="Shader_snetb"]
+code = "shader_type canvas_item;
+render_mode blend_mix;
+vec2 polar_coordinates(vec2 uv, vec2 center, float zoom, float repeat) {
+    vec2 dir = uv - center;
+    float radius = length(dir) * 2.0;
+    float angle = atan(dir.y, dir.x) * (1.0 / (3.1416 * 2.0));
+    return mod(vec2(radius * zoom, angle * repeat), 1.0);
+}
+uniform sampler2D erosion_curve;
+uniform float erosion_offset = 0.1;
+varying float lifetime;
+varying vec4 vertex_color;
+void vertex() {
+    vertex_color = COLOR;
+    lifetime = INSTANCE_CUSTOM.y / INSTANCE_CUSTOM.w;
+}
+void fragment() {
+    vec4 texture_color = texture(TEXTURE, polar_coordinates(UV, vec2(0.5, 0.5), 1, 1));
+    float erosion_curve_val = texture(erosion_curve, vec2(lifetime)).r;
+    float erosion_val = smoothstep(erosion_curve_val, erosion_curve_val + erosion_offset, texture_color.r);
+    COLOR = vec4(vertex_color.rgb, vertex_color.a * erosion_val);
+}"
+
+[sub_resource type="Curve" id="C_ring_erosion"]
+_data = [Vector2(0, 0.499536), 0.0, 1.15666, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_d43am"]
+width = 64
+curve = SubResource("C_ring_erosion")
+
+[sub_resource type="ShaderMaterial" id="MAT_ringpolar"]
+shader = SubResource("Shader_snetb")
+shader_parameter/erosion_curve = SubResource("CurveTexture_d43am")
+shader_parameter/erosion_offset = 0.1
+
+[sub_resource type="Curve" id="Curve_2mk5l"]
+_limits = [0.0, 3.0, 0.0, 1.0]
+_data = [Vector2(0, 3), 0.0, -8.75114, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CT_ring_emission"]
+curve = SubResource("Curve_2mk5l")
+
+[sub_resource type="Curve" id="Curve_elhk5"]
+_data = [Vector2(0, 0.245202), 0.0, 9.35466, 0, 0, Vector2(0.149871, 0.850288), 0.184002, 0.184002, 0, 0, Vector2(1, 1), 0.16094, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CT_ring_scale"]
+curve = SubResource("Curve_elhk5")
+
+[sub_resource type="ParticleProcessMaterial" id="PM_ring_1"]
+particle_flag_disable_z = true
+angle_min = 1.07288e-05
+angle_max = 360.0
+gravity = Vector3(0, 0, 0)
+scale_min = 1.5
+scale_max = 1.5
+scale_curve = SubResource("CT_ring_scale")
+emission_curve = SubResource("CT_ring_emission")
+
+[sub_resource type="Shader" id="S_flipbook"]
+code = "shader_type canvas_item;
+render_mode blend_mix;
+vec2 flipbook(vec2 uv, vec2 size, float progress) {
+    progress = floor(mod(progress, (size.x * size.y)));
+    vec2 frame_size = vec2(1.0, 1.0) / vec2(size.x, size.y);
+    vec2 frame = fract(uv / size) + frame_size;
+    frame.x += ((progress / size.x) - frame_size.x * floor(progress / size.x) * size.x) - frame_size.x;
+    frame.y += (frame_size.y * floor(progress / size.x)) - frame_size.y;
+    return frame;
+}
+vec4 shift_hue(in vec4 color, in float shift) {
+    vec3 gray = vec3(0.57735);
+    vec3 projection = gray * dot(gray, color.rgb);
+    vec3 U = color.rgb - projection;
+    vec3 V = cross(gray, U);
+    vec3 shifted = U * cos(shift * 2.0 * PI) + V * sin(shift * 2.0 * PI) + projection;
+    return vec4(shifted, color.a);
+}
+float erosion_from_factors(vec2 factors, float input) {
+    return smoothstep(factors.x, factors.x + factors.y, input);
+}
+uniform vec2 pivot_offset = vec2(0.0, 0.0);
+uniform sampler2D lut : repeat_disable;
+uniform float frame_count = 9;
+uniform vec2 flipbook_size = vec2(3, 3);
+uniform sampler2D flipbook_curve : repeat_disable, hint_default_black;
+uniform float use_erosion_texture = 0.0;
+uniform sampler2D erosion_texture : repeat_disable;
+uniform sampler2D erosion_curve : hint_default_black;
+uniform float erosion_offset = 0.1;
+uniform float use_hue_shift = 0.0;
+uniform sampler2D hue_shift_curve : repeat_disable, hint_default_black;
+varying float lifetime;
+varying float flipbook_offset;
+varying vec4 vertex_color;
+varying vec2 flipbook_uv;
+void vertex() {
+    vertex_color = COLOR;
+    lifetime = INSTANCE_CUSTOM.y / INSTANCE_CUSTOM.w;
+    flipbook_offset = INSTANCE_CUSTOM.z;
+    VERTEX += pivot_offset * (1.0 / TEXTURE_PIXEL_SIZE);
+    float flipbook_progress = textureLod(flipbook_curve, vec2(lifetime), 0.0).r;
+    flipbook_uv = flipbook(UV, flipbook_size, ((frame_count * flipbook_offset) + (frame_count * flipbook_progress)) * 0.99);
+}
+void fragment() {
+    vec4 flipbook_texture_color = texture(TEXTURE, flipbook_uv);
+    vec4 erosion_color = texture(erosion_texture, UV);
+    float erosion_curve_val = texture(erosion_curve, vec2(lifetime)).r;
+    float erosion_val = erosion_from_factors(vec2(erosion_curve_val, erosion_offset), erosion_color.r);
+    float erosion = mix(1.0, erosion_val, use_erosion_texture);
+    float alpha = flipbook_texture_color.a * vertex_color.a * erosion;
+    vec4 lut_color = texture(lut, flipbook_texture_color.rr);
+    vec4 initial_color = lut_color * vertex_color;
+    float hue_shift_val = texture(hue_shift_curve, flipbook_texture_color.rr).r;
+    vec4 shifted_color = shift_hue(initial_color, hue_shift_val);
+    vec4 final_color = mix(initial_color, shifted_color, use_hue_shift);
+    COLOR = vec4(final_color.rgb, alpha);
+}"
+
+[sub_resource type="Curve" id="C_hyper_curve"]
+
+[sub_resource type="CurveTexture" id="CT_hyper_curve"]
+curve = SubResource("C_hyper_curve")
+
+[sub_resource type="Gradient" id="G_hyper_lut"]
+offsets = PackedFloat32Array(0.8795518, 1)
+colors = PackedColorArray(1, 1, 1, 1, 4.415934, 4.415934, 4.415934, 1)
+
+[sub_resource type="GradientTexture1D" id="GT1_hyper_lut"]
+gradient = SubResource("G_hyper_lut")
+use_hdr = true
+
+[sub_resource type="ShaderMaterial" id="MAT_hyper"]
+shader = SubResource("S_flipbook")
+shader_parameter/pivot_offset = Vector2(0, 0)
+shader_parameter/lut = SubResource("GT1_hyper_lut")
+shader_parameter/frame_count = 9.0
+shader_parameter/flipbook_size = Vector2(2, 2)
+shader_parameter/flipbook_curve = SubResource("CT_hyper_curve")
+shader_parameter/use_erosion_texture = 0.0
+shader_parameter/erosion_offset = 0.1
+shader_parameter/use_hue_shift = 0.0
+
+[sub_resource type="Curve" id="C_hyper_scale"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.24543083, 0.7728155), 0.0, 0.0, 0, 0, Vector2(0.50391644, 1), 0.0, 0.0, 0, 0, Vector2(0.74934727, 0.82961166), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 5
+
+[sub_resource type="CurveTexture" id="CT_hyper_scale"]
+curve = SubResource("C_hyper_scale")
+
+[sub_resource type="ParticleProcessMaterial" id="PM_hyper"]
+particle_flag_disable_z = true
+gravity = Vector3(0, 0, 0)
+scale_min = 0.39999998
+scale_max = 0.39999998
+scale_curve = SubResource("CT_hyper_scale")
+anim_speed_min = 3.0
+anim_speed_max = 3.0
+anim_offset_max = 1.0
+
+[sub_resource type="Shader" id="Shader_url8l"]
+code = "shader_type canvas_item;
+render_mode blend_mix;
+vec2 flipbook(vec2 uv, vec2 size, float progress) {
+    progress = floor(mod(progress, (size.x * size.y)));
+    vec2 frame_size = vec2(1.0, 1.0) / vec2(size.x, size.y);
+    vec2 frame = fract(uv / size) + frame_size;
+    frame.x += ((progress / size.x) - frame_size.x * floor(progress / size.x) * size.x) - frame_size.x;
+    frame.y += (frame_size.y * floor(progress / size.x)) - frame_size.y;
+    return frame;
+}
+vec4 shift_hue(in vec4 color, in float shift) {
+    vec3 gray = vec3(0.57735);
+    vec3 projection = gray * dot(gray, color.rgb);
+    vec3 U = color.rgb - projection;
+    vec3 V = cross(gray, U);
+    vec3 shifted = U * cos(shift * 2.0 * PI) + V * sin(shift * 2.0 * PI) + projection;
+    return vec4(shifted, color.a);
+}
+float erosion_from_factors(vec2 factors, float input) {
+    return smoothstep(factors.x, factors.x + factors.y, input);
+}
+uniform vec2 pivot_offset = vec2(0.0, 0.0);
+uniform sampler2D lut : repeat_disable;
+uniform float frame_count = 9;
+uniform vec2 flipbook_size = vec2(3, 3);
+uniform sampler2D flipbook_curve : repeat_disable, hint_default_black;
+uniform float use_erosion_texture = 0.0;
+uniform sampler2D erosion_texture : repeat_disable;
+uniform sampler2D erosion_curve : hint_default_black;
+uniform float erosion_offset = 0.1;
+uniform float use_hue_shift = 0.0;
+uniform sampler2D hue_shift_curve : repeat_disable, hint_default_black;
+varying float lifetime;
+varying float flipbook_offset;
+varying vec4 vertex_color;
+varying vec2 flipbook_uv;
+void vertex() {
+    vertex_color = COLOR;
+    lifetime = INSTANCE_CUSTOM.y / INSTANCE_CUSTOM.w;
+    flipbook_offset = INSTANCE_CUSTOM.z;
+    VERTEX += pivot_offset * (1.0 / TEXTURE_PIXEL_SIZE);
+    float flipbook_progress = textureLod(flipbook_curve, vec2(lifetime), 0.0).r;
+    flipbook_uv = flipbook(UV, flipbook_size, ((frame_count * flipbook_offset) + (frame_count * flipbook_progress)) * 0.99);
+}
+void fragment() {
+    vec4 flipbook_texture_color = texture(TEXTURE, flipbook_uv);
+    vec4 erosion_color = texture(erosion_texture, UV);
+    float erosion_curve_val = texture(erosion_curve, vec2(lifetime)).r;
+    float erosion_val = erosion_from_factors(vec2(erosion_curve_val, erosion_offset), erosion_color.r);
+    float erosion = mix(1.0, erosion_val, use_erosion_texture);
+    float alpha = flipbook_texture_color.a * vertex_color.a * erosion;
+    vec4 lut_color = texture(lut, flipbook_texture_color.rr);
+    vec4 initial_color = lut_color * vertex_color;
+    float hue_shift_val = texture(hue_shift_curve, flipbook_texture_color.rr).r;
+    vec4 shifted_color = shift_hue(initial_color, hue_shift_val);
+    vec4 final_color = mix(initial_color, shifted_color, use_hue_shift);
+    COLOR = vec4(final_color.rgb, alpha);
+}"
+
+[sub_resource type="Gradient" id="G_flare_lut"]
+offsets = PackedFloat32Array(0.85752, 0.902375)
+colors = PackedColorArray(1, 1, 1, 1, 1.8247963, 1.8247963, 1.8247963, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_lddfj"]
+gradient = SubResource("G_flare_lut")
+use_hdr = true
+
+[sub_resource type="ShaderMaterial" id="MAT_flare"]
+shader = SubResource("Shader_url8l")
+shader_parameter/pivot_offset = Vector2(0, 0)
+shader_parameter/lut = SubResource("GradientTexture1D_lddfj")
+shader_parameter/frame_count = 4.0
+shader_parameter/flipbook_size = Vector2(2, 2)
+shader_parameter/use_erosion_texture = 0.0
+shader_parameter/erosion_offset = 0.1
+shader_parameter/use_hue_shift = 0.0
+
+[sub_resource type="Curve" id="C_flare_emission"]
+_limits = [0.0, 3.0, 0.0, 1.0]
+_data = [Vector2(0, 3), 0.0, -5.74391, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_md6hf"]
+curve = SubResource("C_flare_emission")
+
+[sub_resource type="Curve" id="C_flare_scale"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -2.41411, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_0lsma"]
+curve = SubResource("C_flare_scale")
+
+[sub_resource type="ParticleProcessMaterial" id="PM_flare_1"]
+particle_flag_disable_z = true
+angle_min = -1000.0
+angle_max = 1000.0
+gravity = Vector3(0, 0, 0)
+scale_min = 1.4
+scale_max = 1.75
+scale_curve = SubResource("CurveTexture_0lsma")
+color = Color(1, 1, 1, 0.2509804)
+emission_curve = SubResource("CurveTexture_md6hf")
+anim_offset_max = 1.0
+
+[sub_resource type="ParticleProcessMaterial" id="PM_flare_2"]
+particle_flag_disable_z = true
+angle_min = -1000.0
+angle_max = 1000.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.79999995
+scale_curve = SubResource("CurveTexture_0lsma")
+emission_curve = SubResource("CurveTexture_md6hf")
+anim_offset_max = 1.0
+
+[sub_resource type="Shader" id="S_grayscale"]
+code = "shader_type canvas_item;
+render_mode blend_mix;
+uniform vec2 pivot_offset = vec2(0.0, 0.0);
+uniform sampler2D lut;
+varying vec4 vertex_color;
+void vertex() {
+    vertex_color = COLOR;
+    VERTEX += pivot_offset * (1.0 / TEXTURE_PIXEL_SIZE);
+}
+void fragment() {
+    vec4 grayscale = texture(TEXTURE, UV);
+    vec4 lut_tex = texture(lut, vec2(grayscale.r));
+    vec4 color_sub = lut_tex * vertex_color;
+    COLOR = vec4(color_sub.rgb, vertex_color.a * grayscale.r);
+}"
+
+[sub_resource type="Gradient" id="G_glow_lut"]
+offsets = PackedFloat32Array(1)
+colors = PackedColorArray(1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GT1_glow_lut"]
+gradient = SubResource("G_glow_lut")
+
+[sub_resource type="ShaderMaterial" id="MAT_glow"]
+shader = SubResource("S_grayscale")
+shader_parameter/pivot_offset = Vector2(0, 0)
+shader_parameter/lut = SubResource("GT1_glow_lut")
+
+[sub_resource type="Curve" id="C_glow_alpha"]
+_data = [Vector2(0, 0.103883505), 0.0, 0.0, 0, 0, Vector2(1, 0.14174753), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CT_glow_alpha"]
+curve = SubResource("C_glow_alpha")
+
+[sub_resource type="Curve" id="C_glow_scale"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CT_glow_scale"]
+curve = SubResource("C_glow_scale")
+
+[sub_resource type="ParticleProcessMaterial" id="PM_glow"]
+particle_flag_disable_z = true
+gravity = Vector3(0, 0, 0)
+scale_min = 4.0
+scale_max = 4.0
+scale_curve = SubResource("CT_glow_scale")
+alpha_curve = SubResource("CT_glow_alpha")
+
+[sub_resource type="Curve" id="C_ring_emission"]
+_limits = [0.0, 3.0, 0.0, 1.0]
+_data = [Vector2(0, 3), 0.0, -8.75114, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_6ssgi"]
+curve = SubResource("C_ring_emission")
+
+[sub_resource type="Curve" id="C_ring_scale"]
+_data = [Vector2(0, 0.245202), 0.0, 9.35466, 0, 0, Vector2(0.149871, 0.850288), 0.184002, 0.184002, 0, 0, Vector2(1, 1), 0.16094, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_nday8"]
+curve = SubResource("C_ring_scale")
+
+[sub_resource type="ParticleProcessMaterial" id="PM_ring_2"]
+particle_flag_disable_z = true
+angle_min = 1.07288e-05
+angle_max = 360.0
+gravity = Vector3(0, 0, 0)
+scale_min = 2.5
+scale_max = 2.5
+scale_curve = SubResource("CurveTexture_nday8")
+emission_curve = SubResource("CurveTexture_6ssgi")
+
+[sub_resource type="Gradient" id="G_speck_lut"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GT1_speck_lut"]
+gradient = SubResource("G_speck_lut")
+
+[sub_resource type="ShaderMaterial" id="MAT_speck"]
+shader = SubResource("S_grayscale")
+shader_parameter/pivot_offset = Vector2(0, 0)
+shader_parameter/lut = SubResource("GT1_speck_lut")
+
+[sub_resource type="Gradient" id="G_dagger_lut"]
+offsets = PackedFloat32Array(0.503958, 0.556728)
+colors = PackedColorArray(1, 1, 1, 1, 12, 8, 8, 1)
+
+[sub_resource type="GradientTexture1D" id="GT1_dagger_lut"]
+gradient = SubResource("G_dagger_lut")
+use_hdr = true
+
+[sub_resource type="Curve" id="C_speck_damp"]
+_data = [Vector2(0, 0), 0.0, 4.30388, 0, 0, Vector2(0.501292, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -5.93081, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CT_speck_damp"]
+curve = SubResource("C_speck_damp")
+
+[sub_resource type="Curve" id="C_speck_radial"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -2.8868, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CT_speck_radial"]
+curve = SubResource("C_speck_radial")
+
+[sub_resource type="Curve" id="C_speck_scale"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -2.59382, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CT_speck_scale"]
+curve = SubResource("C_speck_scale")
+
+[sub_resource type="Curve" id="C_speck_sx"]
+_limits = [0.0, 3.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.604607), -1.44846, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="C_speck_sy"]
+_limits = [0.0, 5.0, 0.0, 1.0]
+_data = [Vector2(0, 0.997601), 0.0, 0.0, 0, 0, Vector2(1, 3.25336), 6.03527, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="C_speck_sz"]
+_limits = [0.0, 3.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CXYZ_speck_scale"]
+curve_x = SubResource("C_speck_sx")
+curve_y = SubResource("C_speck_sy")
+curve_z = SubResource("C_speck_sz")
+
+[sub_resource type="Curve" id="C_speck_turb"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CT_speck_turb"]
+curve = SubResource("C_speck_turb")
+
+[sub_resource type="ParticleProcessMaterial" id="PM_speck"]
+lifetime_randomness = 0.8
+particle_flag_align_y = true
+particle_flag_disable_z = true
+particle_flag_damping_as_friction = true
+direction = Vector3(-1, 0, 0)
+spread = 180.0
+flatness = 1.0
+initial_velocity_min = 500.0
+initial_velocity_max = 3000.0
+radial_velocity_min = 150.0
+radial_velocity_max = 250.0
+radial_velocity_curve = SubResource("CT_speck_radial")
+gravity = Vector3(0, 0, 0)
+damping_min = 0.26
+damping_max = 0.26
+damping_curve = SubResource("CT_speck_damp")
+scale_min = 0.29
+scale_max = 0.31
+scale_curve = SubResource("CT_speck_scale")
+scale_over_velocity_max = 670.71
+scale_over_velocity_curve = SubResource("CXYZ_speck_scale")
+color_initial_ramp = SubResource("GT1_dagger_lut")
+turbulence_enabled = true
+turbulence_noise_strength = 5.0
+turbulence_noise_scale = 10.1
+turbulence_noise_speed = Vector3(0.1, 0.1, 0.1)
+turbulence_noise_speed_random = 1.0
+turbulence_influence_min = 0.65
+turbulence_influence_max = 0.85
+turbulence_initial_displacement_min = 1.49012e-06
+turbulence_initial_displacement_max = 1.49012e-06
+turbulence_influence_over_life = SubResource("CT_speck_turb")
+
+[sub_resource type="Curve" id="Curve_j73n1"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 1, Vector2(1, 1), 1.0, 0.0, 1, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_wnrfj"]
+curve = SubResource("Curve_j73n1")
+
+[sub_resource type="Gradient" id="Gradient_elhk5"]
+offsets = PackedFloat32Array(1)
+colors = PackedColorArray(1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_2m2nd"]
+gradient = SubResource("Gradient_elhk5")
+use_hdr = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_url8l"]
+shader = ExtResource("7_snetb")
+shader_parameter/pivot_offset = Vector2(0, 0)
+shader_parameter/lut = SubResource("GradientTexture1D_2m2nd")
+shader_parameter/frame_count = 9.0
+shader_parameter/flipbook_size = Vector2(3, 3)
+shader_parameter/flipbook_curve = SubResource("CurveTexture_wnrfj")
+shader_parameter/use_erosion_texture = 0.0
+shader_parameter/erosion_offset = 0.1
+shader_parameter/use_hue_shift = 0.0
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_lddfj"]
+lifetime_randomness = 0.2
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 43.6
+angle_min = 1.0728835e-05
+angle_max = 360.00003
+gravity = Vector3(0, 0, 0)
+scale_max = 1.1999999
+
+[node name="PulseVfx" type="Node2D"]
+scale = Vector2(0.99999994, 0.99999994)
+script = ExtResource("1_3c1y5")
+
+[node name="start" type="Node2D" parent="."]
+scale = Vector2(0.99999994, 0.99999994)
+
+[node name="vfx_common_ring_polar_b_1" type="GPUParticles2D" parent="start"]
+self_modulate = Color(0.51, 0.357, 0.51, 1)
+material = SubResource("MAT_ringpolar")
+emitting = false
+amount = 1
+texture = ExtResource("2_ring")
+lifetime = 0.3
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 60
+process_material = SubResource("PM_ring_1")
+
+[node name="emitting" type="Node2D" parent="."]
+
+[node name="vfx_hyperbeam_core" type="GPUParticles2D" parent="emitting"]
+self_modulate = Color(1, 0.81739336, 0.6381068, 1)
+z_index = 2
+material = SubResource("MAT_hyper")
+scale = Vector2(0.9999998, 0.9999998)
+emitting = false
+amount = 1
+texture = ExtResource("8_hyper")
+lifetime = 0.13
+fixed_fps = 60
+process_material = SubResource("PM_hyper")
+
+[node name="vfx_common_hit_flare_transparent" type="GPUParticles2D" parent="emitting"]
+self_modulate = Color(0.5, 0.11500001, 0.41658333, 1)
+material = SubResource("MAT_flare")
+position = Vector2(0, -2)
+scale = Vector2(0.9999999, 0.9999999)
+emitting = false
+amount = 4
+texture = ExtResource("4_flare")
+lifetime = 0.17
+fixed_fps = 60
+process_material = SubResource("PM_flare_1")
+
+[node name="vfx_common_hit_flare" type="GPUParticles2D" parent="emitting"]
+self_modulate = Color(0.36, 0.08280001, 0.29994002, 1)
+z_index = 1
+material = SubResource("MAT_flare")
+position = Vector2(0, -2)
+scale = Vector2(0.9999999, 0.9999999)
+emitting = false
+amount = 4
+texture = ExtResource("4_flare")
+lifetime = 0.17
+fixed_fps = 60
+process_material = SubResource("PM_flare_2")
+
+[node name="vfx_common_glow" type="GPUParticles2D" parent="emitting"]
+self_modulate = Color(0.53, 0.5926666, 1, 1)
+material = SubResource("MAT_glow")
+scale = Vector2(0.9999999, 0.9999999)
+emitting = false
+amount = 1
+texture = ExtResource("5_glow")
+lifetime = 0.2
+fixed_fps = 60
+process_material = SubResource("PM_glow")
+
+[node name="end" type="Node2D" parent="."]
+scale = Vector2(0.99999994, 0.99999994)
+
+[node name="vfx_common_ring_polar_b_2" type="GPUParticles2D" parent="end"]
+self_modulate = Color(1, 0.33999997, 0.33999997, 1)
+material = SubResource("MAT_ringpolar")
+emitting = false
+amount = 1
+texture = ExtResource("2_ring")
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 60
+process_material = SubResource("PM_ring_2")
+
+[node name="vfx_common_specks" type="GPUParticles2D" parent="end"]
+material = SubResource("MAT_speck")
+rotation = 1.57079
+emitting = false
+amount = 10
+texture = ExtResource("6_speck")
+lifetime = 1.5
+one_shot = true
+explosiveness = 0.95
+randomness = 0.5
+fixed_fps = 60
+trail_sections = 2
+trail_section_subdivisions = 2
+process_material = SubResource("PM_speck")
+
+[node name="vfx_lightning1" type="GPUParticles2D" parent="end"]
+self_modulate = Color(0.9530105, 0.8901599, 0.94909936, 1)
+material = SubResource("ShaderMaterial_url8l")
+emitting = false
+amount = 1
+texture = ExtResource("8_d43am")
+lifetime = 0.3
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 60
+local_coords = true
+trail_lifetime = 3.13
+process_material = SubResource("ParticleProcessMaterial_lddfj")
+
+[node name="vfx_lightning2" type="GPUParticles2D" parent="end"]
+self_modulate = Color(0.9530105, 0.8901599, 0.94909936, 1)
+material = SubResource("ShaderMaterial_url8l")
+emitting = false
+amount = 1
+texture = ExtResource("9_2mk5l")
+lifetime = 0.3
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 60
+local_coords = true
+trail_lifetime = 3.13
+process_material = SubResource("ParticleProcessMaterial_lddfj")

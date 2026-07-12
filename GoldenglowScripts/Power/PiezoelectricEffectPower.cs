@@ -24,6 +24,6 @@ public sealed class PiezoelectricEffectPower : ModPowerTemplate
 
         Flash();
         for (int i = 0; i < Amount; i++)
-            await GoldenglowCmd.Pulse(Owner.Player);
+            await GoldenglowCmd.Pulse(Owner.Player, null, null);
     }
 }

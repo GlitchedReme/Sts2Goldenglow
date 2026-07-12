@@ -16,7 +16,7 @@ namespace Goldenglow.Card;
 [RegisterCard(typeof(GoldenglowCardPool))]
 public class Wishlist() : AbstractGoldenglowCard(1, CardType.Skill, CardRarity.Rare, TargetType.Self), ICardOnGeneratedAsReward
 {
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust, CardKeyword.Innate];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     private static readonly SavedAttachedState<Wishlist, string> GiftCardIds = new("WishlistGiftCards", _ => "");
 

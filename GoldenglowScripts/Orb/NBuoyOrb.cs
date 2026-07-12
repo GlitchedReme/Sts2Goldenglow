@@ -1,6 +1,7 @@
 using Goldenglow.Utils;
 using Goldenglow.Patch;
 using Godot;
+using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Nodes.Orbs;
 using Goldenglow.Vfx;
 using Goldenglow.Core;
@@ -21,16 +22,24 @@ public partial class NBuoyOrb : Sprite2D
             return;
         }
 
-        Orb.Model.EvokeActivated += e =>
-        {
-            foreach (var target in e)
-            {
-                var lightning = BuoyLightning.Create(this, target.GetCreatureNode()!)!;
-                GoldenglowUtils.PlayVfx(target, lightning, GlobalPosition);
+        Orb.Model.EvokeActivated += OnEvokeActivated;
+    }
 
-                GoldenglowUtils.PlayVfx(target, BuoyAttackVfx.Create());
-            }
-        };
+    public override void _ExitTree()
+    {
+        if (Orb?.Model != null)
+            Orb.Model.EvokeActivated -= OnEvokeActivated;
+    }
+
+    private void OnEvokeActivated(Creature[] e)
+    {
+        if (!IsInstanceValid(this)) return;
+        foreach (var target in e)
+        {
+            var lightning = BuoyLightning.Create(this, target.GetCreatureNode()!)!;
+            GoldenglowUtils.PlayVfx(target, lightning, GlobalPosition);
+            GoldenglowUtils.PlayVfx(target, BuoyAttackVfx.Create());
+        }
     }
 
     public override void _Process(double delta)
@@ -40,7 +49,7 @@ public partial class NBuoyOrb : Sprite2D
 
         if (Orb?.Model == null) return;
 
-        var creature = Orb.Model.Owner?.Creature ?? MonsterOrbPatch.OwnerState[Orb.Model];
+        var creature = MonsterOrbPatch.OwnerState.TryGetValue(Orb.Model, out var c) && c != null ? c : Orb.Model.Owner?.Creature;
         if (creature == null) return;
 
         var creatureNode = creature.GetCreatureNode();

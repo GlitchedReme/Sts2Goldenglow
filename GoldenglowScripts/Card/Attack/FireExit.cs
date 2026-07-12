@@ -35,7 +35,7 @@ public class FireExit() : AbstractGoldenglowCard(0, CardType.Attack, CardRarity.
 
     public decimal CalculateDamage(CardModel? card)
     {
-        if (card?.Owner == null)
+        if (card?.Owner == null || card.Owner.PlayerCombatState == null)
             return 0;
         else
         {

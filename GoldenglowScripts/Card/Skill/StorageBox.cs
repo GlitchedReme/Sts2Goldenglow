@@ -4,7 +4,6 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using Goldenglow.Power;
 using STS2RitsuLib.Interop.AutoRegistration;
-using STS2RitsuLib.Scaffolding.Content;
 
 namespace Goldenglow.Card;
 
@@ -12,7 +11,7 @@ namespace Goldenglow.Card;
 public class StorageBox() : AbstractGoldenglowCard(0, CardType.Skill, CardRarity.Rare, TargetType.Self)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new CardsVar(1),
+        new CardsVar(2),
         new DynamicVar("HandSize", 2)
     ];
 
@@ -26,6 +25,7 @@ public class StorageBox() : AbstractGoldenglowCard(0, CardType.Skill, CardRarity
 
     protected override void OnUpgrade()
     {
+        DynamicVars.Cards.UpgradeValueBy(1);
         DynamicVars["HandSize"].UpgradeValueBy(1);
     }
 }

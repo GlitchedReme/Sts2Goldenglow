@@ -20,7 +20,11 @@ public class LightningAttack() : AbstractGoldenglowCard(1, CardType.Attack, Card
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, cardPlay).Targeting(cardPlay.Target!).Execute(choiceContext);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
+            .FromCard(this, cardPlay)
+            .Targeting(cardPlay.Target!)
+            .WithHitFx("vfx/vfx_attack_lightning")
+            .Execute(choiceContext);
         var hand = PileType.Hand.GetPile(Owner).Cards.ToList();
         if (hand.Count > 0)
         {

@@ -37,8 +37,7 @@ public class ColorSwatch : ModRelicTemplate
         var cards = CardFactory.GetDistinctForCombat(Owner, pool, 1, rng).ToList();
         if (cards.Count == 0) return;
 
-        var card = Owner.Creature.CombatState?.CreateCard(cards[0], Owner);
-        if (card != null)
-            await CardPileCmd.AddGeneratedCardToCombat(card, PileType.Hand, Owner);
+        var card = cards[0];
+        await CardPileCmd.AddGeneratedCardToCombat(card, PileType.Hand, Owner);
     }
 }
