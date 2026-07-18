@@ -1,7 +1,10 @@
+using Goldenglow.Core;
+using Goldenglow.Patch;
 using Goldenglow.Ui;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using STS2RitsuLib.Combat.CardTargeting;
 using STS2RitsuLib.Interop.AutoRegistration;
@@ -9,8 +12,12 @@ using STS2RitsuLib.Interop.AutoRegistration;
 namespace Goldenglow.Card;
 
 [RegisterCard(typeof(GoldenglowCardPool))]
-public class StayAway() : AbstractGoldenglowCard(0, CardType.Skill, CardRarity.Common, CustomTargetType.Anyone)
+public class StayAway() : AbstractGoldenglowCard(0, CardType.Skill, CardRarity.Common, CustomTargetType.Anyone), IHovertipShownInInspectOnly
 {
+    public IEnumerable<IHoverTip> HoverTipsShownInInspectOnly => [
+        GoldenglowUtils.CreateReference("Watersnake (水蛇)")
+    ];
+    
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [

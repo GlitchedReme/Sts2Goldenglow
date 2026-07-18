@@ -1,9 +1,12 @@
 using Godot;
+using Goldenglow.Core;
+using Goldenglow.Patch;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Helpers;
+using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
 using MegaCrit.Sts2.Core.Nodes.Vfx;
@@ -13,8 +16,11 @@ using STS2RitsuLib.Interop.AutoRegistration;
 namespace Goldenglow.Card;
 
 [RegisterCard(typeof(GoldenglowCardPool))]
-public class SatelliteLanding() : AbstractGoldenglowCard(2, CardType.Attack, CardRarity.Uncommon, TargetType.AllEnemies)
+public class SatelliteLanding() : AbstractGoldenglowCard(2, CardType.Attack, CardRarity.Uncommon, TargetType.AllEnemies), IHovertipShownInInspectOnly
 {
+    public IEnumerable<IHoverTip> HoverTipsShownInInspectOnly => [
+        GoldenglowUtils.CreateReference("From Internet (来自于网络)")
+    ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new DamageVar(23, ValueProp.Move)

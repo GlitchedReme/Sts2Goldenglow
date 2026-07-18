@@ -26,7 +26,7 @@ public sealed class SparkCounterattackPower : ModPowerTemplate
         if (result.BlockedDamage + result.UnblockedDamage <= 0) return;
 
         for (int i = 0; i < Amount; i++)
-            await GoldenglowOrbCmd.ChannelBuoy(dealer, 1);
+            await GoldenglowOrbCmd.ChannelBuoy(target.Player!, dealer, 1);
         await Task.CompletedTask;
     }
 }

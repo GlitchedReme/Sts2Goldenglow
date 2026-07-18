@@ -5,12 +5,18 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using Goldenglow.Core;
 using Goldenglow.Power;
 using STS2RitsuLib.Interop.AutoRegistration;
+using MegaCrit.Sts2.Core.HoverTips;
+using Goldenglow.Patch;
 
 namespace Goldenglow.Card;
 
 [RegisterCard(typeof(GoldenglowCardPool))]
-public class Technique() : AbstractGoldenglowCard(2, CardType.Power, CardRarity.Rare, TargetType.Self)
+public class Technique() : AbstractGoldenglowCard(2, CardType.Power, CardRarity.Rare, TargetType.Self), IHovertipShownInInspectOnly
 {
+    public IEnumerable<IHoverTip> HoverTipsShownInInspectOnly => [
+        GoldenglowUtils.CreateReference("Watersnake (水蛇)")
+    ];
+
     protected override bool IsPlayable
     {
         get

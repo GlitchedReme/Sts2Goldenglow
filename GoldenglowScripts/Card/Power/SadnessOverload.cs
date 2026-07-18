@@ -1,20 +1,20 @@
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
-using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using STS2RitsuLib.Interop.AutoRegistration;
 
 using Goldenglow.Power;
 using Goldenglow.Core;
 using MegaCrit.Sts2.Core.HoverTips;
+using Goldenglow.Patch;
 
 namespace Goldenglow.Card;
 
 [RegisterCard(typeof(GoldenglowCardPool))]
-public class SadnessOverload() : AbstractGoldenglowCard(2, CardType.Power, CardRarity.Rare, TargetType.Self)
+public class SadnessOverload() : AbstractGoldenglowCard(2, CardType.Power, CardRarity.Rare, TargetType.Self), IHovertipShownInInspectOnly
 {
-
-    protected override IEnumerable<DynamicVar> CanonicalVars => [
+    public IEnumerable<IHoverTip> HoverTipsShownInInspectOnly => [
+        GoldenglowUtils.CreateReference("KurosuNeko @微博")
     ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips => [GoldenglowUtils.Static];

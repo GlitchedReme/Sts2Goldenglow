@@ -25,13 +25,13 @@ public class TransmissionChannel() : AbstractGoldenglowCard(0, CardType.Skill, C
             if (enemies is not { Count: > 0 }) return;
             var enemy = Owner.RunState.Rng.CombatTargets.NextItem(enemies);
             if (enemy == null) return;
-            await GoldenglowOrbCmd.TransferOrbs(target, enemy, 1);
+            await GoldenglowOrbCmd.TransferOrbs(Owner, target, enemy, 1);
         }
         else
         {
             var count = MonsterOrbManager.MonsterOrbManagerState[target]?.GetOrbs().Count ?? 0;
             if (count > 0)
-                await GoldenglowOrbCmd.TransferOrbs(target, Owner.Creature, count);
+                await GoldenglowOrbCmd.TransferOrbs(Owner, target, Owner.Creature, count);
         }
     }
 

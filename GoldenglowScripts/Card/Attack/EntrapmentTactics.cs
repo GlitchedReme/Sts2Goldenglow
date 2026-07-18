@@ -6,13 +6,17 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
 using MegaCrit.Sts2.Core.HoverTips;
 using STS2RitsuLib.Interop.AutoRegistration;
-using STS2RitsuLib.Scaffolding.Content;
+using Goldenglow.Patch;
+using Goldenglow.Core;
 
 namespace Goldenglow.Card;
 
 [RegisterCard(typeof(GoldenglowCardPool))]
-public class EntrapmentTactics() : AbstractGoldenglowCard(1, CardType.Attack, CardRarity.Common, TargetType.AllEnemies)
+public class EntrapmentTactics() : AbstractGoldenglowCard(1, CardType.Attack, CardRarity.Common, TargetType.AllEnemies), IHovertipShownInInspectOnly
 {
+    public IEnumerable<IHoverTip> HoverTipsShownInInspectOnly => [
+        GoldenglowUtils.CreateReference("Watersnake (水蛇)")
+    ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new DamageVar(5, ValueProp.Move),
@@ -33,7 +37,7 @@ public class EntrapmentTactics() : AbstractGoldenglowCard(1, CardType.Attack, Ca
             var e = CombatState.Enemies[i];
             if (!e.IsDead && !e.IsPlayer)
                 for (int j = 0; j < count; j++)
-                    await GoldenglowOrbCmd.ChannelBuoy(e, 1);
+                    await GoldenglowOrbCmd.ChannelBuoy(Owner, e, 1);
         }
     }
 

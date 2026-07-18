@@ -3,6 +3,7 @@ using Goldenglow.Core;
 using MegaCrit.Sts2.Core.Assets;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.TestSupport;
 
@@ -19,6 +20,7 @@ public partial class BuoyCardAttackVfx : Node2D
     private const float FallDuration = 0.5f;
 
     private Creature _target = null!;
+    private Player _source = null!;
     private Node2D _buoy = null!;
     private Node2D _particles = null!;
     private Func<Task>? _onAttack;
@@ -30,11 +32,12 @@ public partial class BuoyCardAttackVfx : Node2D
 
     public override void _ExitTree() => _cts?.Cancel();
 
-    public static BuoyCardAttackVfx? Create(Vector2 position, Creature target, Func<Task>? onAttack, float startDelay = 0f)
+    public static BuoyCardAttackVfx? Create(Vector2 position, Player source, Creature target, Func<Task>? onAttack, float startDelay = 0f)
     {
         if (TestMode.IsOn) return null;
-        var vfx = PreloadManager.Cache.GetScene(scenePath).Instantiate<BuoyCardAttackVfx>(PackedScene.GenEditState.Disabled);
+        var vfx = PreloadManager.Cache.GetScene(scenePath).Instantiate<BuoyCardAttackVfx>();
         vfx.GlobalPosition = position;
+        vfx._source = source;
         vfx._onAttack = onAttack;
         vfx._startDelay = startDelay;
         vfx._target = target;
@@ -84,7 +87,9 @@ public partial class BuoyCardAttackVfx : Node2D
 
         var lightning = BuoyLightning.Create(this, _target.GetCreatureNode()!)!;
         GoldenglowUtils.PlayVfx(_target, lightning, GlobalPosition);
-        GoldenglowUtils.PlayVfx(_target, BuoyAttackVfx.Create());
+        var skin = SkinResources.GetSkinKey(_source);
+        GoldenglowUtils.PlayVfx(_target, BuoyAttackVfx.Create(skin));
+
         SfxCmd.Play("event:/goldenglow/sfx/buoy_evoke");
 
         await Cmd.Wait(RiseDuration);

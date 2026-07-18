@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -8,14 +6,19 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Models.Capabilities;
-using STS2RitsuLib.Scaffolding.Content;
 using Goldenglow.Capabilities;
+using MegaCrit.Sts2.Core.HoverTips;
+using Goldenglow.Core;
+using Goldenglow.Patch;
 
 namespace Goldenglow.Card;
 
 [RegisterCard(typeof(GoldenglowCardPool))]
-public class HairSpray() : AbstractGoldenglowCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+public class HairSpray() : AbstractGoldenglowCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self), IHovertipShownInInspectOnly
 {
+    public IEnumerable<IHoverTip> HoverTipsShownInInspectOnly => [
+        GoldenglowUtils.CreateReference("Watersnake (水蛇)")
+    ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new DynamicVar("Buff", 2)

@@ -5,13 +5,16 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using STS2RitsuLib.Interop.AutoRegistration;
 using Goldenglow.Core;
 using MegaCrit.Sts2.Core.HoverTips;
-using STS2RitsuLib.Scaffolding.Content;
+using Goldenglow.Patch;
 
 namespace Goldenglow.Card;
 
 [RegisterCard(typeof(GoldenglowCardPool))]
-public class OppositesAttract() : AbstractGoldenglowCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
+public class OppositesAttract() : AbstractGoldenglowCard(1, CardType.Skill, CardRarity.Common, TargetType.Self), IHovertipShownInInspectOnly
 {
+    public IEnumerable<IHoverTip> HoverTipsShownInInspectOnly => [
+        GoldenglowUtils.CreateReference("Watersnake (水蛇)")
+    ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         GoldenglowUtils.CreateAttractVar(2),

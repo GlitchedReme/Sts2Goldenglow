@@ -14,8 +14,7 @@ namespace Goldenglow.Core;
 
 public static class GoldenglowUtils
 {
-    public static bool IsZeroCost(CardModel card) =>
-        !card.EnergyCost.CostsX && card.EnergyCost.GetWithModifiers(CostModifiers.All) == 0;
+    public static bool IsZeroCost(CardModel card) => !card.EnergyCost.CostsX && card.EnergyCost.GetWithModifiers(CostModifiers.All) == 0;
 
     public static IHoverTip Attract => CreateStaticHoverTip("attract");
 
@@ -24,6 +23,12 @@ public static class GoldenglowUtils
     public static IHoverTip Static => CreateStaticHoverTip("static");
 
     public static IHoverTip Pulse => CreateStaticHoverTip("pulse");
+
+    public static IHoverTip CreateReference(string source)
+    {
+        var title = new LocString("static_hover_tips", "GOLDENGLOW_REFERENCE.title");
+        return new HoverTip(title, source);
+    }
 
     public static IHoverTip CreateStaticHoverTip(string tip, params DynamicVar[] vars)
     {
@@ -49,12 +54,11 @@ public static class GoldenglowUtils
     public static DynamicVar CreateAttractVar(int baseValue) => new DynamicVar("Goldenglow_Attract", baseValue)
     .WithSharedTooltip("GOLDENGLOW_KEYWORD_ATTRACT");
 
-
     public static void PlayVfx(Creature target, Node2D vfx, Vector2? position = null)
     {
         ArgumentNullException.ThrowIfNull(target);
         ArgumentNullException.ThrowIfNull(vfx);
-        
+
         if (TestMode.IsOn)
             return;
         var creatureNode = target.GetCreatureNode();

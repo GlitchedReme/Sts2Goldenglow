@@ -59,6 +59,6 @@ texture = ExtResource("1_17863")
 [node name="SkinSelect" parent="." instance=ExtResource("2_358oh")]
 layout_mode = 1
 offset_left = 1206.0
-offset_top = 370.0
+offset_top = 147.0
 offset_right = -861.0
-offset_bottom = -594.0
+offset_bottom = -817.0

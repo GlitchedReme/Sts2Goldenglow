@@ -1,0 +1,14 @@
+[remap]
+
+importer="spine.skel"
+type="SpineSkeletonFileResource"
+uid="uid://mfqntddrct51"
+path="res://.godot/imported/build_char_377_gdglow_snow#5.skel-a064141a37e81b7993f26a73a1631dd7.spskel"
+
+[deps]
+
+source_file="res://Goldenglow/image/character/build_char_377_gdglow_snow#5.skel"
+dest_files=["res://.godot/imported/build_char_377_gdglow_snow#5.skel-a064141a37e81b7993f26a73a1631dd7.spskel"]
+
+[params]
+

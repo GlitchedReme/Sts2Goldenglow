@@ -1,3 +1,5 @@
+using Goldenglow.Core;
+using Goldenglow.Patch;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -10,8 +12,12 @@ using STS2RitsuLib.Interop.AutoRegistration;
 namespace Goldenglow.Card;
 
 [RegisterCard(typeof(GoldenglowCardPool))]
-public class AllInReadiness() : AbstractGoldenglowCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+public class AllInReadiness() : AbstractGoldenglowCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self), IHovertipShownInInspectOnly
 {
+    public IEnumerable<IHoverTip> HoverTipsShownInInspectOnly => [
+        GoldenglowUtils.CreateReference("Watersnake (水蛇)")
+    ];
+    
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new BlockVar(11, ValueProp.Move)
     ];

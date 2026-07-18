@@ -1,3 +1,6 @@
+using System.Linq;
+using Godot;
+using GoldenglowCharacter = Goldenglow.Character.Goldenglow;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
@@ -10,9 +13,12 @@ using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Models;
 using STS2RitsuLib.Models.Capabilities;
 using Goldenglow.Capabilities;
+using Goldenglow.Orb;
 using Goldenglow.Patch;
 using Goldenglow.Ui;
 using Goldenglow.Card;
+using MegaCrit.Sts2.Core.Nodes.Rooms;
+using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 
 namespace Goldenglow.Core;
 
@@ -49,6 +55,12 @@ public class GoldenglowSingleton() : HookedSingletonModel(HookType.Combat)
                 value = model.ModifyOrbValue(orb, value);
         }
         return value;
+    }
+
+    public override Task BeforeCombatStart()
+    {
+        RefreshAllOrbs();
+        return Task.CompletedTask;
     }
 
     public override async Task BeforeSideTurnStart(PlayerChoiceContext choiceContext, CombatSide side, IReadOnlyList<Creature> participants, ICombatState combatState)
@@ -90,5 +102,49 @@ public class GoldenglowSingleton() : HookedSingletonModel(HookType.Combat)
     {
         _pulseValues.Clear();
         MonsterOrbManager.ClearAllInstances();
+    }
+
+    public static void ApplySkinByNetId(ulong netId)
+    {
+        var runState = RunManager.Instance.DebugOnlyGetState();
+        if (runState == null) return;
+
+        var player = runState.Players.FirstOrDefault(p => p.NetId == netId);
+        if (player == null) return;
+
+        if (player.Character is not GoldenglowCharacter || player.Creature == null) return;
+
+        var skinKey = SkinResources.GetSkinKey(player);
+        var res = SkinResources.GetSpine(skinKey).Combat;
+        var node = NCombatRoom.Instance?.GetCreatureNode(player.Creature);
+        var spine = node?.Visuals?.SpineBody;
+        if (spine == null || res == null) return;
+
+        spine.SetSkeletonDataRes(new MegaSkeletonDataResource(res));
+        spine.TryGetAnimationState()?.SetAnimation("Idle", loop: true);
+
+        RefreshOrbsForOwner(netId);
+    }
+
+    public static void RefreshOrbsForOwner(ulong netId)
+    {
+        var room = NCombatRoom.Instance;
+        if (room == null) return;
+        foreach (var child in room.FindChildren("*", "", true, false))
+        {
+            if (child is NBuoyOrb orb && (orb.Orb?.Model as BuoyOrb)?.Source?.NetId == netId)
+                orb.RefreshSkin();
+        }
+    }
+
+    public static void RefreshAllOrbs()
+    {
+        var room = NCombatRoom.Instance;
+        if (room == null) return;
+        foreach (var child in room.FindChildren("*", "", true, false))
+        {
+            if (child is NBuoyOrb orb)
+                orb.RefreshSkin();
+        }
     }
 }

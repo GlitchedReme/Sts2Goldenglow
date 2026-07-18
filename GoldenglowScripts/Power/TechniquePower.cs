@@ -53,7 +53,7 @@ public sealed class TechniquePower : ModPowerTemplate, IPowerCustomTextProvider
         if (TurnCounter >= Amount)
         {
             TurnCounter = 0;
-            var clone = _storedCard.CreateDupe();
+            var clone = _storedCard.CreateDupe(player);
             await CardCmd.AutoPlay(choiceContext, clone, target: null);
             Flash();
         }

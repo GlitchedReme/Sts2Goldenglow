@@ -42,16 +42,16 @@ public class InsulatingScissors : ModRelicTemplate
     {
         var queue = Owner.Creature.Player!.PlayerCombatState!.OrbQueue;
         int prevCount = queue.Orbs.Count;
-        await GoldenglowOrbCmd.ChannelBuoy(Owner.Creature, 1);
+        await GoldenglowOrbCmd.ChannelBuoy(Owner, Owner.Creature, 1);
         if (queue.Orbs.Count > prevCount)
             queue.Orbs[^1].GetOrCreateCapability<OrbBoostCapability>();
     }
 
-    private static async Task ChannelBuoyToEnemy(Creature enemy)
+    private async Task ChannelBuoyToEnemy(Creature enemy)
     {
         var mgr = MonsterOrbManager.MonsterOrbManagerState[enemy];
         int prevCount = mgr?.GetOrbs().Count ?? 0;
-        await GoldenglowOrbCmd.ChannelBuoy(enemy, 1);
+        await GoldenglowOrbCmd.ChannelBuoy(Owner, enemy, 1);
         if (mgr != null)
         {
             var orbs = mgr.GetOrbs();

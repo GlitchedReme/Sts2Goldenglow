@@ -4,7 +4,6 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Interop.AutoRegistration;
-using STS2RitsuLib.Scaffolding.Content;
 using Goldenglow.Core;
 using MegaCrit.Sts2.Core.HoverTips;
 using STS2RitsuLib.Cards.DynamicVars;
@@ -15,7 +14,7 @@ namespace Goldenglow.Card;
 public class NewLife() : AbstractGoldenglowCard(0, CardType.Attack, CardRarity.Rare, TargetType.AllEnemies)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DynamicVar("Threshold", 3),
+        new DynamicVar("Threshold", 4),
         new DynamicVar("DamageBonus", 20),
         ModCardVars.ComputedDamage("Damage", 0,
             card => GoldenglowCmd.GetStaticStacks(card!) * card!.DynamicVars["DamageBonus"].BaseValue, ValueProp.Move),

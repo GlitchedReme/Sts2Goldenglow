@@ -1,4 +1,5 @@
 using Godot;
+using Goldenglow.Core;
 using Goldenglow.Utils;
 using MegaCrit.Sts2.Core.Assets;
 
@@ -13,5 +14,19 @@ public partial class BuoyAttackVfx : Node2D
         this.PlayAllParticles();
     }
 
-    public static BuoyAttackVfx Create() => PreloadManager.Cache.GetScene(ScenePath).Instantiate<BuoyAttackVfx>();
+    public static Node2D Create(string? skin)
+    {
+        Node2D vfx = PreloadManager.Cache.GetScene(ScenePath).Instantiate<BuoyAttackVfx>();
+
+        if (skin != null && skin != "default")
+        {
+            vfx = PreloadManager.Cache.GetScene(BuoySkinAttackVfx.ScenePath).Instantiate<BuoySkinAttackVfx>();
+            var skinPath = SkinResources.GetBuoyAttackPath(skin);
+            if (!string.IsNullOrEmpty(skinPath) && vfx is BuoySkinAttackVfx bvfx)
+                bvfx.ParticleTexture = PreloadManager.Cache.GetTexture2D(skinPath);
+        }
+
+        return vfx;
+    }
+
 }

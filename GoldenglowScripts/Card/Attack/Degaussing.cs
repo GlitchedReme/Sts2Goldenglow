@@ -12,7 +12,6 @@ namespace Goldenglow.Card;
 [RegisterCard(typeof(GoldenglowCardPool))]
 public class Degaussing() : AbstractGoldenglowCard(0, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
 {
-
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new DamageVar(6, ValueProp.Move),
         new DynamicVar("HandSize", 3)

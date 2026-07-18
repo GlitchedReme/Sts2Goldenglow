@@ -5,6 +5,7 @@ using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Nodes.Orbs;
 using Goldenglow.Vfx;
 using Goldenglow.Core;
+using MegaCrit.Sts2.Core.Assets;
 
 namespace Goldenglow.Orb;
 
@@ -22,6 +23,7 @@ public partial class NBuoyOrb : Sprite2D
             return;
         }
 
+        RefreshSkin();
         Orb.Model.EvokeActivated += OnEvokeActivated;
     }
 
@@ -38,8 +40,21 @@ public partial class NBuoyOrb : Sprite2D
         {
             var lightning = BuoyLightning.Create(this, target.GetCreatureNode()!)!;
             GoldenglowUtils.PlayVfx(target, lightning, GlobalPosition);
-            GoldenglowUtils.PlayVfx(target, BuoyAttackVfx.Create());
+            if (Orb?.Model != null)
+            {
+                var source = (Orb.Model as BuoyOrb)?.Source;
+                var skin = SkinResources.GetSkinKey(source);
+                GoldenglowUtils.PlayVfx(target, BuoyAttackVfx.Create(skin));
+            }
         }
+    }
+
+    public void RefreshSkin()
+    {
+        if (Orb?.Model == null) return;
+        var source = (Orb.Model as BuoyOrb)?.Source;
+        var skin = SkinResources.GetSkinKey(source);
+        Texture = PreloadManager.Cache.GetTexture2D(SkinResources.GetBuoySkinPath(skin));
     }
 
     public override void _Process(double delta)

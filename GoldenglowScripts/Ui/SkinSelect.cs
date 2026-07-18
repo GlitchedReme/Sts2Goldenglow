@@ -1,45 +1,14 @@
 using Godot;
 using MegaCrit.Sts2.addons.mega_text;
-using MegaCrit.Sts2.Core.Assets;
 using MegaCrit.Sts2.Core.Bindings.MegaSpine;
-using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Nodes.GodotExtensions;
-using MegaCrit.Sts2.Core.Runs;
+using Goldenglow.Core;
 
 namespace Goldenglow.Ui;
 
 public partial class SkinSelect : HBoxContainer
 {
-    private struct SkinDef
-    {
-        public string DisplayName;
-        public string ResourcePath;
-    }
-
-    private static readonly List<SkinDef> _skinDefs =
-    [
-        new() { DisplayName = "default", ResourcePath = "res://Goldenglow/image/character/default.tres" },
-        new() { DisplayName = "snow", ResourcePath = "res://Goldenglow/image/character/snow.tres" },
-        new() { DisplayName = "sanrio", ResourcePath = "res://Goldenglow/image/character/sanrio.tres" },
-        new() { DisplayName = "summer", ResourcePath = "res://Goldenglow/image/character/summer.tres" },
-    ];
-
-    private static Resource[]? _skeletonResources;
-    private static Resource[] SkeletonResources
-    {
-        get
-        {
-            if (_skeletonResources == null)
-            {
-                _skeletonResources = new Resource[_skinDefs.Count];
-                for (int i = 0; i < _skinDefs.Count; i++)
-                    _skeletonResources[i] = PreloadManager.Cache.GetAsset<Resource>(_skinDefs[i].ResourcePath);
-            }
-            return _skinDefs.Count == 0 ? [] : _skeletonResources;
-        }
-    }
-
     public static int CurrentSkinIndex { get; set; }
 
     private int _currentIndex;
@@ -47,62 +16,131 @@ public partial class SkinSelect : HBoxContainer
     private MegaSprite _leftSprite = null!;
     private MegaSprite _centerSprite = null!;
     private MegaSprite _rightSprite = null!;
+    private MegaSprite _condidateSprite = null!;
     private MegaLabel _label = null!;
+
+    private Node2D _leftNode = null!;
+    private Node2D _centerNode = null!;
+    private Node2D _rightNode = null!;
+    private Node2D _candidateNode = null!;
+
+    private Vector2 _leftHome;
+    private Vector2 _centerHome;
+    private Vector2 _rightHome;
+    private float _slotWidth;
+
+    private bool _isAnimating;
+
+    private const float AnimDuration = 0.25f;
 
     public override void _Ready()
     {
         var leftBtn = GetNode<GGoldArrowButton>("LeftButton");
         var rightBtn = GetNode<GGoldArrowButton>("RightButton");
 
-        _leftSprite = new MegaSprite(GetNode("NinePatchRect/Mask/Node/SpineSprite3"));
-        _centerSprite = new MegaSprite(GetNode("NinePatchRect/Mask/Node/SpineSprite"));
-        _rightSprite = new MegaSprite(GetNode("NinePatchRect/Mask/Node/SpineSprite2"));
+        _leftNode = GetNode<Node2D>("NinePatchRect/Mask/Node/SpineSprite3");
+        _centerNode = GetNode<Node2D>("NinePatchRect/Mask/Node/SpineSprite");
+        _rightNode = GetNode<Node2D>("NinePatchRect/Mask/Node/SpineSprite2");
+        _candidateNode = GetNode<Node2D>("NinePatchRect/Mask/Node/SpineSprite4");
+
+        _leftSprite = new MegaSprite(_leftNode);
+        _centerSprite = new MegaSprite(_centerNode);
+        _rightSprite = new MegaSprite(_rightNode);
+        _condidateSprite = new MegaSprite(_candidateNode);
         _label = GetNode<GMegaLabel>("NinePatchRect/Mask/Label");
 
         leftBtn.Released += OnLeftPressed;
         rightBtn.Released += OnRightPressed;
 
-        _currentIndex = CurrentSkinIndex;
+        _leftHome = _leftNode.Position;
+        _centerHome = _centerNode.Position;
+        _rightHome = _rightNode.Position;
+        _slotWidth = _centerHome.X - _leftHome.X;
+
+        _candidateNode.Visible = false;
+
+        _currentIndex = SkinResources.IndexOfKey(SkinResources.SelectedSkinKey);
+        CurrentSkinIndex = _currentIndex;
         UpdateSkin();
     }
 
     private void OnLeftPressed(NClickableControl _)
     {
-        _currentIndex = (_currentIndex - 1 + _skinDefs.Count) % _skinDefs.Count;
-        CurrentSkinIndex = _currentIndex;
-        UpdateSkin();
+        if (_isAnimating) return;
+        _isAnimating = true;
+
+        var c = SkinResources.Keys.Count;
+        var targetIndex = (_currentIndex - 1 + c) % c;
+
+        ApplySkin(_condidateSprite, (_currentIndex - 2 + c) % c);
+        _candidateNode.Position = new Vector2(_leftHome.X - _slotWidth, _leftHome.Y);
+        _candidateNode.Visible = true;
+
+        var tween = CreateTween();
+        tween.SetParallel(true);
+        tween.TweenProperty(_leftNode, "position:x", _leftNode.Position.X + _slotWidth, AnimDuration);
+        tween.TweenProperty(_centerNode, "position:x", _centerNode.Position.X + _slotWidth, AnimDuration);
+        tween.TweenProperty(_rightNode, "position:x", _rightNode.Position.X + _slotWidth, AnimDuration);
+        tween.TweenProperty(_candidateNode, "position:x", _candidateNode.Position.X + _slotWidth, AnimDuration);
+        tween.SetParallel(false);
+        tween.SetTrans(Tween.TransitionType.Cubic);
+        tween.SetEase(Tween.EaseType.Out);
+        tween.TweenCallback(Callable.From(() => OnTweenComplete(targetIndex)));
     }
 
     private void OnRightPressed(NClickableControl _)
     {
-        _currentIndex = (_currentIndex + 1) % _skinDefs.Count;
+        if (_isAnimating) return;
+        _isAnimating = true;
+
+        var c = SkinResources.Keys.Count;
+        var targetIndex = (_currentIndex + 1) % c;
+
+        ApplySkin(_condidateSprite, (_currentIndex + 2) % c);
+        _candidateNode.Position = new Vector2(_rightHome.X + _slotWidth, _rightHome.Y);
+        _candidateNode.Visible = true;
+
+        var tween = CreateTween();
+        tween.SetParallel(true);
+        tween.TweenProperty(_leftNode, "position:x", _leftNode.Position.X - _slotWidth, AnimDuration);
+        tween.TweenProperty(_centerNode, "position:x", _centerNode.Position.X - _slotWidth, AnimDuration);
+        tween.TweenProperty(_rightNode, "position:x", _rightNode.Position.X - _slotWidth, AnimDuration);
+        tween.TweenProperty(_candidateNode, "position:x", _candidateNode.Position.X - _slotWidth, AnimDuration);
+        tween.SetParallel(false);
+        tween.SetTrans(Tween.TransitionType.Cubic);
+        tween.SetEase(Tween.EaseType.Out);
+        tween.TweenCallback(Callable.From(() => OnTweenComplete(targetIndex)));
+    }
+
+    private void OnTweenComplete(int newIndex)
+    {
+        _currentIndex = newIndex;
         CurrentSkinIndex = _currentIndex;
+
+        _leftNode.Position = _leftHome;
+        _centerNode.Position = _centerHome;
+        _rightNode.Position = _rightHome;
+        _candidateNode.Visible = false;
+
         UpdateSkin();
+        _isAnimating = false;
     }
 
     private void UpdateSkin()
     {
-        var c = _skinDefs.Count;
+        var c = SkinResources.Keys.Count;
         ApplySkin(_leftSprite, (_currentIndex - 1 + c) % c);
         ApplySkin(_centerSprite, _currentIndex);
         ApplySkin(_rightSprite, (_currentIndex + 1) % c);
-        _label.Text = new LocString("settings_ui", $"GOLDENGLOW_SETTINGS_SKIN.{_skinDefs[_currentIndex].DisplayName}").GetFormattedText();
 
-        var player = LocalContext.GetMe(RunManager.Instance.DebugOnlyGetState());
-        if (player == null)
-            return;
-        Entry.Skin.Modify(player, data =>
-        {
-            data.Skin = _skinDefs[_currentIndex].DisplayName;
-        });
+        var key = SkinResources.Keys[_currentIndex];
+        SkinResources.SelectedSkinKey = key;
+        _label.Text = new LocString("settings_ui", SkinResources.GetLocKey(key)).GetFormattedText();
     }
 
     private static void ApplySkin(MegaSprite sprite, int index)
     {
-        var res = SkeletonResources[index];
-        if (res == null)
-            return;
-
+        var res = SkinResources.GetSpine(SkinResources.Keys[index]).Combat;
         sprite.SetSkeletonDataRes(new MegaSkeletonDataResource(res));
         sprite.TryGetAnimationState()?.SetAnimation("Idle", loop: true);
     }

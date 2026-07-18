@@ -8,12 +8,16 @@ using STS2RitsuLib.Models.Capabilities;
 using Goldenglow.Capabilities;
 using Goldenglow.Core;
 using MegaCrit.Sts2.Core.HoverTips;
+using Goldenglow.Patch;
 
 namespace Goldenglow.Card;
 
 [RegisterCard(typeof(GoldenglowCardPool))]
-public class SurgingCurrent() : AbstractGoldenglowCard(1, CardType.Skill, CardRarity.Rare, TargetType.Self)
+public class SurgingCurrent() : AbstractGoldenglowCard(1, CardType.Skill, CardRarity.Rare, TargetType.Self), IHovertipShownInInspectOnly
 {
+    public IEnumerable<IHoverTip> HoverTipsShownInInspectOnly => [
+        GoldenglowUtils.CreateReference("Watersnake (水蛇)")
+    ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new BlockVar(8, ValueProp.Move),

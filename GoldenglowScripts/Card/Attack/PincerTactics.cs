@@ -7,12 +7,16 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Interop.AutoRegistration;
+using Goldenglow.Patch;
 
 namespace Goldenglow.Card;
 
 [RegisterCard(typeof(GoldenglowCardPool))]
-public class PincerTactics() : AbstractGoldenglowCard(1, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy)
+public class PincerTactics() : AbstractGoldenglowCard(1, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy), IHovertipShownInInspectOnly
 {
+    public IEnumerable<IHoverTip> HoverTipsShownInInspectOnly => [
+        GoldenglowUtils.CreateReference("Watersnake (水蛇)")
+    ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new DamageVar(6, ValueProp.Move),
@@ -31,9 +35,9 @@ public class PincerTactics() : AbstractGoldenglowCard(1, CardType.Attack, CardRa
         int targetOrbs = MonsterOrbManager.MonsterOrbManagerState[target]?.GetOrbs().Count ?? 0;
 
         if (playerOrbs > targetOrbs)
-            await GoldenglowOrbCmd.TransferOrbs(Owner.Creature, target, playerOrbs);
+            await GoldenglowOrbCmd.TransferOrbs(Owner, Owner.Creature, target, playerOrbs);
         else if (targetOrbs > playerOrbs)
-            await GoldenglowOrbCmd.TransferOrbs(target, Owner.Creature, targetOrbs);
+            await GoldenglowOrbCmd.TransferOrbs(Owner, target, Owner.Creature, targetOrbs);
     }
 
     protected override void OnUpgrade()

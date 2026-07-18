@@ -24,7 +24,7 @@ public class SupportTactics() : AbstractGoldenglowCard(1, CardType.Skill, CardRa
     {
         int count = (int)DynamicVars["Buoy"].BaseValue;
         foreach (var player in CombatState!.Players)
-            await GoldenglowOrbCmd.ChannelBuoy(player.Creature, count);
+            await GoldenglowOrbCmd.ChannelBuoy(Owner, player.Creature, count);
     }
 
     protected override void OnUpgrade()

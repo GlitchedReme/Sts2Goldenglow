@@ -5,7 +5,6 @@ using Goldenglow.Ui;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.HoverTips;
-using MegaCrit.Sts2.Core.Models;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Scaffolding.Content;
 
@@ -35,6 +34,6 @@ public class CleaningTools : ModRelicTemplate
         int count = orbs.Count;
         if (count == 0) return;
 
-        await GoldenglowOrbCmd.TransferOrbs(creature, Owner.Creature, count);
+        await GoldenglowOrbCmd.TransferOrbs(Owner, creature, Owner.Creature, count);
     }
 }

@@ -4,6 +4,7 @@ using Goldenglow.Ui;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Hooks;
 using MegaCrit.Sts2.Core.Models;
@@ -13,45 +14,21 @@ namespace Goldenglow.Card;
 
 public static class GoldenglowOrbCmd
 {
-    public static async Task Channel(Creature target, OrbModel orb)
+    public static async Task Channel(Player player, Creature target, OrbModel orb, int count = 1)
     {
-        if (target.IsPlayer)
+        for (int i = 0; i < count; i++)
         {
-            var player = target.Player;
-            if (player == null) return;
-            orb.Owner = null!;
-            await OrbCmd.Channel(new ThrowingPlayerChoiceContext(), orb, player);
-        }
-        else
-        {
-            var mgr = GetOrCreateMonsterOrbManager(target);
-            var orbs = mgr.GetOrbs();
-            if (mgr.Capacity > 0 && orbs.Count >= mgr.Capacity)
+            if (target.IsPlayer)
             {
-                await EvokeOldestOrb(orbs[0], target);
-                if (target.IsDead) return;
-                mgr.EvokeOrb(orbs[0]);
+                var p = target.Player;
+                if (p == null) return;
+                orb.Owner = null!;
+                if (orb is BuoyOrb buoy)
+                    buoy.Source ??= player;
+                await OrbCmd.Channel(new ThrowingPlayerChoiceContext(), orb, p);
             }
-            orb.Owner = null!;
-            MonsterOrbPatch.OwnerState[orb] = target;
-            mgr.ChannelOrb(orb);
-        }
-    }
-
-    public static async Task Channel<TOrb>(Creature target, int count) where TOrb : OrbModel
-    {
-        if (target.IsPlayer)
-        {
-            var player = target.Player;
-            if (player == null) return;
-            for (int i = 0; i < count; i++)
-                await OrbCmd.Channel<TOrb>(new ThrowingPlayerChoiceContext(), player);
-        }
-        else
-        {
-            for (int i = 0; i < count; i++)
+            else
             {
-                if (target.IsDead) return;
                 var mgr = GetOrCreateMonsterOrbManager(target);
                 var orbs = mgr.GetOrbs();
                 if (mgr.Capacity > 0 && orbs.Count >= mgr.Capacity)
@@ -60,12 +37,18 @@ public static class GoldenglowOrbCmd
                     if (target.IsDead) return;
                     mgr.EvokeOrb(orbs[0]);
                 }
-                var orb = ModelDb.Orb<TOrb>().ToMutable();
                 orb.Owner = null!;
+                if (orb is BuoyOrb buoyMonster)
+                    buoyMonster.Source ??= player;
                 MonsterOrbPatch.OwnerState[orb] = target;
                 mgr.ChannelOrb(orb);
             }
         }
+    }
+
+    public static async Task Channel<TOrb>(Player player, Creature target, int count = 1) where TOrb : OrbModel
+    {
+        await Channel(player, target, ModelDb.Orb<TOrb>().ToMutable(), count);
     }
 
     private static async Task EvokeOldestOrb(OrbModel orb, Creature monster)
@@ -82,7 +65,7 @@ public static class GoldenglowOrbCmd
     /// Channels buoy orbs to a target, dispatching to the player OrbQueue or the monster MonsterOrbManager.
     /// Used by bidirectional cards that can target either side.
     /// </summary>
-    public static async Task ChannelBuoy(Creature target, int count) => await Channel<BuoyOrb>(target, count);
+    public static async Task ChannelBuoy(Player player, Creature target, int count) => await Channel<BuoyOrb>(player, target, count);
 
     public static MonsterOrbManager GetOrCreateMonsterOrbManager(Creature target)
     {
@@ -105,14 +88,14 @@ public static class GoldenglowOrbCmd
         return MonsterOrbManager.Instances.FirstOrDefault(m => m.Creature == target);
     }
 
-    public static async Task TransferOrbs(Creature source, Creature target, int count)
+    public static async Task TransferOrbs(Player player, Creature source, Creature target, int count)
     {
         if (CombatManager.Instance.IsOverOrEnding) return;
         if (source == target || count <= 0) return;
 
         var orbs = PopOrbs(source, count);
         for (int i = 0; i < orbs.Count; i++)
-            await Channel(target, orbs[i]);
+            await Channel(player, target, orbs[i]);
     }
 
     private static List<OrbModel> PopOrbs(Creature source, int count)

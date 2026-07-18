@@ -1,0 +1,45 @@
+[gd_scene load_steps=7 format=3 uid="uid://8tlt2n1nd2kc"]
+
+[ext_resource type="Script" uid="uid://ijaenhx5sti4" path="res://GoldenglowScripts/Vfx/BuoySkinAttackVfx.cs" id="1_r6wj2"]
+[ext_resource type="Texture2D" uid="uid://b8uaohgndw10p" path="res://Goldenglow/image/vfx/flipbook_154.png" id="1_ylene"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_r6wj2"]
+particles_animation = true
+particles_anim_h_frames = 2
+particles_anim_v_frames = 2
+particles_anim_loop = false
+
+[sub_resource type="Curve" id="Curve_xp7tt"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.063218385, 1), 0.0, 0.0, 0, 0, Vector2(0.6982759, 0.86087996), -0.87413764, -0.87413764, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_t4kqh"]
+curve = SubResource("Curve_xp7tt")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_3qwxt"]
+particle_flag_disable_z = true
+direction = Vector3(0, -1, 0)
+spread = 60.0
+initial_velocity_min = 389.44998
+initial_velocity_max = 447.24
+angular_velocity_min = 21.709984
+angular_velocity_max = 75.97998
+gravity = Vector3(0, 400, 0)
+linear_accel_min = -50.0
+linear_accel_max = -50.0
+damping_min = 24.874
+damping_max = 24.874
+alpha_curve = SubResource("CurveTexture_t4kqh")
+anim_offset_max = 1.0
+
+[node name="BuoySkinAttackVfx" type="Node2D"]
+script = ExtResource("1_r6wj2")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+material = SubResource("CanvasItemMaterial_r6wj2")
+emitting = false
+amount = 4
+texture = ExtResource("1_ylene")
+one_shot = true
+explosiveness = 0.94
+process_material = SubResource("ParticleProcessMaterial_3qwxt")

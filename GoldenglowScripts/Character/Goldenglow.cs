@@ -5,10 +5,12 @@ using Goldenglow.Relic;
 using MegaCrit.Sts2.Core.Animation;
 using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Entities.Characters;
+using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Nodes.Combat;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Scaffolding.Characters;
 using STS2RitsuLib.Scaffolding.Godot;
+using STS2RitsuLib.Scaffolding.Visuals.StateMachine;
 
 namespace Goldenglow.Character;
 
@@ -94,25 +96,44 @@ public class Goldenglow : ModCharacterTemplate<GoldenglowCardPool, GoldenglowRel
 
     protected override CreatureAnimator? SetupCustomCreatureAnimator(MegaSprite controller)
     {
-        // 设定动画名和是否循环播放
-        AnimState idle = new("Skill2_Idle", isLooping: true);
+        AnimState idle1 = new("Idle", isLooping: true);
+        AnimState idle2 = new("Skill2_Idle", isLooping: true);
+        
         AnimState cast = new("Skill2_Loop");
         AnimState attack = new("Skill2_Loop");
         AnimState die = new("Die");
         AnimState relaxed = new("Idle", isLooping: true);
 
-        cast.NextState = idle;
-        attack.NextState = idle;
+        cast.NextState = idle2;
+        attack.NextState = idle2;
         // hurt.NextState = idle;
-        relaxed.AddBranch("Idle", idle);
+        relaxed.AddBranch("Idle", idle1);
 
-        CreatureAnimator creatureAnimator = new(idle, controller);
-        creatureAnimator.AddAnyState("Idle", idle);
+        CreatureAnimator creatureAnimator = new(idle1, controller);
+        creatureAnimator.AddAnyState("Idle", idle1);
         creatureAnimator.AddAnyState("Dead", die);
         // creatureAnimator.AddAnyState("Hit", hurt);
         creatureAnimator.AddAnyState("Attack", attack);
         creatureAnimator.AddAnyState("Cast", cast);
         creatureAnimator.AddAnyState("Relaxed", relaxed);
         return creatureAnimator;
+    }
+
+    protected override ModAnimStateMachine? SetupCustomMerchantAnimationStateMachine(Node merchantRoot, CharacterModel character)
+    {
+        var spine = new MegaSprite(merchantRoot.GetChild(0));
+        return ModAnimStateMachineBuilder.Create()
+            .AddState("Idle", loop: true)
+            .Done()
+            .BuildSpine(spine);
+    }
+
+    protected override ModAnimStateMachine? SetupCustomRestSiteAnimationStateMachine(Node restSiteRoot, CharacterModel character)
+    {
+        var spine = new MegaSprite(restSiteRoot.GetChild(0));
+        return ModAnimStateMachineBuilder.Create()
+            .AddState("Sit", loop: true)
+            .Done()
+            .BuildSpine(spine);
     }
 }

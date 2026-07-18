@@ -4,17 +4,20 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using Goldenglow.Orb;
 using MegaCrit.Sts2.Core.HoverTips;
-using System.Collections.Generic;
 using STS2RitsuLib.Interop.AutoRegistration;
-using STS2RitsuLib.Scaffolding.Content;
 
 using Goldenglow.Power;
+using Goldenglow.Core;
+using Goldenglow.Patch;
 
 namespace Goldenglow.Card;
 
 [RegisterCard(typeof(GoldenglowCardPool))]
-public class SparkCounterattack() : AbstractGoldenglowCard(2, CardType.Power, CardRarity.Uncommon, TargetType.Self)
+public class SparkCounterattack() : AbstractGoldenglowCard(2, CardType.Power, CardRarity.Uncommon, TargetType.Self), IHovertipShownInInspectOnly
 {
+    public IEnumerable<IHoverTip> HoverTipsShownInInspectOnly => [
+        GoldenglowUtils.CreateReference("鹰角网络 (hypergryph)")
+    ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new DynamicVar("Buoy", 1)

@@ -1,8 +1,11 @@
+using Goldenglow.Core;
+using Goldenglow.Patch;
 using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Factories;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
 using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace Goldenglow.Card;
@@ -11,8 +14,12 @@ namespace Goldenglow.Card;
 /// Choose 1 of 3 random Exhaust cards, add to hand with cost 0 this turn.
 /// </summary>
 [RegisterCard(typeof(GoldenglowCardPool))]
-public class BarberKit() : AbstractGoldenglowCard(1, CardType.Skill, CardRarity.Rare, TargetType.Self)
+public class BarberKit() : AbstractGoldenglowCard(1, CardType.Skill, CardRarity.Rare, TargetType.Self), IHovertipShownInInspectOnly
 {
+    public IEnumerable<IHoverTip> HoverTipsShownInInspectOnly => [
+        GoldenglowUtils.CreateReference("鹰角网络 (hypergryph)")
+    ];
+
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var pool = Owner.Character.CardPool

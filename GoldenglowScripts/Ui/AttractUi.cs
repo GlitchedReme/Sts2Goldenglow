@@ -36,7 +36,7 @@ public partial class AttractUi : Control
             return _containers[index];
 
         var scene = PreloadManager.Cache.GetScene("res://scenes/ui/card_hover_tip.tscn");
-        var container = scene.Instantiate<Control>(PackedScene.GenEditState.Disabled);
+        var container = scene.Instantiate<Control>();
         container.Visible = false;
         AddChild(container);
         _containers.Add(container);

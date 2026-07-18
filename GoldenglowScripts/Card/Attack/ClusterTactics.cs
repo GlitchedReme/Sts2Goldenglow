@@ -57,7 +57,7 @@ public class ClusterTactics() : AbstractGoldenglowCard(1, CardType.Attack, CardR
         for (int i = 0; i < handSize; i++)
         {
             var pos = basePos + Vector2.Right.Rotated(MathF.PI + Random.Shared.NextSingle() * MathF.PI) * (200f + Random.Shared.NextSingle() * 200f);
-            var vfx = BuoyCardAttackVfx.Create(pos, target, async () =>
+            var vfx = BuoyCardAttackVfx.Create(pos, Owner, target, async () =>
             {
                 await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
                     .FromCard(this, cardPlay)

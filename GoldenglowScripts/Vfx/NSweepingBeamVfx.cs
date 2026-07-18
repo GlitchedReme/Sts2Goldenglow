@@ -21,7 +21,7 @@ public partial class NSweepingBeamVfx : Node2D
     public static NSweepingBeamVfx? Create()
     {
         if (TestMode.IsOn) return null;
-        var vfx = PreloadManager.Cache.GetScene(scenePath).Instantiate<NSweepingBeamVfx>(PackedScene.GenEditState.Disabled);
+        var vfx = PreloadManager.Cache.GetScene(scenePath).Instantiate<NSweepingBeamVfx>();
         return vfx;
     }
 

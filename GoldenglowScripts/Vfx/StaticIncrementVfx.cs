@@ -1,17 +1,9 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Godot;
 using MegaCrit.Sts2.Core.Assets;
 using MegaCrit.Sts2.Core.Commands;
-using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Helpers;
-using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Nodes.Cards;
-using MegaCrit.Sts2.Core.Nodes.Cards.Holders;
-using MegaCrit.Sts2.Core.Nodes.Combat;
 using MegaCrit.Sts2.Core.Nodes.GodotExtensions;
-using MegaCrit.Sts2.Core.Nodes.Rooms;
 using MegaCrit.Sts2.Core.TestSupport;
 
 namespace Goldenglow.Vfx;
@@ -48,7 +40,7 @@ public partial class StaticIncrementVfx : Control
     public static StaticIncrementVfx? Create(NCard cardNode)
     {
         if (TestMode.IsOn) return null;
-        var vfx = PreloadManager.Cache.GetScene(scenePath).Instantiate<StaticIncrementVfx>(PackedScene.GenEditState.Disabled);
+        var vfx = PreloadManager.Cache.GetScene(scenePath).Instantiate<StaticIncrementVfx>();
         vfx._cardNode = cardNode;
         cardNode.CardVfxContainer.AddChildSafely(vfx);
         return vfx;

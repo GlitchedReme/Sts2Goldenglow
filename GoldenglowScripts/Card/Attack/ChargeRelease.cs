@@ -13,9 +13,9 @@ namespace Goldenglow.Card;
 public class ChargeRelease() : AbstractGoldenglowCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DamageVar(7, ValueProp.Move),
+        new DamageVar(8, ValueProp.Move),
         new CardsVar(1),
-        new DynamicVar("StaticDamage", 7),
+        new DynamicVar("StaticDamage", 6),
         new DynamicVar("StaticDraw", 1)
     ];
 

@@ -48,7 +48,7 @@ public class CrystalClearSparkle() : AbstractGoldenglowCard(1, CardType.Attack, 
             var pos = (targetNode?.VfxSpawnPosition ?? Vector2.Zero)
                 + Vector2.Right.Rotated(MathF.PI + Random.Shared.NextSingle() * MathF.PI) * (200f + Random.Shared.NextSingle() * 200f);
 
-            var vfx = BuoyCardAttackVfx.Create(pos, target, async () =>
+            var vfx = BuoyCardAttackVfx.Create(pos, Owner, target, async () =>
             {
                 await DamageCmd.Attack(((ComputedDynamicVar)DynamicVars["Damage"]).Calculate())
                     .FromCard(this, cardPlay)

@@ -1,9 +1,9 @@
 shader_type canvas_item;
 render_mode blend_mix;
 
-#include "res://Goldenglow/shader/utils/flipbook.gdshaderinc"
-#include "res://Goldenglow/shader/utils/hue_shift.gdshaderinc"
-#include "res://Goldenglow/shader/utils/erosion_from_factors.gdshaderinc"
+#include "res://Goldenglow/shaders/utils/flipbook.gdshaderinc"
+#include "res://Goldenglow/shaders/utils/hue_shift.gdshaderinc"
+#include "res://Goldenglow/shaders/utils/erosion_from_factors.gdshaderinc"
 
 uniform vec2 pivot_offset = vec2(0.0, 0.0);
 

@@ -1,0 +1,16 @@
+[remap]
+
+importer="spine.atlas"
+type="SpineAtlasResource"
+uid="uid://y6ma78sri63n"
+path="res://.godot/imported/build_char_377_gdglow_snow#5.atlas-4a046f4f2e9d887efb664c282100ee29.spatlas"
+
+[deps]
+
+source_file="res://Goldenglow/image/character/build_char_377_gdglow_snow#5.atlas"
+dest_files=["res://.godot/imported/build_char_377_gdglow_snow#5.atlas-4a046f4f2e9d887efb664c282100ee29.spatlas"]
+
+[params]
+
+normal_map_prefix="n"
+specular_map_prefix="s"

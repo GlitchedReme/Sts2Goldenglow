@@ -1,27 +1,27 @@
-using System.Linq;
+using Goldenglow.Core;
+using Goldenglow.Patch;
 using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Scaffolding.Characters;
-using STS2RitsuLib.Scaffolding.Content;
 
 namespace Goldenglow.Card;
 
 [RegisterCard(typeof(GoldenglowCardPool))]
-public class WelcomeGuests : AbstractGoldenglowCard
+public class WelcomeGuests() : AbstractGoldenglowCard(energyCost, type, rarity, targetType), IHovertipShownInInspectOnly
 {
+    public IEnumerable<IHoverTip> HoverTipsShownInInspectOnly => [
+        GoldenglowUtils.CreateReference("dogdogbhh (白花花)")
+    ];
+
     private const int energyCost = 1;
     private const CardType type = CardType.Attack;
     private const CardRarity rarity = CardRarity.Uncommon;
     private const TargetType targetType = TargetType.AllEnemies;
-
-    public WelcomeGuests()
-        : base(energyCost, type, rarity, targetType)
-    {
-    }
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new DynamicVar("Multiplier", 7)

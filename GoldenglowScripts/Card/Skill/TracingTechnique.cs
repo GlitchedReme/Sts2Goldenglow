@@ -1,16 +1,20 @@
+using Goldenglow.Core;
+using Goldenglow.Patch;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using STS2RitsuLib.Interop.AutoRegistration;
-using STS2RitsuLib.Scaffolding.Content;
-using System.Collections.Generic;
 
 namespace Goldenglow.Card;
 
 [RegisterCard(typeof(GoldenglowCardPool))]
-public class TracingTechnique() : AbstractGoldenglowCard(3, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+public class TracingTechnique() : AbstractGoldenglowCard(3, CardType.Skill, CardRarity.Uncommon, TargetType.Self), IHovertipShownInInspectOnly
 {
+    public IEnumerable<IHoverTip> HoverTipsShownInInspectOnly => [
+        GoldenglowUtils.CreateReference("iasimo")
+    ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new EnergyVar(1),

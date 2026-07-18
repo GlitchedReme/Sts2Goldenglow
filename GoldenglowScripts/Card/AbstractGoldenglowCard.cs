@@ -6,6 +6,7 @@ namespace Goldenglow.Card;
 public abstract class AbstractGoldenglowCard(int cost, CardType type, CardRarity rarity, TargetType target) : ModCardTemplate(cost, type, rarity, target)
 {
     public override CardAssetProfile AssetProfile => new(
+        PortraitPath: $"res://Goldenglow/image/card_atlas/{GetType().Name}.tres",
         FramePath: Type switch
         {
             CardType.Attack => "res://Goldenglow/image/character/card_frame_attack_s.png",

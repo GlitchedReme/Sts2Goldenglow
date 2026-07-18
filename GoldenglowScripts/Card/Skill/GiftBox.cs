@@ -6,12 +6,16 @@ using Goldenglow.Core;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Commands;
+using Goldenglow.Patch;
 
 namespace Goldenglow.Card;
 
 [RegisterCard(typeof(GoldenglowCardPool))]
-public class GiftBox() : AbstractGoldenglowCard(-2, CardType.Skill, CardRarity.Uncommon, TargetType.Self), ICardOnAttracted
+public class GiftBox() : AbstractGoldenglowCard(-2, CardType.Skill, CardRarity.Uncommon, TargetType.Self), ICardOnAttracted, IHovertipShownInInspectOnly
 {
+    public IEnumerable<IHoverTip> HoverTipsShownInInspectOnly => [
+        GoldenglowUtils.CreateReference("Watersnake (水蛇)")
+    ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new CardsVar(2)

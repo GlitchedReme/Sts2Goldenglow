@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://gwt4q11a23h"]
+[gd_scene load_steps=17 format=3 uid="uid://gwt4q11a23h"]
 
 [ext_resource type="Texture2D" uid="uid://b4ffylh" path="res://Goldenglow/image/ui/settings_tiny_left_arrow.tres" id="1_gpntl"]
 [ext_resource type="Script" uid="uid://v444vbqg7d2p" path="res://GoldenglowScripts/Ui/GGoldArrowButton.cs" id="1_kp7jd"]
@@ -10,6 +10,7 @@
 [ext_resource type="SpineSkeletonDataResource" uid="uid://cpn2gh738frtb" path="res://Goldenglow/image/character/sanrio.tres" id="6_8qj7g"]
 [ext_resource type="Script" uid="uid://cfvup1836q4e3" path="res://GoldenglowScripts/Ui/SkinSelect.cs" id="7_qd4s2"]
 [ext_resource type="Shader" uid="uid://b1igbtqnks6lc" path="res://Goldenglow/shaders/utils/hsv.gdshader" id="8_4d2fq"]
+[ext_resource type="SpineSkeletonDataResource" uid="uid://tydodt24qlkl" path="res://Goldenglow/image/character/build_sanrio.tres" id="10_750n1"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_xt4q7"]
 resource_local_to_scene = true
@@ -133,6 +134,15 @@ preview_animation = "Idle"
 preview_frame = false
 preview_time = 0.0
 position = Vector2(47.000004, 184)
+scale = Vector2(0.35, 0.35)
+
+[node name="SpineSprite4" type="SpineSprite" parent="NinePatchRect/Mask/Node"]
+skeleton_data_res = ExtResource("10_750n1")
+preview_skin = "Default"
+preview_animation = "Sit"
+preview_frame = false
+preview_time = 0.0
+position = Vector2(252, 197)
 scale = Vector2(0.35, 0.35)
 
 [node name="RightButton" type="Control" parent="."]

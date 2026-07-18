@@ -12,7 +12,7 @@ namespace Goldenglow.Card;
 public class JacobsLadder() : AbstractGoldenglowCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DamageVar(5, ValueProp.Move),
+        new DamageVar(3, ValueProp.Move),
         new RepeatVar(2),
         GoldenglowUtils.CreatePulseVar()
     ];
@@ -25,7 +25,7 @@ public class JacobsLadder() : AbstractGoldenglowCard(1, CardType.Attack, CardRar
             .Targeting(cardPlay.Target!)
             .Execute(choiceContext);
         for (int i = 0; i < DynamicVars.Repeat.BaseValue; i++)
-            await GoldenglowCmd.Pulse(Owner, this, cardPlay);
+            await GoldenglowCmd.Pulse(Owner, this, cardPlay, cardPlay.Target);
     }
 
     protected override void OnUpgrade()

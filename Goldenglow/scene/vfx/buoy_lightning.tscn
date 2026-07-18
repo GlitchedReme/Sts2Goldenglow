@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://cwyj5dbvuukl0" path="res://Goldenglow/image/vfx/char_gdglow_02.png" id="2_83w0l"]
 
 [sub_resource type="Curve" id="Curve_wrw5i"]
-_data = [Vector2(0, 0), 0.0, -0.29416576, 0, 0, Vector2(0.3042254, 0.7134571), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+_data = [Vector2(0, 0), 0.0, -0.29416576, 0, 0, Vector2(0.3, 0.70353484), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 3
 
 [sub_resource type="CurveTexture" id="CurveTexture_83w0l"]

@@ -4,11 +4,11 @@ using Goldenglow.Core;
 using Goldenglow.Vfx;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Nodes.Cards;
-using MegaCrit.Sts2.Core.Nodes.Rooms;
 using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Models.Capabilities;
 
@@ -52,13 +52,13 @@ public static class GoldenglowCmd
         }
     }
 
-    public static async Task Pulse(Player player, CardModel? cardSource, CardPlay? cardPlay)
+    public static async Task Pulse(Player player, CardModel? cardSource, CardPlay? cardPlay, Creature? hit = null)
     {
         var hittableEnemies = player.Creature.CombatState?.HittableEnemies;
         if (hittableEnemies != null && hittableEnemies.Count != 0)
         {
             var amount = GoldenglowSingleton.GetPulse(player);
-            var target = player.RunState.Rng.CombatTargets.NextItem(hittableEnemies);
+            var target = hit ?? player.RunState.Rng.CombatTargets.NextItem(hittableEnemies);
             if (target != null)
             {
                 await CreatureCmd.Damage(new ThrowingPlayerChoiceContext(), target, amount, ValueProp.Unpowered, player.Creature, cardSource, cardPlay);

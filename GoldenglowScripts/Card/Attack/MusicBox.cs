@@ -24,13 +24,13 @@ public class MusicBox() : AbstractGoldenglowCard(1, CardType.Attack, CardRarity.
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, cardPlay).Targeting(cardPlay.Target!).Execute(choiceContext);
 
         var target = cardPlay.Target!;
-        await GoldenglowOrbCmd.TransferOrbs(Owner.Creature, target, 1);
+        await GoldenglowOrbCmd.TransferOrbs(Owner, Owner.Creature, target, 1);
 
         var enemies = CombatState!.Enemies;
         for (int i = 0; i < enemies.Count; i++)
         {
             if (enemies[i].IsDead || enemies[i].IsPlayer) continue;
-            await GoldenglowOrbCmd.TransferOrbs(enemies[i], Owner.Creature, 1);
+            await GoldenglowOrbCmd.TransferOrbs(Owner, enemies[i], Owner.Creature, 1);
         }
     }
 

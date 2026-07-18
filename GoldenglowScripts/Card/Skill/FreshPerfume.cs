@@ -4,12 +4,18 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using STS2RitsuLib.Interop.AutoRegistration;
 using Goldenglow.Power;
+using Goldenglow.Patch;
+using MegaCrit.Sts2.Core.HoverTips;
+using Goldenglow.Core;
 
 namespace Goldenglow.Card;
 
 [RegisterCard(typeof(GoldenglowCardPool))]
-public class FreshPerfume() : AbstractGoldenglowCard(0, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+public class FreshPerfume() : AbstractGoldenglowCard(0, CardType.Skill, CardRarity.Uncommon, TargetType.Self), IHovertipShownInInspectOnly
 {
+    public IEnumerable<IHoverTip> HoverTipsShownInInspectOnly => [
+        GoldenglowUtils.CreateReference("鹰角网络 (hypergryph)")
+    ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new DynamicVar("Turns", 3),

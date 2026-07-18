@@ -11,6 +11,7 @@ using STS2RitsuLib.Scaffolding.Content;
 using STS2RitsuLib.Scaffolding.Godot;
 using MegaCrit.Sts2.Core.Combat;
 using Goldenglow.Power;
+using MegaCrit.Sts2.Core.Entities.Players;
 
 namespace Goldenglow.Orb;
 
@@ -18,6 +19,8 @@ namespace Goldenglow.Orb;
 public class BuoyOrb : ModOrbTemplate
 {
     public Creature? Holder => MonsterOrbPatch.OwnerState.TryGetValue(this, out var creature) && creature != null ? creature : Owner?.Creature;
+
+    public Player? Source { get; set; }
 
     protected override string PassiveSfx => "event:/goldenglow/sfx/buoy_evoke";
 

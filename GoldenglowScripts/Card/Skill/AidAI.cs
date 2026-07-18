@@ -25,7 +25,7 @@ public class AidAI() : AbstractGoldenglowCard(-1, CardType.Skill, CardRarity.Unc
     {
         var xValue = ResolveEnergyXValue();
         var count = xValue + (int)DynamicVars["Channel"].BaseValue;
-        await GoldenglowOrbCmd.ChannelBuoy(cardPlay.Target!, count);
+        await GoldenglowOrbCmd.ChannelBuoy(Owner, cardPlay.Target!, count);
     }
 
     protected override void OnUpgrade()

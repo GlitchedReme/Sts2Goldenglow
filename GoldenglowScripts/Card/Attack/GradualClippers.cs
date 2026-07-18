@@ -13,10 +13,15 @@ namespace Goldenglow.Card;
 [RegisterCard(typeof(GoldenglowCardPool))]
 public class GradualClippers() : AbstractGoldenglowCard(6, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
 {
-    private int _turnReduction;
+    private int Reduction
+    {
+        get => (int)DynamicVars["Reduction"].BaseValue;
+        set => DynamicVars["Reduction"].BaseValue = value;
+    }
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DamageVar(28, ValueProp.Move)
+        new DamageVar(28, ValueProp.Move),
+        new DynamicVar("Reduction", 0)
     ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -36,17 +41,16 @@ public class GradualClippers() : AbstractGoldenglowCard(6, CardType.Attack, Card
         var state = Owner?.Creature?.CombatState;
         if (state == null) return;
 
-        _turnReduction = CombatManager.Instance.History.CardPlaysFinished
-            .Count(e => e.HappenedThisTurn(state));
-        if (_turnReduction > 0)
-            EnergyCost.AddThisCombat(-_turnReduction);
+        Reduction = CombatManager.Instance.History.CardPlaysFinished.Count(e => e.HappenedThisTurn(state));
+        if (Reduction > 0)
+            EnergyCost.AddThisCombat(-Reduction);
     }
 
     public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         if (cardPlay.Card.Owner != Owner) return;
 
-        _turnReduction++;
+        Reduction++;
         EnergyCost.AddThisCombat(-1);
     }
 
@@ -54,9 +58,9 @@ public class GradualClippers() : AbstractGoldenglowCard(6, CardType.Attack, Card
     {
         if (player != Owner) return;
 
-        if (_turnReduction > 0)
-            EnergyCost.AddThisCombat(_turnReduction);
-        _turnReduction = 0;
+        if (Reduction > 0)
+            EnergyCost.AddThisCombat(Reduction);
+        Reduction = 0;
     }
 
     protected override void OnUpgrade()

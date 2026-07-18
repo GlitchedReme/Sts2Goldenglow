@@ -31,6 +31,6 @@ public class InsulatingComb : ModRelicTemplate
 
         var target = Owner.RunState.Rng.CombatTargets.NextItem(enemies);
         if (target != null)
-            await GoldenglowOrbCmd.ChannelBuoy(target, 1);
+            await GoldenglowOrbCmd.ChannelBuoy(Owner, target, 1);
     }
 }
