@@ -23,7 +23,7 @@ public class FireExit() : AbstractGoldenglowCard(0, CardType.Attack, CardRarity.
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await DamageCmd.Attack(DynamicVars.ComputeDynamicValue("Damage"))
-            .FromCard(this, cardPlay)
+            .FromCardCompat(this, cardPlay)
             .Targeting(cardPlay.Target!)
             .Execute(choiceContext);
     }

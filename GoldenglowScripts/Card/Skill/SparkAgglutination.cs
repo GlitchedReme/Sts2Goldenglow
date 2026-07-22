@@ -20,7 +20,7 @@ public class SparkAgglutination() : AbstractGoldenglowCard(1, CardType.Skill, Ca
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DynamicVar("Buff", 1)
+        new DynamicVar("Buff", 2)
     ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips => [HoverTipFactory.FromOrb<BuoyOrb>()];

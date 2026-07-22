@@ -1,7 +1,6 @@
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
-using MegaCrit.Sts2.Core.Factories;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
@@ -16,6 +15,8 @@ namespace Goldenglow.Card;
 [RegisterCard(typeof(GoldenglowCardPool))]
 public class Wishlist() : AbstractGoldenglowCard(1, CardType.Skill, CardRarity.Rare, TargetType.Self), ICardOnGeneratedAsReward
 {
+    private const int GiftAmount = 2;
+
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     private static readonly SavedAttachedState<Wishlist, string> GiftCardIds = new("WishlistGiftCards", _ => "");
@@ -58,15 +59,22 @@ public class Wishlist() : AbstractGoldenglowCard(1, CardType.Skill, CardRarity.R
         var rng = player.PlayerRng.Rewards;
         var pool = player.Character.CardPool
             .GetUnlockedCards(UnlockState.all, player.RunState.CardMultiplayerConstraint)
-            .Where(c => c.Keywords.Contains(CardKeyword.Exhaust))
+            .Where(c => c.Keywords.Contains(CardKeyword.Exhaust) && c is not Wishlist)
             .ToList();
 
         if (pool.Count == 0) return;
 
-        var cards = CardFactory.GetDistinctForCombat(player, pool, 3, rng).ToList();
-        if (cards.Count == 0) return;
+        var takeCount = Math.Min(GiftAmount, pool.Count);
+        var selected = new List<CardModel>();
+        var available = pool.ToList();
+        for (int i = 0; i < takeCount; i++)
+        {
+            var pick = rng.NextItem(available)!;
+            available.Remove(pick);
+            selected.Add(player.RunState.CreateCard(pick, player));
+        }
 
-        GiftCardIds[this] = string.Join(",", cards.Select(c => c.Id.ToString()));
+        GiftCardIds[this] = string.Join(",", selected.Select(c => c.Id.ToString()));
         _giftCardIdsBackup = GiftCardIds[this];
     }
 

@@ -22,6 +22,10 @@ public class BuoyOrb : ModOrbTemplate
 
     public Player? Source { get; set; }
 
+#if !STS2_AT_LEAST_109_0
+    internal event Action<Creature[]>? GgEvokeActivated;
+#endif
+
     protected override string PassiveSfx => "event:/goldenglow/sfx/buoy_evoke";
 
     protected override string EvokeSfx => "event:/goldenglow/sfx/buoy_evoke";
@@ -46,6 +50,7 @@ public class BuoyOrb : ModOrbTemplate
     public override async Task BeforeTurnEndOrbTrigger(PlayerChoiceContext choiceContext)
     {
         await Passive(choiceContext, null);
+        await Cmd.Wait(0.1f);
     }
 
     public override async Task Passive(PlayerChoiceContext choiceContext, Creature? target)
@@ -53,14 +58,20 @@ public class BuoyOrb : ModOrbTemplate
         var holder = Holder ?? throw new InvalidOperationException("BuoyOrb has no Holder set");
 
         PlayPassiveSfx();
+#if STS2_AT_LEAST_109_0
         ActivatePassive();
+#endif
         if (IsFriendly(holder))
         {
             await CreatureCmd.GainBlock(holder, PassiveVal, ValueProp.Unpowered, null);
         }
         else
         {
+#if STS2_AT_LEAST_109_0
             ActivateEvoke([holder]);
+#else
+            GgEvokeActivated?.Invoke([holder]);
+#endif
             await CreatureCmd.Damage(choiceContext, holder, PassiveVal, ValueProp.Unpowered, holder);
             AfterDamage();
         }
@@ -77,7 +88,11 @@ public class BuoyOrb : ModOrbTemplate
         }
         else
         {
+#if STS2_AT_LEAST_109_0
             ActivateEvoke([holder]);
+#else
+            GgEvokeActivated?.Invoke([holder]);
+#endif
             await CreatureCmd.Damage(choiceContext, holder, EvokeVal, ValueProp.Unpowered, holder);
             AfterDamage();
         }

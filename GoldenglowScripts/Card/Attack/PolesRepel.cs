@@ -23,7 +23,7 @@ public class PolesRepel() : AbstractGoldenglowCard(1, CardType.Attack, CardRarit
         var enemyCount = CombatState!.HittableEnemies.Count;
         for (int i = 0; i < enemyCount; i++)
             await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-                .FromCard(this, cardPlay)
+                .FromCardCompat(this, cardPlay)
                 .TargetingAllOpponents(CombatState!)
                 .WithHitFx("vfx/vfx_attack_lightning")
                 .Execute(choiceContext);

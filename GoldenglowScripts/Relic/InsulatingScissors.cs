@@ -1,13 +1,9 @@
-using Goldenglow.Capabilities;
 using Goldenglow.Card;
 using Goldenglow.Orb;
-using Goldenglow.Ui;
-using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Models;
 using STS2RitsuLib.Interop.AutoRegistration;
-using STS2RitsuLib.Models.Capabilities;
 using STS2RitsuLib.Scaffolding.Content;
 
 namespace Goldenglow.Relic;
@@ -18,9 +14,9 @@ public class InsulatingScissors : ModRelicTemplate
     public override RelicRarity Rarity => RelicRarity.Ancient;
 
     public override RelicAssetProfile AssetProfile => new(
-        IconPath: "res://Goldenglow/images/relics/InsulatingScissors.png",
-        IconOutlinePath: "res://Goldenglow/images/relics/InsulatingScissors.png",
-        BigIconPath: "res://Goldenglow/images/relics/InsulatingScissors.png"
+        IconPath: "res://Goldenglow/image/relics/InsulatingScissors.png",
+        IconOutlinePath: "res://Goldenglow/image/relics/InsulatingScissors.png",
+        BigIconPath: "res://Goldenglow/image/relics/InsulatingScissors.png"
     );
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips => [HoverTipFactory.FromOrb<BuoyOrb>()];
@@ -30,33 +26,24 @@ public class InsulatingScissors : ModRelicTemplate
         var combatState = Owner.Creature.CombatState;
         if (combatState == null) return;
 
-        await ChannelBuoyToPlayer();
+        foreach (var player in combatState.Players)
+        {
+            if (player.Creature.IsDead) continue;
+            await GoldenglowOrbCmd.ChannelBuoy(Owner, player.Creature, 1);
+        }
+
         foreach (var enemy in combatState.Enemies)
         {
             if (enemy.IsDead) continue;
-            await ChannelBuoyToEnemy(enemy);
+            await GoldenglowOrbCmd.ChannelBuoy(Owner, enemy, 1);
         }
     }
 
-    private async Task ChannelBuoyToPlayer()
+    public override decimal ModifyOrbValue(OrbModel orb, decimal value)
     {
-        var queue = Owner.Creature.Player!.PlayerCombatState!.OrbQueue;
-        int prevCount = queue.Orbs.Count;
-        await GoldenglowOrbCmd.ChannelBuoy(Owner, Owner.Creature, 1);
-        if (queue.Orbs.Count > prevCount)
-            queue.Orbs[^1].GetOrCreateCapability<OrbBoostCapability>();
-    }
+        if (orb is not BuoyOrb)
+            return value;
 
-    private async Task ChannelBuoyToEnemy(Creature enemy)
-    {
-        var mgr = MonsterOrbManager.MonsterOrbManagerState[enemy];
-        int prevCount = mgr?.GetOrbs().Count ?? 0;
-        await GoldenglowOrbCmd.ChannelBuoy(Owner, enemy, 1);
-        if (mgr != null)
-        {
-            var orbs = mgr.GetOrbs();
-            if (orbs.Count > prevCount)
-                orbs[^1].GetOrCreateCapability<OrbBoostCapability>();
-        }
+        return Math.Max(value + 1, 0m);
     }
 }

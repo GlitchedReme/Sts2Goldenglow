@@ -42,6 +42,7 @@ public class Entry
         patcher.RegisterPatch<OrbTipOnMonsterPatch>();
         patcher.RegisterPatch<MonsterOrbCombatStatePatch>();
         patcher.RegisterPatch<MonsterOrbModifyValuePatch>();
+        patcher.RegisterPatch<FocusPowerModifyOrbValuePatch>();
 
         patcher.RegisterPatch<ScenePathPatch>();
         patcher.RegisterPatch<CustomPowerTextPatch>();

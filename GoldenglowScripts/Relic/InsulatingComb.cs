@@ -14,9 +14,9 @@ public class InsulatingComb : ModRelicTemplate
     public override RelicRarity Rarity => RelicRarity.Starter;
 
     public override RelicAssetProfile AssetProfile => new(
-        IconPath: "res://Goldenglow/images/relics/InsulatingComb.png",
-        IconOutlinePath: "res://Goldenglow/images/relics/InsulatingComb.png",
-        BigIconPath: "res://Goldenglow/images/relics/InsulatingComb.png"
+        IconPath: "res://Goldenglow/image/relics/InsulatingComb.png",
+        IconOutlinePath: "res://Goldenglow/image/relics/InsulatingComb.png",
+        BigIconPath: "res://Goldenglow/image/relics/InsulatingComb.png"
     );
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips => [HoverTipFactory.FromOrb<BuoyOrb>()];

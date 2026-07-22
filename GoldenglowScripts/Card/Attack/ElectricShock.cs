@@ -7,38 +7,41 @@ using STS2RitsuLib.Cards.DynamicVars;
 using STS2RitsuLib.Interop.AutoRegistration;
 using Goldenglow.Core;
 using MegaCrit.Sts2.Core.HoverTips;
+using Goldenglow.Patch;
 
 namespace Goldenglow.Card;
 
 [RegisterCard(typeof(GoldenglowCardPool))]
-public class ElectricShock() : AbstractGoldenglowCard(0, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
+public class ElectricShock() : AbstractGoldenglowCard(0, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy), IHovertipShownInInspectOnly
 {
+    public IEnumerable<IHoverTip> HoverTipsShownInInspectOnly => [
+        GoldenglowUtils.CreateReference("Namie")
+    ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new DynamicVar("Buff", 3),
-        ModCardVars.ComputedDamage("Damage", 3,
-            card => 3 + GoldenglowCmd.GetStaticStacks(card!) * card!.DynamicVars["Buff"].BaseValue, ValueProp.Move),
-        ModCardVars.ComputedBlock("Block", 3,
-            card => 3 + GoldenglowCmd.GetStaticStacks(card!) * card!.DynamicVars["Buff"].BaseValue)
+        ModCardVars.ComputedDamage("Damage", 3, card => DynamicVars["Damage"].BaseValue + GoldenglowCmd.GetStaticStacks(card!) * card!.DynamicVars["Buff"].BaseValue, ValueProp.Move),
+        ModCardVars.ComputedBlock("Block", 3, card => DynamicVars["Block"].BaseValue + GoldenglowCmd.GetStaticStacks(card!) * card!.DynamicVars["Buff"].BaseValue)
     ];
 
     public override bool GainsBlock => true;
-
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips => [GoldenglowUtils.Static];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await DamageCmd.Attack(((ComputedDynamicVar)DynamicVars["Damage"]).Calculate())
-            .FromCard(this, cardPlay)
+        await DamageCmd.Attack(DynamicVars.ComputeDynamicValue("Damage"))
+            .FromCardCompat(this, cardPlay)
             .Targeting(cardPlay.Target!)
             .Execute(choiceContext);
-        await CreatureCmd.GainBlock(Owner.Creature, ((ComputedDynamicVar)DynamicVars["Block"]).Calculate(), ValueProp.Move, cardPlay);
+        await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.ComputeDynamicValue("Block"), ValueProp.Move, cardPlay);
         await GoldenglowCmd.ApplyStatic(cardPlay.Card);
     }
 
     protected override void OnUpgrade()
     {
         DynamicVars["Buff"].UpgradeValueBy(1);
+        DynamicVars["Damage"].UpgradeValueBy(1);
+        DynamicVars["Block"].UpgradeValueBy(1);
     }
 }

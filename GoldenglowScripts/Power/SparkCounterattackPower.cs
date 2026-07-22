@@ -5,7 +5,6 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Interop.AutoRegistration;
-using STS2RitsuLib.Scaffolding.Content;
 
 namespace Goldenglow.Power;
 
@@ -14,11 +13,8 @@ namespace Goldenglow.Power;
 /// Amount = BuoyOrbs to channel per hit (stacks).
 /// </summary>
 [RegisterPower]
-public sealed class SparkCounterattackPower : ModPowerTemplate
+public sealed class SparkCounterattackPower : AbstractGoldenglowPower
 {
-    public override PowerType Type => PowerType.Buff;
-    public override PowerStackType StackType => PowerStackType.Counter;
-
     public override async Task AfterDamageReceived(PlayerChoiceContext choiceContext, Creature target, DamageResult result, ValueProp props, Creature? dealer, CardModel? cardSource)
     {
         if (target != Owner) return;

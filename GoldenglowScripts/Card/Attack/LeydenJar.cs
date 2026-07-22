@@ -13,7 +13,7 @@ public class LeydenJar() : AbstractGoldenglowCard(-1, CardType.Attack, CardRarit
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         GoldenglowUtils.CreatePulseVar(),
-        new DynamicVar("Extra", 1)
+        new DynamicVar("Extra", 2)
     ];
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];

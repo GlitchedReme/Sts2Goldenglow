@@ -18,9 +18,9 @@ public class ColorSwatch : ModRelicTemplate
     public override RelicRarity Rarity => RelicRarity.Shop;
 
     public override RelicAssetProfile AssetProfile => new(
-        IconPath: "res://Goldenglow/images/relics/ColorSwatch.png",
-        IconOutlinePath: "res://Goldenglow/images/relics/ColorSwatch.png",
-        BigIconPath: "res://Goldenglow/images/relics/ColorSwatch.png"
+        IconPath: "res://Goldenglow/image/relics/ColorSwatch.png",
+        IconOutlinePath: "res://Goldenglow/image/relics/ColorSwatch.png",
+        BigIconPath: "res://Goldenglow/image/relics/ColorSwatch.png"
     );
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips => [HoverTipFactory.FromKeyword(CardKeyword.Exhaust)];

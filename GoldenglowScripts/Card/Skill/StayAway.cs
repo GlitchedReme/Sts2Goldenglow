@@ -15,7 +15,7 @@ namespace Goldenglow.Card;
 public class StayAway() : AbstractGoldenglowCard(0, CardType.Skill, CardRarity.Common, CustomTargetType.Anyone), IHovertipShownInInspectOnly
 {
     public IEnumerable<IHoverTip> HoverTipsShownInInspectOnly => [
-        GoldenglowUtils.CreateReference("Watersnake (水蛇)")
+        GoldenglowUtils.CreateReference("Namie")
     ];
     
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];

@@ -18,9 +18,9 @@ public class FloralToner : ModRelicTemplate, IOnCardAttracted
     public override RelicRarity Rarity => RelicRarity.Rare;
 
     public override RelicAssetProfile AssetProfile => new(
-        IconPath: "res://Goldenglow/images/relics/FloralToner.png",
-        IconOutlinePath: "res://Goldenglow/images/relics/FloralToner.png",
-        BigIconPath: "res://Goldenglow/images/relics/FloralToner.png"
+        IconPath: "res://Goldenglow/image/relics/FloralToner.png",
+        IconOutlinePath: "res://Goldenglow/image/relics/FloralToner.png",
+        BigIconPath: "res://Goldenglow/image/relics/FloralToner.png"
     );
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips => [GoldenglowUtils.Attract];

@@ -3,7 +3,6 @@ using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using STS2RitsuLib.Interop.AutoRegistration;
-using STS2RitsuLib.Scaffolding.Content;
 
 namespace Goldenglow.Power;
 
@@ -12,11 +11,8 @@ namespace Goldenglow.Power;
 /// Amount = number of pulses per turn (stacks).
 /// </summary>
 [RegisterPower]
-public sealed class PiezoelectricEffectPower : ModPowerTemplate
+public sealed class PiezoelectricEffectPower : AbstractGoldenglowPower
 {
-    public override PowerType Type => PowerType.Buff;
-    public override PowerStackType StackType => PowerStackType.Counter;
-
     public override async Task AfterSideTurnStart(CombatSide side, IReadOnlyList<Creature> participants, ICombatState combatState)
     {
         if (!participants.Contains(Owner)) return;

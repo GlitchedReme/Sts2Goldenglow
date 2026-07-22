@@ -11,7 +11,7 @@ public class TuningFork() : AbstractGoldenglowCard(1, CardType.Skill, CardRarity
 {
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        GoldenglowUtils.CreateAttractVar(4)
+        GoldenglowUtils.CreateAttractVar(3)
     ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

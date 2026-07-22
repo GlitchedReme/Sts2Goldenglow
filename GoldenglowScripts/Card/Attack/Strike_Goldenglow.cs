@@ -20,7 +20,7 @@ public class Strike_Goldenglow() : AbstractGoldenglowCard(1, CardType.Attack, Ca
     {
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
             .WithHitFx("vfx/vfx_attack_lightning")
-            .FromCard(this, cardPlay)
+            .FromCardCompat(this, cardPlay)
             .Targeting(cardPlay.Target!)
             .Execute(choiceContext);
     }

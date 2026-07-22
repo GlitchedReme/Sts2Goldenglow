@@ -26,9 +26,9 @@ public class WindChime : ModRelicTemplate, IRelicCustomTextProvider
     ];
 
     public override RelicAssetProfile AssetProfile => new(
-        IconPath: "res://Goldenglow/images/relics/WindChime.png",
-        IconOutlinePath: "res://Goldenglow/images/relics/WindChime.png",
-        BigIconPath: "res://Goldenglow/images/relics/WindChime.png"
+        IconPath: "res://Goldenglow/image/relics/WindChime.png",
+        IconOutlinePath: "res://Goldenglow/image/relics/WindChime.png",
+        BigIconPath: "res://Goldenglow/image/relics/WindChime.png"
     );
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips => [GoldenglowUtils.Attract];

@@ -14,7 +14,7 @@ public class DroneStrike() : AbstractGoldenglowCard(1, CardType.Attack, CardRari
 {
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DamageVar(9, ValueProp.Move),
+        new DamageVar(10, ValueProp.Move),
         new DynamicVar("Buoy", 1)
     ];
 
@@ -23,7 +23,7 @@ public class DroneStrike() : AbstractGoldenglowCard(1, CardType.Attack, CardRari
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this, cardPlay)
+            .FromCardCompat(this, cardPlay)
             .Targeting(cardPlay.Target!)
             .Execute(choiceContext);
         for (int j = 0; j < (int)DynamicVars["Buoy"].BaseValue; j++)
@@ -32,6 +32,7 @@ public class DroneStrike() : AbstractGoldenglowCard(1, CardType.Attack, CardRari
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(3);
+        DynamicVars.Damage.UpgradeValueBy(1);
+        DynamicVars["Buoy"].UpgradeValueBy(1);
     }
 }

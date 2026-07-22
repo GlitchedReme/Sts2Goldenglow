@@ -3,6 +3,7 @@ using HarmonyLib;
 
 namespace Goldenglow.Orb;
 
+#if STS2_AT_LEAST_109_0
 public partial class NBuoyVfx : NOrbVfx
 {
     private static readonly FieldInfo? FocusedParticlesField = AccessTools.Field(typeof(NOrbVfx), "_focusedParticles");
@@ -16,3 +17,4 @@ public partial class NBuoyVfx : NOrbVfx
         PassiveActivatedParticlesField?.SetValue(this, GetNode<GParticleContainers>("PassiveActivatedParticles"));
     }
 }
+#endif

@@ -10,10 +10,10 @@ using STS2RitsuLib.Interop.AutoRegistration;
 namespace Goldenglow.Card;
 
 [RegisterCard(typeof(GoldenglowCardPool))]
-public class SunkInThought() : AbstractGoldenglowCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self), IHovertipShownInInspectOnly
+public class SunkInThought() : AbstractGoldenglowCard(1, CardType.Skill, CardRarity.Common, TargetType.Self), IHovertipShownInInspectOnly
 {
     public IEnumerable<IHoverTip> HoverTipsShownInInspectOnly => [
-        GoldenglowUtils.CreateReference("Watersnake (水蛇)")
+        GoldenglowUtils.CreateReference("Namie")
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
@@ -25,14 +25,23 @@ public class SunkInThought() : AbstractGoldenglowCard(1, CardType.Skill, CardRar
         await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.BaseValue, Owner);
     }
 
+#if STS2_AT_LEAST_109_0
     protected override CardLocation GetResultLocationForCardPlay()
     {
         var loc = base.GetResultLocationForCardPlay();
         if (loc.pileType != PileType.Discard)
             return loc;
-        return new(Owner, PileType.Draw, CardPilePosition.Random);
+        return new(Owner, PileType.Draw, CardPilePosition.Bottom);
     }
-
+#else
+    protected override PileType GetResultPileTypeForCardPlay()
+    {
+        var pile = base.GetResultPileTypeForCardPlay();
+        if (pile != PileType.Discard)
+            return pile;
+        return PileType.Draw;
+    }
+#endif
 
     protected override void OnUpgrade()
     {

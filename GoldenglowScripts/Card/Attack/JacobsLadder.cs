@@ -21,7 +21,7 @@ public class JacobsLadder() : AbstractGoldenglowCard(1, CardType.Attack, CardRar
     {
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
             .WithHitFx("vfx/vfx_attack_lightning")
-            .FromCard(this, cardPlay)
+            .FromCardCompat(this, cardPlay)
             .Targeting(cardPlay.Target!)
             .Execute(choiceContext);
         for (int i = 0; i < DynamicVars.Repeat.BaseValue; i++)

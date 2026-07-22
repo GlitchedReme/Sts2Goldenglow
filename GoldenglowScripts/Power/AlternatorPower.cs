@@ -1,12 +1,8 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Goldenglow.Card;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Entities.Creatures;
-using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
 using STS2RitsuLib.Interop.AutoRegistration;
-using STS2RitsuLib.Scaffolding.Content;
 
 namespace Goldenglow.Power;
 
@@ -15,14 +11,11 @@ namespace Goldenglow.Power;
 /// Amount stacks: each stack = one additional slot per turn.
 /// </summary>
 [RegisterPower]
-public sealed class AlternatorPower : ModPowerTemplate
+public sealed class AlternatorPower : AbstractGoldenglowPower
 {
-    public override PowerType Type => PowerType.Buff;
-    public override PowerStackType StackType => PowerStackType.Counter;
-
     public override async Task AfterSideTurnStart(CombatSide side, IReadOnlyList<Creature> participants, ICombatState combatState)
     {
-        if (!participants.Contains(base.Owner)) return;
+        if (!participants.Contains(Owner)) return;
 
         var allCreatures = new List<Creature>();
         if (combatState.Players.Count > 0)

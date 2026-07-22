@@ -15,7 +15,7 @@ public class ScatteredTactics() : AbstractGoldenglowCard(2, CardType.Skill, Card
 {
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DynamicVar("Buoy", 4)
+        new DynamicVar("Buoy", 5)
     ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips => [HoverTipFactory.FromOrb<BuoyOrb>()];

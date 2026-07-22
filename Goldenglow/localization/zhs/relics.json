@@ -8,11 +8,11 @@
   "GOLDENGLOW_RELIC_WIND_CHIME.flavor": "给风丸小姐的装饰品。起风的时候叮铃叮铃的响，总能将思绪顺风吹往远方。",
 
   "GOLDENGLOW_RELIC_HAIR_CAPE.title": "美发围布",
-  "GOLDENGLOW_RELIC_HAIR_CAPE.description": "战斗开始时，获得一个[gold]浮标[/gold]。",
+  "GOLDENGLOW_RELIC_HAIR_CAPE.description": "战斗开始时，[gold]生成[/gold][blue]2[/blue]个[gold]浮标[/gold]。",
   "GOLDENGLOW_RELIC_HAIR_CAPE.flavor": "头发展现一个人的神气，得好好打理一番才行！",
 
   "GOLDENGLOW_RELIC_TECHNIQUE_NOTES.title": "技巧笔记",
-  "GOLDENGLOW_RELIC_TECHNIQUE_NOTES.description": "每两个回合，[gold]脉冲[/gold]一次。",
+  "GOLDENGLOW_RELIC_TECHNIQUE_NOTES.description": "你的回合开始时，[gold]脉冲[/gold]一次。",
   "GOLDENGLOW_RELIC_TECHNIQUE_NOTES.flavor": "最近每天花两小时复习技巧与理论，绝对能考个好成绩！",
 
   "GOLDENGLOW_RELIC_COLOR_SWATCH.title": "试色卡",
@@ -20,7 +20,7 @@
   "GOLDENGLOW_RELIC_COLOR_SWATCH.flavor": "大多数罗德岛干员的发色我都记住了！",
 
   "GOLDENGLOW_RELIC_INSULATING_SCISSORS.title": "绝缘剪刀",
-  "GOLDENGLOW_RELIC_INSULATING_SCISSORS.description": "战斗开始时，所有角色[gold]生成[/gold]一个[gold]浮标[/gold]，浮标的效果提高1点。",
+  "GOLDENGLOW_RELIC_INSULATING_SCISSORS.description": "战斗开始时，所有角色[gold]生成[/gold]一个[gold]浮标[/gold]。[gold]浮标[/gold]的效果提高[blue]1[/blue]点。",
   "GOLDENGLOW_RELIC_INSULATING_SCISSORS.flavor": "绝对不会电到顾客！但是客人说略微酥麻的感觉让他们精神抖擞，真头疼……",
 
   "GOLDENGLOW_RELIC_CLEANING_TOOLS.title": "清扫工具",
@@ -35,5 +35,5 @@
   "GOLDENGLOW_RELIC_NIGHT_SKY_PROJECTOR.description": "战斗奖励额外添加一张[gold]消耗[/gold]牌。",
   "GOLDENGLOW_RELIC_NIGHT_SKY_PROJECTOR.flavor": "能看到夏栎姐所讲的美丽的野外夜空。",
 
-  "SEA_GLASS.GOLDENGLOW_CHARACTER_GOLDENGLOW.title": "静电玻璃"
+  "SEA_GLASS.GOLDENGLOW_CHARACTER_GOLDENGLOW.title": "闪电玻璃"
 }

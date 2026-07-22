@@ -8,16 +8,12 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Models.Capabilities;
-using STS2RitsuLib.Scaffolding.Content;
 
 namespace Goldenglow.Power;
 
 [RegisterPower]
-public sealed class ChargeBalancePower : ModPowerTemplate
+public sealed class ChargeBalancePower : AbstractGoldenglowPower
 {
-    public override PowerType Type => PowerType.Buff;
-    public override PowerStackType StackType => PowerStackType.Counter;
-
     public override async Task AfterOrbEvoked(PlayerChoiceContext choiceContext, OrbModel orb, IEnumerable<Creature> targets)
     {
         if (orb.Owner?.Creature != Owner) return;

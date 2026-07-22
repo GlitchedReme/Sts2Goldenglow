@@ -30,7 +30,7 @@ public class WarmHope() : AbstractGoldenglowCard(2, CardType.Skill, CardRarity.R
         {
             CardCmd.ApplyKeyword(c, CardKeyword.Exhaust);
             c.EnergyCost.SetThisCombat(0);
-            await CardPileCmd.AddGeneratedCardToCombat(c, PileType.Discard, Owner);
+            await CardPileCmd.AddGeneratedCardToCombat(c, PileType.Discard, Owner, CardPilePosition.Top);
         }
     }
 

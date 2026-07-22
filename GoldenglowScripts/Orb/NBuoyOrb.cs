@@ -1,4 +1,3 @@
-using Goldenglow.Utils;
 using Goldenglow.Patch;
 using Godot;
 using MegaCrit.Sts2.Core.Entities.Creatures;
@@ -24,13 +23,23 @@ public partial class NBuoyOrb : Sprite2D
         }
 
         RefreshSkin();
+#if STS2_AT_LEAST_109_0
         Orb.Model.EvokeActivated += OnEvokeActivated;
+#else
+        if (Orb.Model is BuoyOrb buoyOrb)
+            buoyOrb.GgEvokeActivated += OnEvokeActivated;
+#endif
     }
 
     public override void _ExitTree()
     {
+#if STS2_AT_LEAST_109_0
         if (Orb?.Model != null)
             Orb.Model.EvokeActivated -= OnEvokeActivated;
+#else
+        if (Orb?.Model is BuoyOrb buoyOrb)
+            buoyOrb.GgEvokeActivated -= OnEvokeActivated;
+#endif
     }
 
     private void OnEvokeActivated(Creature[] e)

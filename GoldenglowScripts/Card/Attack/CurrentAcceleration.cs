@@ -39,7 +39,7 @@ public class CurrentAcceleration() : AbstractGoldenglowCard(1, CardType.Attack, 
             var vfx = BuoyCardAttackVfx.Create(pos, Owner, target, async () =>
             {
                 await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-                    .FromCard(this, cardPlay)
+                    .FromCardCompat(this, cardPlay)
                     .Targeting(target)
                     .Execute(choiceContext);
             }, delay);

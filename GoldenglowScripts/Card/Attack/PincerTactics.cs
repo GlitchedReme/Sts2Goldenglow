@@ -28,7 +28,7 @@ public class PincerTactics() : AbstractGoldenglowCard(1, CardType.Attack, CardRa
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         for (int i = 0; i < DynamicVars.Repeat.BaseValue; i++)
-            await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, cardPlay).Targeting(cardPlay.Target!).Execute(choiceContext);
+            await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCardCompat(this, cardPlay).Targeting(cardPlay.Target!).Execute(choiceContext);
 
         var target = cardPlay.Target!;
         int playerOrbs = Owner.PlayerCombatState!.OrbQueue.Orbs.Count;

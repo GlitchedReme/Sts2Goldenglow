@@ -38,7 +38,7 @@ public class SatelliteLanding() : AbstractGoldenglowCard(2, CardType.Attack, Car
             await Cmd.Wait(nLargeMagicMissileVfx?.WaitTime ?? 0f);
         }
 
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, cardPlay).TargetingAllOpponents(CombatState!).Execute(choiceContext);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCardCompat(this, cardPlay).TargetingAllOpponents(CombatState!).Execute(choiceContext);
     }
 
     protected override void OnUpgrade()

@@ -1,33 +1,24 @@
+using Goldenglow.Core;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
-using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace Goldenglow.Card;
 
 [RegisterCard(typeof(GoldenglowCardPool))]
-public class LimitingComb() : AbstractGoldenglowCard(0, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+public class LimitingComb() : AbstractGoldenglowCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.None)
 {
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [
+        new CardsVar(3)
+    ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        var drawn = new List<CardModel>();
-        var foundCosts = new HashSet<int>();
-
-        while (true)
+        var count = DynamicVars.Cards.IntValue;
+        for (var i = 0; i < count; i++)
         {
-            var card = await GoldenglowCmd.DrawFiltered(choiceContext, Owner, c =>
-            {
-                int cost = c.EnergyCost.GetAmountToSpend();
-                if (c.EnergyCost.CostsX) cost = -1;
-                if (foundCosts.Add(cost) && !drawn.Contains(c))
-                {
-                    drawn.Add(c);
-                    return true;
-                }
-                return false;
-            });
+            var card = await GoldenglowCmd.DrawFiltered(choiceContext, Owner, GoldenglowUtils.IsZeroCost);
 
             if (card == null) break;
         }
@@ -35,6 +26,6 @@ public class LimitingComb() : AbstractGoldenglowCard(0, CardType.Skill, CardRari
 
     protected override void OnUpgrade()
     {
-        AddKeyword(CardKeyword.Innate);
+        DynamicVars.Cards.UpgradeValueBy(1);
     }
 }

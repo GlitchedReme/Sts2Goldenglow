@@ -3,7 +3,6 @@ using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.Factories;
 using MegaCrit.Sts2.Core.HoverTips;
-using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Runs;
 using MegaCrit.Sts2.Core.Unlocks;
 using STS2RitsuLib.Interop.AutoRegistration;
@@ -17,9 +16,9 @@ public class NightSkyProjector : ModRelicTemplate
     public override RelicRarity Rarity => RelicRarity.Rare;
 
     public override RelicAssetProfile AssetProfile => new(
-        IconPath: "res://Goldenglow/images/relics/NightSkyProjector.png",
-        IconOutlinePath: "res://Goldenglow/images/relics/NightSkyProjector.png",
-        BigIconPath: "res://Goldenglow/images/relics/NightSkyProjector.png"
+        IconPath: "res://Goldenglow/image/relics/NightSkyProjector.png",
+        IconOutlinePath: "res://Goldenglow/image/relics/NightSkyProjector.png",
+        BigIconPath: "res://Goldenglow/image/relics/NightSkyProjector.png"
     );
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips => [HoverTipFactory.FromKeyword(CardKeyword.Exhaust)];

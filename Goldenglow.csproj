@@ -2,6 +2,21 @@
   <Import Project="$(MSBuildThisFileDirectory)local.props"
     Condition="Exists('$(MSBuildThisFileDirectory)local.props')" />
 
+  <PropertyGroup Label="Compatibility (STS2 API, signatures, defines)">
+    <GoldenglowCompatTargets>0.107.1;0.109.0</GoldenglowCompatTargets>
+    <GoldenglowLatestApiCompat>0.109.0</GoldenglowLatestApiCompat>
+    <Sts2ApiCompat Condition="'$(Sts2ApiCompat)' == ''">$(GoldenglowLatestApiCompat)</Sts2ApiCompat>
+
+    <Sts2DataDir Condition="'$(Sts2ApiCompat)' == '0.107.1' and '$(Sts2SigDir_0_107_1)' != ''">$(Sts2SigDir_0_107_1)</Sts2DataDir>
+    <Sts2DataDir Condition="'$(Sts2ApiCompat)' == '0.109.0' and '$(Sts2SigDir_0_109_0)' != ''">$(Sts2SigDir_0_109_0)</Sts2DataDir>
+    <Sts2DataDir Condition="'$(Sts2DataDir)' == '' and '$(Sts2Dir)' != ''">$(Sts2Dir)/data_sts2_windows_x86_64</Sts2DataDir>
+
+    <RitsuLibPackageId Condition="'$(Sts2ApiCompat)' == '$(GoldenglowLatestApiCompat)'">STS2.RitsuLib</RitsuLibPackageId>
+    <RitsuLibPackageId Condition="'$(Sts2ApiCompat)' != '$(GoldenglowLatestApiCompat)'">STS2.RitsuLib.Compat.$(Sts2ApiCompat)</RitsuLibPackageId>
+  </PropertyGroup>
+
+  <Import Project="$(MSBuildThisFileDirectory)build\Goldenglow.CompatDefines.targets" />
+
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <EnableDynamicLoading>true</EnableDynamicLoading>
@@ -12,10 +27,10 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DefaultItemExcludes>$(DefaultItemExcludes);packages/**</DefaultItemExcludes>
     <AppOutputBase>$(MSBuildProjectDirectory)\</AppOutputBase>
+    <IntermediateOutputPath>$(MSBuildProjectDirectory)\.godot\mono\temp\obj\$(Configuration)\$(Sts2ApiCompat)\</IntermediateOutputPath>
 
     <Sts2Dir Condition="'$(Sts2Dir)' == '' and '$(Sts2Path)' != ''">$(Sts2Path)</Sts2Dir>
     <GodotExe Condition="'$(GodotExe)' == '' and '$(GodotPath)' != ''">$(GodotPath)</GodotExe>
-    <Sts2DataDir Condition="'$(Sts2DataDir)' == '' and '$(Sts2Dir)' != ''">$(Sts2Dir)/data_sts2_windows_x86_64</Sts2DataDir>
     <RitsuLibDeployDir>$(Sts2Dir)/mods/STS2-RitsuLib/</RitsuLibDeployDir>
   </PropertyGroup>
 
@@ -30,6 +45,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Goldenglow.Bootstrap\**" />
+    <None Remove="Goldenglow.Bootstrap\**" />
+    <Content Remove="Goldenglow.Bootstrap\**" />
+    <EmbeddedResource Remove="Goldenglow.Bootstrap\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="sts2">
       <HintPath>$(Sts2DataDir)/sts2.dll</HintPath>
       <Private>false</Private>
@@ -40,22 +62,50 @@
       <Private>false</Private>
     </Reference>
 
-    <PackageReference Include="STS2.RitsuLib" Version="*" />
+    <PackageReference Include="$(RitsuLibPackageId)" Version="*" />
   </ItemGroup>
 
   <Target Name="Copy Mod" AfterTargets="PostBuildEvent">
-    <Message Text="Copying mod to Slay the Spire 2 mods folder..." Importance="high" />
-    <MakeDir Directories="$(Sts2Dir)/mods/" />
-    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(Sts2Dir)/mods/$(MSBuildProjectName)/" />
-    <!-- <Copy SourceFiles="$(TargetDir)$(TargetName).pdb"
-              DestinationFolder="$(Sts2Dir)/mods/$(MSBuildProjectName)/"
-              Condition="Exists('$(TargetDir)$(TargetName).pdb')" /> -->
+    <Message Text="Copying mod variant ($(Sts2ApiCompat)) to Slay the Spire 2 mods folder..." Importance="high" />
+    <MakeDir Directories="$(Sts2Dir)/mods/$(MSBuildProjectName)/lib/$(Sts2ApiCompat)/" />
+    <Copy SourceFiles="$(TargetPath)"
+          DestinationFolder="$(Sts2Dir)/mods/$(MSBuildProjectName)/lib/$(Sts2ApiCompat)/" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb"
+          DestinationFolder="$(Sts2Dir)/mods/$(MSBuildProjectName)/lib/$(Sts2ApiCompat)/"
+          Condition="'$(Configuration)' == 'Debug' and Exists('$(TargetDir)$(TargetName).pdb')" />
+    <WriteLinesToFile
+      File="$(Sts2Dir)/mods/$(MSBuildProjectName)/lib/$(Sts2ApiCompat)/compat-target.txt"
+      Lines="$(Sts2ApiCompat)"
+      Overwrite="true" />
     <Copy SourceFiles="$(MSBuildProjectName).json"
-      DestinationFolder="$(Sts2Dir)/mods/$(MSBuildProjectName)/" />
+          DestinationFolder="$(Sts2Dir)/mods/$(MSBuildProjectName)/" />
   </Target>
 
   <Target Name="ExportPck" DependsOnTargets="Build">
     <Message Text="Copying PCK to Slay the Spire 2 mods folder..." Importance="high" />
+    <Exec
+      Command="&quot;$(GodotExe)&quot; --path &quot;$(MSBuildProjectDirectory)&quot; --headless --export-pack &quot;Windows Desktop&quot; &quot;$(Sts2Dir)/mods/$(MSBuildProjectName)/$(MSBuildProjectName).pck&quot;"
+      EnvironmentVariables="IsInnerGodotExport=true;MSBUILDDISABLENODEREUSE=1"
+      ContinueOnError="WarnAndContinue" />
+  </Target>
+
+  <Target Name="BuildAll">
+    <Message Text="=== Bootstrap ===" Importance="high" />
+    <MSBuild Projects="$(MSBuildThisFileDirectory)Goldenglow.Bootstrap\Goldenglow.Bootstrap.csproj"
+             Targets="Build"
+             Properties="Configuration=$(Configuration)" />
+    <Message Text="=== Variant 0.107.1 ===" Importance="high" />
+    <MSBuild Projects="$(MSBuildProjectFile)"
+             Targets="Build"
+             Properties="Sts2ApiCompat=0.107.1;Configuration=$(Configuration)" />
+    <Message Text="=== Variant 0.109.0 ===" Importance="high" />
+    <MSBuild Projects="$(MSBuildProjectFile)"
+             Targets="Build"
+             Properties="Sts2ApiCompat=0.109.0;Configuration=$(Configuration)" />
+  </Target>
+
+  <Target Name="BuildAllPck" DependsOnTargets="BuildAll">
+    <Message Text="=== Exporting PCK ===" Importance="high" />
     <Exec
       Command="&quot;$(GodotExe)&quot; --path &quot;$(MSBuildProjectDirectory)&quot; --headless --export-pack &quot;Windows Desktop&quot; &quot;$(Sts2Dir)/mods/$(MSBuildProjectName)/$(MSBuildProjectName).pck&quot;"
       EnvironmentVariables="IsInnerGodotExport=true;MSBUILDDISABLENODEREUSE=1"

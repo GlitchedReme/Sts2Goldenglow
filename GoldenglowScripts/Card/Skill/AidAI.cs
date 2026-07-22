@@ -4,9 +4,7 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using STS2RitsuLib.Combat.CardTargeting;
 using Goldenglow.Orb;
 using MegaCrit.Sts2.Core.HoverTips;
-using System.Collections.Generic;
 using STS2RitsuLib.Interop.AutoRegistration;
-using STS2RitsuLib.Scaffolding.Content;
 
 namespace Goldenglow.Card;
 
@@ -16,7 +14,7 @@ public class AidAI() : AbstractGoldenglowCard(-1, CardType.Skill, CardRarity.Unc
     protected override bool HasEnergyCostX => true;
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DynamicVar("Channel", 0)
+        new DynamicVar("Channel", 1)
     ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips => [HoverTipFactory.FromOrb<BuoyOrb>()];

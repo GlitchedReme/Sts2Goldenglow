@@ -7,6 +7,7 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Cards.DynamicVars;
 using STS2RitsuLib.Interop.AutoRegistration;
+using MegaCrit.Sts2.Core.HoverTips;
 
 namespace Goldenglow.Card;
 
@@ -30,6 +31,8 @@ public class BarberProblem() : AbstractGoldenglowCard(1, CardType.Attack, CardRa
         ModCardVars.ComputedDamage("Damage", 0, ExhaustCount, ValueProp.Move)
     ];
 
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips => [HoverTipFactory.FromKeyword(CardKeyword.Exhaust)];
+
     private decimal ExhaustCount(CardModel? card, Creature? _)
     {
         if (card?.Owner?.PlayerCombatState == null) return 0;
@@ -39,7 +42,7 @@ public class BarberProblem() : AbstractGoldenglowCard(1, CardType.Attack, CardRa
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await DamageCmd.Attack(DynamicVars.ComputeDynamicValue("Damage"))
-            .FromCard(this, cardPlay)
+            .FromCardCompat(this, cardPlay)
             .TargetingAllOpponents(CombatState!)
             .Execute(choiceContext);
     }

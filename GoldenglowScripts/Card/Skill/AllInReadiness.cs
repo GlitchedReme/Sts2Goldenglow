@@ -17,7 +17,7 @@ public class AllInReadiness() : AbstractGoldenglowCard(2, CardType.Skill, CardRa
     public IEnumerable<IHoverTip> HoverTipsShownInInspectOnly => [
         GoldenglowUtils.CreateReference("Watersnake (水蛇)")
     ];
-    
+
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new BlockVar(11, ValueProp.Move)
     ];

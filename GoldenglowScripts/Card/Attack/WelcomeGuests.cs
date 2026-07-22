@@ -40,7 +40,7 @@ public class WelcomeGuests() : AbstractGoldenglowCard(energyCost, type, rarity, 
                 var cost = selected.EnergyCost.CostsX ? Owner.GetEnergy() : selected.EnergyCost.Canonical;
                 await CardCmd.Exhaust(choiceContext, selected);
                 await DamageCmd.Attack(cost * DynamicVars["Multiplier"].BaseValue)
-                    .FromCard(this, cardPlay)
+                    .FromCardCompat(this, cardPlay)
                     .TargetingAllOpponents(CombatState!)
                     .Execute(choiceContext);
             }

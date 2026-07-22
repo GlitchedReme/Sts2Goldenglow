@@ -14,7 +14,7 @@ public class HairCare() : AbstractGoldenglowCard(1, CardType.Skill, CardRarity.U
 {
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new BlockVar(6, ValueProp.Move),
+        new BlockVar(5, ValueProp.Move),
         new DynamicVar("Buff", 1)
     ];
 

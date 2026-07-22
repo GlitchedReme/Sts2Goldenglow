@@ -35,7 +35,7 @@ public class Selection() : AbstractGoldenglowCard(1, CardType.Skill, CardRarity.
         )).FirstOrDefault();
         if (selected == null) return;
 
-        var clone = selected.CreateDupe(Owner);
+        var clone = selected.CreateDupeCompat(Owner);
         await CardCmd.AutoPlay(choiceContext, clone, target: null);
     }
 

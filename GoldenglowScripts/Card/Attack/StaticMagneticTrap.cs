@@ -35,7 +35,7 @@ public class StaticMagneticTrap() : AbstractGoldenglowCard(1, CardType.Attack, C
         }
 
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this, cardPlay)
+            .FromCardCompat(this, cardPlay)
             .Targeting(cardPlay.Target!)
             .Execute(choiceContext);
 

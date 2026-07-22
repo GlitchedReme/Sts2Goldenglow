@@ -16,9 +16,9 @@ public class CleaningTools : ModRelicTemplate
     public override RelicRarity Rarity => RelicRarity.Rare;
 
     public override RelicAssetProfile AssetProfile => new(
-        IconPath: "res://Goldenglow/images/relics/CleaningTools.png",
-        IconOutlinePath: "res://Goldenglow/images/relics/CleaningTools.png",
-        BigIconPath: "res://Goldenglow/images/relics/CleaningTools.png"
+        IconPath: "res://Goldenglow/image/relics/CleaningTools.png",
+        IconOutlinePath: "res://Goldenglow/image/relics/CleaningTools.png",
+        BigIconPath: "res://Goldenglow/image/relics/CleaningTools.png"
     );
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips => [HoverTipFactory.FromOrb<BuoyOrb>(), GoldenglowUtils.Transfer];

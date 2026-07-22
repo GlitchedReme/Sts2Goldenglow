@@ -3,14 +3,13 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using STS2RitsuLib.Interop.AutoRegistration;
-using STS2RitsuLib.Scaffolding.Content;
 
 using Goldenglow.Power;
 
 namespace Goldenglow.Card;
 
 [RegisterCard(typeof(GoldenglowCardPool))]
-public class Alternator() : AbstractGoldenglowCard(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
+public class Alternator() : AbstractGoldenglowCard(0, CardType.Power, CardRarity.Uncommon, TargetType.Self)
 {
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [

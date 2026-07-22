@@ -11,16 +11,16 @@ using STS2RitsuLib.Interop.AutoRegistration;
 namespace Goldenglow.Card;
 
 [RegisterCard(typeof(GoldenglowCardPool))]
-public class SubharmonicResonance() : AbstractGoldenglowCard(1, CardType.Power, CardRarity.Ancient, TargetType.Self), IHovertipShownInInspectOnly
+public class SubharmonicResonance() : AbstractGoldenglowCard(3, CardType.Power, CardRarity.Ancient, TargetType.Self), IHovertipShownInInspectOnly
 {
     public IEnumerable<IHoverTip> HoverTipsShownInInspectOnly => [
         GoldenglowUtils.CreateReference("dogdogbhh (白花花)")
     ];
-    
+
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         GoldenglowUtils.CreatePulseVar(),
     ];
-    
+
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await PowerCmd.Apply<SubharmonicResonancePower>(choiceContext, Owner.Creature, 2, Owner.Creature, this);
@@ -28,6 +28,7 @@ public class SubharmonicResonance() : AbstractGoldenglowCard(1, CardType.Power, 
 
     protected override void OnUpgrade()
     {
-        AddKeyword(CardKeyword.Innate);
+        // AddKeyword(CardKeyword.Innate);
+        EnergyCost.UpgradeBy(-1);
     }
 }

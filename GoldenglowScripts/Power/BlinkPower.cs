@@ -1,35 +1,44 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Entities.Cards;
-using MegaCrit.Sts2.Core.Entities.Creatures;
-using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.Models;
 using STS2RitsuLib.Interop.AutoRegistration;
-using STS2RitsuLib.Scaffolding.Content;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Entities.Players;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Entities.Powers;
 
 namespace Goldenglow.Power;
 
 [RegisterPower]
-public sealed class BlinkPower : ModPowerTemplate
+public sealed class BlinkPower : AbstractGoldenglowPower
 {
-    public override PowerType Type => PowerType.Buff;
-    public override PowerStackType StackType => PowerStackType.Counter;
+    public class InternalData
+    {
+        public List<CardModel> _exiled = [];
+    }
 
-    private readonly List<CardModel> _exiled = [];
+    public override PowerStackType StackType => PowerStackType.Single;
+    public override PowerInstanceType InstanceType => PowerInstanceType.Instanced;
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => [
+        new StringVar("Exiled", "")
+    ];
+
+    protected override object? InitInternalData() => new InternalData();
 
     public void StoreExiled(List<CardModel> cards)
     {
-        _exiled.AddRange(cards);
+        GetInternalData<InternalData>()._exiled.AddRange(cards);
+        ((StringVar)DynamicVars["Exiled"]).StringValue = string.Join(", ", cards.Select(c => $"[gold]{c.Title}[/gold]"));
     }
 
-    public override async Task AfterSideTurnStart(CombatSide side, IReadOnlyList<Creature> participants, ICombatState combatState)
+    public override async Task BeforeHandDraw(Player player, PlayerChoiceContext choiceContext, ICombatState combatState)
     {
-        if (!participants.Contains(base.Owner)) return;
-        foreach (var card in _exiled)
+        if (Owner.Player != player) return;
+        foreach (var card in GetInternalData<InternalData>()._exiled)
             await CardPileCmd.Add(card, PileType.Hand);
-        _exiled.Clear();
+        GetInternalData<InternalData>()._exiled.Clear();
         await PowerCmd.Remove(this);
     }
 }

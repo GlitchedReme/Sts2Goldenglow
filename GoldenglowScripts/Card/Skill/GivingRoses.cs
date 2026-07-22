@@ -8,7 +8,7 @@ using STS2RitsuLib.Interop.AutoRegistration;
 namespace Goldenglow.Card;
 
 [RegisterCard(typeof(GoldenglowCardPool))]
-public class GivingRoses() : AbstractGoldenglowCard(1, CardType.Skill, CardRarity.Rare, TargetType.Self)
+public class GivingRoses() : AbstractGoldenglowCard(2, CardType.Skill, CardRarity.Rare, TargetType.Self)
 {
 	public override CardMultiplayerConstraint MultiplayerConstraint => CardMultiplayerConstraint.MultiplayerOnly;
     

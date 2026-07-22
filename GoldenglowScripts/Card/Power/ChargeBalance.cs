@@ -9,7 +9,7 @@ using STS2RitsuLib.Combat.CardTargeting;
 namespace Goldenglow.Card;
 
 [RegisterCard(typeof(GoldenglowCardPool))]
-public class ChargeBalance() : AbstractGoldenglowCard(2, CardType.Power, CardRarity.Rare, CustomTargetType.Anyone)
+public class ChargeBalance() : AbstractGoldenglowCard(1, CardType.Power, CardRarity.Rare, CustomTargetType.Anyone)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new PowerVar<ChargeBalancePower>(2)

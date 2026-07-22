@@ -19,7 +19,7 @@ public class ElectrostaticSpark() : AbstractGoldenglowCard(1, CardType.Attack, C
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, cardPlay).Targeting(cardPlay.Target!).Execute(choiceContext);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCardCompat(this, cardPlay).Targeting(cardPlay.Target!).Execute(choiceContext);
         await GoldenglowCmd.Attract(choiceContext, Owner, this);
     }
 

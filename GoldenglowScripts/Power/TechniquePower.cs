@@ -6,15 +6,12 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using STS2RitsuLib.Interop.AutoRegistration;
-using STS2RitsuLib.Scaffolding.Content;
 
 namespace Goldenglow.Power;
 
 [RegisterPower]
-public sealed class TechniquePower : ModPowerTemplate, IPowerCustomTextProvider
+public sealed class TechniquePower : AbstractGoldenglowPower, IPowerCustomTextProvider
 {
-    public override PowerType Type => PowerType.Buff;
-    public override PowerStackType StackType => PowerStackType.Counter;
     public override PowerInstanceType InstanceType => PowerInstanceType.Instanced;
 
     public string CustomText => Amount > 1 ? $"{TurnCounter}/{Amount}" : Amount.ToString();
@@ -53,7 +50,7 @@ public sealed class TechniquePower : ModPowerTemplate, IPowerCustomTextProvider
         if (TurnCounter >= Amount)
         {
             TurnCounter = 0;
-            var clone = _storedCard.CreateDupe(player);
+            var clone = _storedCard.CreateDupeCompat(player);
             await CardCmd.AutoPlay(choiceContext, clone, target: null);
             Flash();
         }

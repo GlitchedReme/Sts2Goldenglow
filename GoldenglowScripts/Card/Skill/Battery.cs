@@ -13,7 +13,7 @@ public class Battery() : AbstractGoldenglowCard(0, CardType.Skill, CardRarity.Un
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new EnergyVar(1),
         new DynamicVar("Turns", 3),
-        new CardsVar(0)
+        new CardsVar(1)
     ];
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];

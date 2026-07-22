@@ -13,14 +13,14 @@ using Goldenglow.Patch;
 namespace Goldenglow.Card;
 
 [RegisterCard(typeof(GoldenglowCardPool))]
-public class SurgingCurrent() : AbstractGoldenglowCard(1, CardType.Skill, CardRarity.Rare, TargetType.Self), IHovertipShownInInspectOnly
+public class SurgingCurrent() : AbstractGoldenglowCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self), IHovertipShownInInspectOnly
 {
     public IEnumerable<IHoverTip> HoverTipsShownInInspectOnly => [
         GoldenglowUtils.CreateReference("Watersnake (水蛇)")
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new BlockVar(8, ValueProp.Move),
+        new BlockVar(7, ValueProp.Move),
         new CardsVar(1)
     ];
 
@@ -34,13 +34,15 @@ public class SurgingCurrent() : AbstractGoldenglowCard(1, CardType.Skill, CardRa
         for (int i = 0; i < DynamicVars.Cards.BaseValue; i++)
         {
             var drawn = await GoldenglowCmd.DrawFiltered(choiceContext, Owner, c => c.TryGetCapability<StaticCapability>(out _));
-            drawn?.GetOrCreateCapability<StaticCapability>().Increment();
+            if (drawn == null)
+                break;
+            await GoldenglowCmd.ApplyStatic(drawn, false);
         }
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Block.UpgradeValueBy(1);
-        DynamicVars.Cards.UpgradeValueBy(1);
+        DynamicVars.Block.UpgradeValueBy(3);
+        // DynamicVars.Cards.UpgradeValueBy(1);
     }
 }

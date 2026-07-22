@@ -61,7 +61,11 @@ public static class GoldenglowCmd
             var target = hit ?? player.RunState.Rng.CombatTargets.NextItem(hittableEnemies);
             if (target != null)
             {
+#if STS2_AT_LEAST_109_0
                 await CreatureCmd.Damage(new ThrowingPlayerChoiceContext(), target, amount, ValueProp.Unpowered, player.Creature, cardSource, cardPlay);
+#else
+                await CreatureCmd.Damage(new ThrowingPlayerChoiceContext(), target, amount, ValueProp.Unpowered, player.Creature, cardSource);
+#endif
                 var vfx = NSweepingBeamVfx.Create();
                 var pos = target.GetCreatureNode()?.VfxSpawnPosition + Vector2.Right.Rotated(Random.Shared.NextSingle() * MathF.PI * 2) * (MathF.Sqrt(Random.Shared.NextSingle()) * 80f);
                 if (vfx != null)
@@ -73,7 +77,7 @@ public static class GoldenglowCmd
         }
     }
 
-    public static async Task ApplyStatic(CardModel card)
+    public static async Task ApplyStatic(CardModel card, bool wait = true)
     {
         var cap = card.GetOrCreateCapability<StaticCapability>();
         cap.Increment();
@@ -83,7 +87,8 @@ public static class GoldenglowCmd
         {
             StaticIncrementVfx.Create(cardNode);
             SfxCmd.Play("event:/sfx/characters/defect/defect_lightning_passive");
-            await Cmd.CustomScaledWait(0.5f, 0.6f);
+            if (wait)
+                await Cmd.CustomScaledWait(0.5f, 0.6f);
         }
     }
 

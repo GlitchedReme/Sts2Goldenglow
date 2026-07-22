@@ -1,7 +1,10 @@
+using System.Reflection;
 using Godot;
+using Goldenglow;
 using Goldenglow.Card;
 using Goldenglow.Potion;
 using Goldenglow.Relic;
+using HarmonyLib;
 using MegaCrit.Sts2.Core.Animation;
 using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Entities.Characters;
@@ -56,7 +59,6 @@ public class Goldenglow : ModCharacterTemplate<GoldenglowCardPool, GoldenglowRel
             // 地图标记
             MapMarkerPath: "res://Goldenglow/image/character/icon.png"
             ),
-        // 音效、特效等后续补充
         Audio: new(
             CharacterSelectSfx: "event:/goldenglow/sfx/char_select"
         )
@@ -74,16 +76,16 @@ public class Goldenglow : ModCharacterTemplate<GoldenglowCardPool, GoldenglowRel
 
     public override List<string> GetArchitectAttackVfx() => [
         "vfx/vfx_attack_slash",
-        "vfx/vfx_heavy_blunt",
-        "vfx/vfx_attack_blunt",
-        "vfx/vfx_bloody_impact",
-        "vfx/vfx_rock_shatter"
+        "vfx/vfx_attack_lightning",
+        "vfx/vfx_attack_slash",
+        "vfx/vfx_attack_lightning",
+        "vfx/vfx_attack_lightning"
     ];
 
 #pragma warning disable CS0672
     protected override IEnumerable<StartingDeckEntry> StartingDeckEntries => [
         StartingDeckEntry.Of<Strike_Goldenglow>(4),
-        StartingDeckEntry.Of<Defend_Goldenglow>(3),
+        StartingDeckEntry.Of<Defend_Goldenglow>(4),
         StartingDeckEntry.Of<ElectrostaticSpark>(),
         StartingDeckEntry.Of<PreciseDiversion>()
     ];
@@ -94,15 +96,27 @@ public class Goldenglow : ModCharacterTemplate<GoldenglowCardPool, GoldenglowRel
 
 #pragma warning restore CS0672
 
+    private static readonly FieldInfo CurrentStateField = AccessTools.Field(typeof(CreatureAnimator), "_currentState");
+
     protected override CreatureAnimator? SetupCustomCreatureAnimator(MegaSprite controller)
     {
         AnimState idle1 = new("Idle", isLooping: true);
+        AnimState idle2Start = new("Skill2_Start");
         AnimState idle2 = new("Skill2_Idle", isLooping: true);
-        
+
+        AnimState attack01 = new("Attack_Start");
+        AnimState attack02 = new("Attack");
+        AnimState attack03 = new("Attack_End");
+
         AnimState cast = new("Skill2_Loop");
         AnimState attack = new("Skill2_Loop");
         AnimState die = new("Die");
         AnimState relaxed = new("Idle", isLooping: true);
+
+        attack01.NextState = attack02;
+        attack02.NextState = attack03;
+        attack03.NextState = idle2Start;
+        idle2Start.NextState = idle2;
 
         cast.NextState = idle2;
         attack.NextState = idle2;
@@ -113,7 +127,8 @@ public class Goldenglow : ModCharacterTemplate<GoldenglowCardPool, GoldenglowRel
         creatureAnimator.AddAnyState("Idle", idle1);
         creatureAnimator.AddAnyState("Dead", die);
         // creatureAnimator.AddAnyState("Hit", hurt);
-        creatureAnimator.AddAnyState("Attack", attack);
+        creatureAnimator.AddAnyState("Attack", attack01, () => CurrentStateField.GetValue(creatureAnimator) is AnimState currentState && (currentState.Id == idle1.Id || currentState.Id == attack01.Id || currentState.Id == attack02.Id || currentState.Id == attack03.Id));
+        creatureAnimator.AddAnyState("Attack", attack, () => CurrentStateField.GetValue(creatureAnimator) is AnimState currentState && (currentState.Id == idle2.Id || currentState.Id == attack.Id));
         creatureAnimator.AddAnyState("Cast", cast);
         creatureAnimator.AddAnyState("Relaxed", relaxed);
         return creatureAnimator;
@@ -121,19 +136,86 @@ public class Goldenglow : ModCharacterTemplate<GoldenglowCardPool, GoldenglowRel
 
     protected override ModAnimStateMachine? SetupCustomMerchantAnimationStateMachine(Node merchantRoot, CharacterModel character)
     {
-        var spine = new MegaSprite(merchantRoot.GetChild(0));
-        return ModAnimStateMachineBuilder.Create()
-            .AddState("Idle", loop: true)
-            .Done()
-            .BuildSpine(spine);
+        return BuildWorldSpineStateMachine("Merchant", merchantRoot, "Idle");
     }
 
     protected override ModAnimStateMachine? SetupCustomRestSiteAnimationStateMachine(Node restSiteRoot, CharacterModel character)
     {
-        var spine = new MegaSprite(restSiteRoot.GetChild(0));
-        return ModAnimStateMachineBuilder.Create()
-            .AddState("Sit", loop: true)
+        return BuildWorldSpineStateMachine("RestSite", restSiteRoot, "Sit");
+    }
+
+    private static ModAnimStateMachine? BuildWorldSpineStateMachine(string tag, Node root, string animId)
+    {
+        var child0 = root.GetChildCount() > 0 ? root.GetChild(0) : null;
+        if (child0 is null) return null;
+
+        var spine = new MegaSprite(child0);
+        if (!spine.IsAnimationStateReady() || !spine.HasAnimation(animId))
+            return null;
+
+        var machine = ModAnimStateMachineBuilder.Create()
+            .AddState(animId, loop: true)
             .Done()
             .BuildSpine(spine);
+
+        // char_377's setup pose is scattered (authoring skeleton); apply the animation once to
+        // assemble the bones immediately.
+        ForceApply(spine);
+
+        // The merchant setup runs synchronously during NMerchantCharacter._Ready (via
+        // RunWhenSpineReady). The SpineSprite's native animation state is rebuilt shortly after
+        // _Ready (deferred to end-of-frame), discarding the track just set by BuildSpine. The rest
+        // site is unaffected because its setup runs later (NRestSiteRoom._Ready Postfix), after the
+        // rebuild has already settled. Detect the rebuild on the next frame and re-enter the state
+        // so the track lands on the stable animation state.
+        var t0AnimId = TryGetAnimStateInstanceId(child0);
+        var tree = child0.GetTree();
+        if (tree is not null && machine is { Current: { } initialState })
+        {
+            Godot.Callable handler = default;
+            void OnDeferredFrame()
+            {
+                tree.Disconnect("process_frame", handler);
+                if (!GodotObject.IsInstanceValid(child0))
+                    return;
+
+                var curId = TryGetAnimStateInstanceId(child0);
+                if (curId == t0AnimId)
+                    return;
+
+                Entry.Logger.Info($"[{tag}] anim state rebuilt (t0={t0AnimId} cur={curId}), re-entering '{initialState.Id}'");
+                machine.Start(initialState);
+                ForceApply(spine);
+            }
+            handler = Godot.Callable.From(OnDeferredFrame);
+            tree.Connect("process_frame", handler);
+        }
+
+        return machine;
+    }
+
+    private static void ForceApply(MegaSprite spine)
+    {
+        try
+        {
+            var st = spine.TryGetAnimationState();
+            var sk = spine.GetSkeleton();
+            if (st is { } s && sk is { } k)
+            {
+                s.Update(0f);
+                s.Apply(k);
+            }
+        }
+        catch { }
+    }
+
+    private static ulong? TryGetAnimStateInstanceId(Node spineNode)
+    {
+        try
+        {
+            var obj = spineNode.Call("get_animation_state").AsGodotObject();
+            return obj is not null && GodotObject.IsInstanceValid(obj) ? obj.GetInstanceId() : null;
+        }
+        catch { return null; }
     }
 }

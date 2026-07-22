@@ -59,8 +59,9 @@ public class ClusterTactics() : AbstractGoldenglowCard(1, CardType.Attack, CardR
             var pos = basePos + Vector2.Right.Rotated(MathF.PI + Random.Shared.NextSingle() * MathF.PI) * (200f + Random.Shared.NextSingle() * 200f);
             var vfx = BuoyCardAttackVfx.Create(pos, Owner, target, async () =>
             {
+                if (target == null) return;
                 await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-                    .FromCard(this, cardPlay)
+                    .FromCardCompat(this, cardPlay)
                     .Targeting(target)
                     .Execute(choiceContext);
             }, delay);

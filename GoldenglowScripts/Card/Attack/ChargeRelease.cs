@@ -5,6 +5,7 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
+using STS2RitsuLib.Cards.DynamicVars;
 using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace Goldenglow.Card;
@@ -13,28 +14,26 @@ namespace Goldenglow.Card;
 public class ChargeRelease() : AbstractGoldenglowCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DamageVar(8, ValueProp.Move),
-        new CardsVar(1),
-        new DynamicVar("StaticDamage", 6),
-        new DynamicVar("StaticDraw", 1)
+        new DynamicVar("StaticDamage", 7),
+        new DynamicVar("StaticDraw", 1),
+        ModCardVars.ComputedDamage("Damage", 7, card => DynamicVars["Damage"].BaseValue + GoldenglowCmd.GetStaticStacks(card!) * card!.DynamicVars["StaticDamage"].BaseValue, ValueProp.Move),
+        ModCardVars.Computed("Cards", 1, card => (int)DynamicVars["Cards"].BaseValue + GoldenglowCmd.GetStaticStacks(card) * (int)DynamicVars["StaticDraw"].BaseValue)
     ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips => [GoldenglowUtils.Static];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        var staticStacks = GoldenglowCmd.GetStaticStacks(cardPlay.Card);
-        var damage = DynamicVars.Damage.BaseValue + staticStacks * DynamicVars["StaticDamage"].BaseValue;
-        var draw = (int)DynamicVars.Cards.BaseValue + staticStacks * (int)DynamicVars["StaticDraw"].BaseValue;
+        var damage = DynamicVars.ComputeDynamicValue("Damage");
+        var draw = DynamicVars.ComputeDynamicValue("Cards");
 
         await CreatureCmd.Damage(choiceContext, cardPlay.Target!, damage, ValueProp.Unpowered, Owner.Creature);
         await CardPileCmd.Draw(choiceContext, draw, Owner);
+        await GoldenglowCmd.ApplyStatic(cardPlay.Card);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(1);
-        DynamicVars["StaticDamage"].UpgradeValueBy(1);
-        DynamicVars.Cards.UpgradeValueBy(1);
+        DynamicVars["Cards"].UpgradeValueBy(1);
     }
 }

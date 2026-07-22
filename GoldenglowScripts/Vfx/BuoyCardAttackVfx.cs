@@ -19,7 +19,7 @@ public partial class BuoyCardAttackVfx : Node2D
     private const float RiseDuration = 0.1f;
     private const float FallDuration = 0.5f;
 
-    private Creature _target = null!;
+    private Creature? _target = null!;
     private Player _source = null!;
     private Node2D _buoy = null!;
     private Node2D _particles = null!;
@@ -85,10 +85,13 @@ public partial class BuoyCardAttackVfx : Node2D
         CreateTween().TweenProperty(_buoy, "position:y", -30f, RiseDuration)
             .SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 
-        var lightning = BuoyLightning.Create(this, _target.GetCreatureNode()!)!;
-        GoldenglowUtils.PlayVfx(_target, lightning, GlobalPosition);
-        var skin = SkinResources.GetSkinKey(_source);
-        GoldenglowUtils.PlayVfx(_target, BuoyAttackVfx.Create(skin));
+        if (_target != null)
+        {
+            var lightning = BuoyLightning.Create(this, _target.GetCreatureNode()!)!;
+            GoldenglowUtils.PlayVfx(_target, lightning, GlobalPosition);
+            var skin = SkinResources.GetSkinKey(_source);
+            GoldenglowUtils.PlayVfx(_target, BuoyAttackVfx.Create(skin));
+        }
 
         SfxCmd.Play("event:/goldenglow/sfx/buoy_evoke");
 

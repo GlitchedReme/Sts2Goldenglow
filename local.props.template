@@ -5,5 +5,11 @@
         <!-- <Sts2DataDir>$(Sts2Path)\data_sts2_windows_x86_64</Sts2DataDir> -->
         <!-- Optional: MegaDot / Godot 4.5.1 mono executable used for --export-pack -->
         <!-- <GodotPath>Z:\Projects\sts2\megadot\MegaDot_v4.5.1-stable_mono_win64.exe</GodotPath> -->
+
+        <!-- STS2 API signature directories (for multi-variant builds).
+             Each points to a data_sts2_windows_x86_64 folder containing
+             sts2.dll + 0Harmony.dll for that game version. -->
+        <Sts2SigDir_0_107_1>Path\To\sts21071\data_sts2_windows_x86_64</Sts2SigDir_0_107_1>
+        <Sts2SigDir_0_109_0>Path\To\sts2109\data_sts2_windows_x86_64</Sts2SigDir_0_109_0>
     </PropertyGroup>
 </Project>

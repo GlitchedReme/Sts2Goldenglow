@@ -1,19 +1,18 @@
 """
-Pack images from a directory into Godot AtlasTextures (atlas PNGs + .tres files).
-Uses shelf-based bin packing for tight packing of mixed-size images.
-Automatically splits into multiple atlases when exceeding max atlas size.
+Pack images from multiple directories into Godot AtlasTextures.
+Supports simultaneous card + power atlas packing.
 
 Usage:
-    python pack_atlas.py <input_dir> [options]
+    python pack_atlas.py                    # Pack all defaults (card + power)
+    python pack_atlas.py card               # Pack card only
+    python pack_atlas.py power              # Pack power only
+    python pack_atlas.py card power         # Pack both explicitly
+    python pack_atlas.py <dir> [options]    # Pack custom directory
 
 Options:
-    --atlas-name NAME    Base name for atlas PNGs (default: card_atlas)
     --padding N          Padding between images in pixels (default: 4)
     --max-size N         Max atlas dimension in pixels (default: 2048)
-    --output-dir DIR     Output directory (default: input_dir/../<atlas-name>)
-
-Example:
-    python pack_atlas.py image/card --atlas-name card_atlas --max-size 2048
+    --output-dir DIR     Output dir (default: input_dir/../<atlas_name>)
 """
 
 import sys
@@ -28,6 +27,22 @@ except ImportError:
     print("Pillow is required: pip install Pillow")
     sys.exit(1)
 
+# Default pack targets: (name, input_subdir, output_subdir, strip_suffix)
+DEFAULTS = {
+    "card": {
+        "input": "Goldenglow/image/card",
+        "output": "Goldenglow/image/card_atlas",
+        "atlas_name": "card_atlas",
+        "strip_suffix": None,
+    },
+    "power": {
+        "input": "Goldenglow/image/power",
+        "output": "Goldenglow/image/power_atlas",
+        "atlas_name": "power_atlas",
+        "strip_suffix": "32",
+    },
+}
+
 
 def generate_uid() -> str:
     chars = string.ascii_lowercase + string.digits
@@ -35,10 +50,6 @@ def generate_uid() -> str:
 
 
 def shelf_pack(images, padding: int, max_size: int):
-    """
-    Shelf-based bin packing (NFDH - Next Fit Decreasing Height).
-    Returns list of atlases; each atlas is list of (name, img, x, y).
-    """
     sorted_imgs = sorted(images, key=lambda x: -x[1].height)
 
     atlases = []
@@ -55,20 +66,17 @@ def shelf_pack(images, padding: int, max_size: int):
             print(f"WARNING: {name} ({w}x{h}) exceeds max_size {max_size}, skipping")
             continue
 
-        # Try current shelf
         if cursor_x + w + padding <= max_size:
             x, y = cursor_x, shelf_y
             cursor_x += w + padding
             shelf_h = max(shelf_h, h + padding)
             current.append((name, img, x, y))
         else:
-            # New shelf
             shelf_y += shelf_h
             cursor_x = padding
             shelf_h = h + padding
 
             if shelf_y + h + padding > max_size:
-                # New atlas
                 atlases.append(current)
                 current = []
                 shelf_y = padding
@@ -85,18 +93,21 @@ def shelf_pack(images, padding: int, max_size: int):
     return atlases
 
 
-def pack_images(input_dir: Path, atlas_name: str, padding: int, max_size: int, output_dir: Path):
+def pack_images(input_dir: Path, atlas_name: str, padding: int, max_size: int, output_dir: Path, strip_suffix: str | None = None):
     png_files = sorted(input_dir.glob("*.png"))
     if not png_files:
         print(f"No PNG files found in {input_dir}")
         return
 
-    print(f"Found {len(png_files)} images")
+    print(f"Found {len(png_files)} images in {input_dir}")
 
     images = []
     for f in png_files:
+        stem = f.stem
+        if strip_suffix and stem.endswith(strip_suffix):
+            stem = stem[: -len(strip_suffix)]
         img = Image.open(f).convert("RGBA")
-        images.append((f.stem, img))
+        images.append((stem, img))
 
     atlases = shelf_pack(images, padding, max_size)
     print(f"Packed into {len(atlases)} atlas(es)\n")
@@ -135,33 +146,42 @@ def pack_images(input_dir: Path, atlas_name: str, padding: int, max_size: int, o
         atlas.save(atlas_path)
         print(f"  Saved: {atlas_path}\n")
 
-    print(f"Done! {len(atlases)} atlas(es), {total_tres} .tres files generated.")
+    print(f"Done! {len(atlases)} atlas(es), {total_tres} .tres files generated.\n")
 
 
 def main():
     parser = argparse.ArgumentParser(description="Pack images into Godot AtlasTextures")
-    parser.add_argument("input_dir", type=str, nargs="?", default="Goldenglow/image/card", help="Directory containing PNG files (default: Goldenglow/image/card)")
-    parser.add_argument("--atlas-name", type=str, default="card_atlas", help="Base name for atlas PNGs (default: card_atlas)")
+    parser.add_argument("targets", nargs="*", help="Targets to pack: 'card', 'power', or custom directory paths (default: card power)")
     parser.add_argument("--padding", type=int, default=4, help="Padding between images (default: 4)")
     parser.add_argument("--max-size", type=int, default=2048, help="Max atlas dimension in pixels (default: 2048)")
-    parser.add_argument("--output-dir", type=str, default=None, help="Output dir (default: input_dir/../<atlas-name>)")
     args = parser.parse_args()
 
-    input_dir = Path(args.input_dir)
-    if not input_dir.is_absolute():
-        input_dir = Path.cwd() / input_dir
+    targets = args.targets if args.targets else ["card", "power"]
+    project_root = Path.cwd()
 
-    output_dir = Path(args.output_dir) if args.output_dir else input_dir.parent / args.atlas_name
-    if not output_dir.is_absolute():
-        output_dir = Path.cwd() / output_dir
+    for target in targets:
+        if target in DEFAULTS:
+            cfg = DEFAULTS[target]
+            input_dir = project_root / cfg["input"]
+            output_dir = project_root / cfg["output"]
+            atlas_name = cfg["atlas_name"]
+            strip_suffix = cfg["strip_suffix"]
+        else:
+            input_dir = Path(target)
+            if not input_dir.is_absolute():
+                input_dir = project_root / input_dir
+            atlas_name = input_dir.name + "_atlas"
+            output_dir = input_dir.parent / atlas_name
+            strip_suffix = None
 
-    if not input_dir.exists():
-        print(f"Input directory not found: {input_dir}")
-        sys.exit(1)
+        if not input_dir.exists():
+            print(f"Input directory not found: {input_dir}")
+            continue
 
-    output_dir.mkdir(parents=True, exist_ok=True)
+        output_dir.mkdir(parents=True, exist_ok=True)
 
-    pack_images(input_dir, args.atlas_name, args.padding, args.max_size, output_dir)
+        print(f"=== Packing {target} ===")
+        pack_images(input_dir, atlas_name, args.padding, args.max_size, output_dir, strip_suffix)
 
 
 if __name__ == "__main__":

@@ -5,7 +5,6 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
 using Goldenglow.Core;
 using STS2RitsuLib.Interop.AutoRegistration;
-using STS2RitsuLib.Scaffolding.Content;
 
 namespace Goldenglow.Card;
 
@@ -29,7 +28,7 @@ public class CurrentShield() : AbstractGoldenglowCard(1, CardType.Skill, CardRar
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Block.UpgradeValueBy(1);
+        // DynamicVars.Block.UpgradeValueBy(1);
         DynamicVars["Goldenglow_Attract"].UpgradeValueBy(1);
     }
 }

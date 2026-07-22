@@ -13,7 +13,7 @@ public class HairComb() : AbstractGoldenglowCard(0, CardType.Skill, CardRarity.U
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new BlockVar(11, ValueProp.Move),
-        new CardsVar(1)
+        new CardsVar(0)
     ];
 
     public override bool GainsBlock => true;
@@ -23,11 +23,13 @@ public class HairComb() : AbstractGoldenglowCard(0, CardType.Skill, CardRarity.U
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, cardPlay);
-        await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.BaseValue, Owner);
+        if (DynamicVars.Cards.BaseValue > 0)
+            await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.BaseValue, Owner);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Block.UpgradeValueBy(3);
+        DynamicVars.Block.UpgradeValueBy(2);
+        DynamicVars.Cards.UpgradeValueBy(1);
     }
 }

@@ -19,7 +19,7 @@ public class Degaussing() : AbstractGoldenglowCard(0, CardType.Attack, CardRarit
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, cardPlay).Targeting(cardPlay.Target!).Execute(choiceContext);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCardCompat(this, cardPlay).Targeting(cardPlay.Target!).Execute(choiceContext);
         await PowerCmd.Apply<DegaussingTempPower>(choiceContext, Owner.Creature, DynamicVars["HandSize"].BaseValue, Owner.Creature, this);
     }
 

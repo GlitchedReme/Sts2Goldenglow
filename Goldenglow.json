@@ -2,7 +2,7 @@
   "id": "Goldenglow",
   "name": "澄闪",
   "author": "Reme",
-  "description": "添加新角色澄闪——罗德岛驭械术师，以浮标充能球与静电效果为核心的75张全新卡牌。",
+  "description": "添加新角色澄闪。",
   "version": "0.1.0",
   "has_pck": true,
   "has_dll": true,
