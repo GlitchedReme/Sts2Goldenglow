@@ -6,10 +6,6 @@ using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace Goldenglow.Power;
 
-/// <summary>
-/// Each turn start, pulses once.
-/// Amount = number of pulses per turn (stacks).
-/// </summary>
 [RegisterPower]
 public sealed class PiezoelectricEffectPower : AbstractGoldenglowPower
 {

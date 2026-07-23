@@ -1,0 +1,98 @@
+{
+  "GOLDENGLOW_POWER_ALTERNATOR_POWER.description": "At the start of your turn, a random character gains 1 Orb Slot.",
+  "GOLDENGLOW_POWER_ALTERNATOR_POWER.smartDescription": "At the start of your turn, {Amount:plural:a random character|[blue]{}[/blue] random characters} {Amount:plural:gains|gain} an Orb Slot.",
+  "GOLDENGLOW_POWER_ALTERNATOR_POWER.title": "Generator",
+
+  "GOLDENGLOW_POWER_BATTERY_POWER.description": "At the start of your next turn, gain {energyPrefix:energyIcons(1)}.",
+  "GOLDENGLOW_POWER_BATTERY_POWER.smartDescription": "At the start of the next {Amount:plural:turn|[blue]{}[/blue] turns}, gain {energyPrefix:energyIcons(1)}.",
+  "GOLDENGLOW_POWER_BATTERY_POWER.title": "Battery",
+
+  "GOLDENGLOW_POWER_BEAUTIFUL_HAIRSTYLE_POWER.description": "The damage and [gold]Block[/gold] of your Basic and Common cards increase.",
+  "GOLDENGLOW_POWER_BEAUTIFUL_HAIRSTYLE_POWER.smartDescription": "The damage and [gold]Block[/gold] of your Basic and Common cards increase by [blue]{Amount}[/blue].",
+  "GOLDENGLOW_POWER_BEAUTIFUL_HAIRSTYLE_POWER.title": "Beautiful Hairstyle",
+
+  "GOLDENGLOW_POWER_BEST_FRIENDS_POWER.description": "Your cards with [gold]Exhaust[/gold] are played an extra time.",
+  "GOLDENGLOW_POWER_BEST_FRIENDS_POWER.smartDescription": "Your cards with [gold]Exhaust[/gold] are played an extra [blue]{Amount}[/blue] {Amount:plural:time|times}.",
+  "GOLDENGLOW_POWER_BEST_FRIENDS_POWER.title": "Best Friends",
+
+  "GOLDENGLOW_POWER_BLINK_POWER.description": "At the start of your turn, return the cards [gold]Exhausted[/gold] by [gold]Blink[/gold] to your hand.",
+  "GOLDENGLOW_POWER_BLINK_POWER.smartDescription": "At the start of your turn, return {Exiled} to your hand.",
+  "GOLDENGLOW_POWER_BLINK_POWER.title": "Blink",
+
+  "GOLDENGLOW_POWER_BUOY_RECOVERY_POWER.description": "After a [gold]Buoy[/gold] is [gold]Evoked[/gold] from an enemy, [gold]Channel[/gold] 1 [gold]Buoy[/gold].",
+  "GOLDENGLOW_POWER_BUOY_RECOVERY_POWER.smartDescription": "After a [gold]Buoy[/gold] is [gold]Evoked[/gold] from an enemy, [gold]Channel[/gold] [blue]{Amount}[/blue] [gold]{Amount:plural:Buoy|Buoys}[/gold].",
+  "GOLDENGLOW_POWER_BUOY_RECOVERY_POWER.title": "Buoy Recovery",
+
+  "GOLDENGLOW_POWER_CAPACITY_EXPANSION_POWER.description": "Hand size limit increases.",
+  "GOLDENGLOW_POWER_CAPACITY_EXPANSION_POWER.smartDescription": "Hand size limit increases by [blue]{Amount}[/blue].",
+
+  "GOLDENGLOW_POWER_TEMP_HAND_SIZE.description": "Hand size limit increases this turn.",
+  "GOLDENGLOW_POWER_TEMP_HAND_SIZE.smartDescription": "Hand size limit increases by [blue]{Amount}[/blue] this turn.",
+  "GOLDENGLOW_POWER_TEMP_HAND_SIZE.title": "Capacity Expansion (Temp)",
+  "GOLDENGLOW_POWER_CAPACITY_EXPANSION_POWER.title": "Capacity Expansion",
+
+  "GOLDENGLOW_POWER_CHARGE_BALANCE_POWER.description": "Whenever an Orb is [gold]Evoked[/gold], gain [gold]Focus[/gold] temporarily.",
+  "GOLDENGLOW_POWER_CHARGE_BALANCE_POWER.smartDescription": "Whenever an Orb is [gold]Evoked[/gold], gain [blue]{Amount}[/blue] [gold]Focus[/gold] this turn.",
+  "GOLDENGLOW_POWER_CHARGE_BALANCE_POWER.title": "Charge Balance",
+
+  "GOLDENGLOW_POWER_DRONE_CASTER_POWER.description": "Whenever a [gold]Buoy[/gold] is [gold]Channeled[/gold], trigger its passive effect.",
+  "GOLDENGLOW_POWER_DRONE_CASTER_POWER.smartDescription": "Whenever a [gold]Buoy[/gold] is [gold]Channeled[/gold], trigger its passive effect [blue]{Amount}[/blue] {Amount:plural:time|times}.",
+  "GOLDENGLOW_POWER_DRONE_CASTER_POWER.title": "Drone Caster",
+
+  "GOLDENGLOW_POWER_EXCITATION_POWER.description": "After an [gold]Orb[/gold] is [gold]Evoked[/gold] from you, deal damage to ALL enemies.",
+  "GOLDENGLOW_POWER_EXCITATION_POWER.smartDescription": "After an [gold]Orb[/gold] is [gold]Evoked[/gold] from you, deal [blue]{Amount}[/blue] damage to ALL enemies.",
+  "GOLDENGLOW_POWER_EXCITATION_POWER.title": "Excitation",
+
+  "GOLDENGLOW_POWER_FRESH_PERFUME_POWER.description": "At the start of your next turn, draw 1 card.",
+  "GOLDENGLOW_POWER_FRESH_PERFUME_POWER.smartDescription": "At the start of the next {Amount:plural:turn|[blue]{}[/blue] turns}, draw 1 card.",
+  "GOLDENGLOW_POWER_FRESH_PERFUME_POWER.title": "Fresh Perfume",
+
+  "GOLDENGLOW_POWER_LIQUID_SOAP_POWER.description": "Whenever you play a Basic or Common card, draw 1 card.",
+  "GOLDENGLOW_POWER_LIQUID_SOAP_POWER.smartDescription": "Whenever you play [blue]{BaseCards}[/blue] {BaseCards:plural:Basic or Common card|Basic or Common cards}, draw [blue]{Amount}[/blue] {Amount:plural:card|cards}.",
+  "GOLDENGLOW_POWER_LIQUID_SOAP_POWER.title": "Liquid Soap",
+
+  "GOLDENGLOW_POWER_RADIATION_LAMP_POWER.description": "Whenever a character gains an Orb, increase its effectiveness.",
+  "GOLDENGLOW_POWER_RADIATION_LAMP_POWER.smartDescription": "Whenever a character gains an Orb, increase its effectiveness by [blue]{Amount}[/blue].",
+  "GOLDENGLOW_POWER_RADIATION_LAMP_POWER.title": "Radiation Lamp",
+
+  "GOLDENGLOW_POWER_SADNESS_OVERLOAD_POWER.description": "At the end of your turn, [gold]Attract[/gold] 1 card.",
+  "GOLDENGLOW_POWER_SADNESS_OVERLOAD_POWER.smartDescription": "At the end of your turn, [gold]Attract[/gold] [blue]{Amount}[/blue] {Amount:plural:card|cards}.",
+  "GOLDENGLOW_POWER_SADNESS_OVERLOAD_POWER.title": "Sadness Overload",
+
+  "GOLDENGLOW_POWER_SCATTER_SPARKS_BLOCK_POWER.description": "Whenever you shuffle, gain [gold]Block[/gold].",
+  "GOLDENGLOW_POWER_SCATTER_SPARKS_BLOCK_POWER.smartDescription": "Whenever you shuffle, gain [blue]{Amount}[/blue] [gold]Block[/gold].",
+  "GOLDENGLOW_POWER_SCATTER_SPARKS_BLOCK_POWER.title": "Spark Shield",
+
+  "GOLDENGLOW_POWER_SCATTER_SPARKS_DISCARD_POWER.description": "Whenever you shuffle, discard the top card of your Draw Pile.",
+  "GOLDENGLOW_POWER_SCATTER_SPARKS_DISCARD_POWER.smartDescription": "Whenever you shuffle, discard the top [blue]{Amount}[/blue] {Amount:plural:card|cards} of your Draw Pile.",
+  "GOLDENGLOW_POWER_SCATTER_SPARKS_DISCARD_POWER.title": "Scatter Sparks",
+
+  "GOLDENGLOW_POWER_SPARK_COUNTERATTACK_POWER.description": "Whenever you take attack damage, [gold]Channel[/gold] 1 [gold]Buoy[/gold] onto the attacker.",
+  "GOLDENGLOW_POWER_SPARK_COUNTERATTACK_POWER.smartDescription": "Whenever you take attack damage, [gold]Channel[/gold] [blue]{Amount}[/blue] [gold]{Amount:plural:Buoy|Buoys}[/gold] onto the attacker.",
+  "GOLDENGLOW_POWER_SPARK_COUNTERATTACK_POWER.title": "Spark Counterattack",
+
+  "GOLDENGLOW_POWER_PIEZOELECTRIC_EFFECT_POWER.description": "At the start of your turn, [gold]Pulse[/gold] once.",
+  "GOLDENGLOW_POWER_PIEZOELECTRIC_EFFECT_POWER.smartDescription": "At the start of your turn, [gold]Pulse[/gold] [blue]{Amount}[/blue] {Amount:plural:time|times}.",
+  "GOLDENGLOW_POWER_PIEZOELECTRIC_EFFECT_POWER.title": "Piezoelectric Effect",
+
+  "GOLDENGLOW_POWER_TARGET_LOCK_ON_POWER.description": "This turn, whenever you play an [gold]Exhaust[/gold] card, draw 1 card.",
+  "GOLDENGLOW_POWER_TARGET_LOCK_ON_POWER.smartDescription": "This turn, whenever you play an [gold]Exhaust[/gold] card, draw [blue]{Amount}[/blue] {Amount:plural:card|cards}.",
+  "GOLDENGLOW_POWER_TARGET_LOCK_ON_POWER.title": "Target Lock-On",
+
+  "GOLDENGLOW_POWER_ELECTROSTATIC_FIELD_POWER.description": "This turn, whenever the target takes damage, gain [gold]Block[/gold].",
+  "GOLDENGLOW_POWER_ELECTROSTATIC_FIELD_POWER.smartDescription": "This turn, whenever the target takes damage, gain [blue]{Amount}[/blue] [gold]Block[/gold].",
+  "GOLDENGLOW_POWER_ELECTROSTATIC_FIELD_POWER.remoteDescription": "This turn, whenever the target takes damage, [gold]{ApplierName}[/gold] gains [blue]{Amount}[/blue] [gold]Block[/gold].",
+  "GOLDENGLOW_POWER_ELECTROSTATIC_FIELD_POWER.title": "Electrostatic Field",
+
+  "GOLDENGLOW_POWER_SUBHARMONIC_RESONANCE_POWER.description": "Every 2 cards you play, [gold]Pulse[/gold] once.",
+  "GOLDENGLOW_POWER_SUBHARMONIC_RESONANCE_POWER.smartDescription": "Every [blue]{Amount}[/blue] {Amount:plural:card|cards} you play, [gold]Pulse[/gold] once.",
+  "GOLDENGLOW_POWER_SUBHARMONIC_RESONANCE_POWER.title": "Subharmonic Resonance",
+
+  "GOLDENGLOW_POWER_TECHNIQUE_POWER.description": "At the start of your turn, play a copy of a 0-cost card.",
+  "GOLDENGLOW_POWER_TECHNIQUE_POWER.smartDescription": "{Amount:cond:>1?Every other turn at the start of your turn|At the start of your turn}, play a copy of [gold]{StoredCardName}[/gold].",
+  "GOLDENGLOW_POWER_TECHNIQUE_POWER.title": "Technique",
+
+  "GOLDENGLOW_POWER_TEMP_FOCUS_POWER.description": "This turn, [gold]Orb[/gold] effectiveness increases.",
+  "GOLDENGLOW_POWER_TEMP_FOCUS_POWER.smartDescription": "This turn, [gold]Orb[/gold] effectiveness increases by [blue]{Amount}[/blue].",
+  "GOLDENGLOW_POWER_TEMP_FOCUS_POWER.title": "Charge Boost"
+}

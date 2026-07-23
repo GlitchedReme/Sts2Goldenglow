@@ -37,7 +37,7 @@ public class WelcomeGuests() : AbstractGoldenglowCard(energyCost, type, rarity, 
             )).FirstOrDefault();
             if (selected != null)
             {
-                var cost = selected.EnergyCost.CostsX ? Owner.GetEnergy() : selected.EnergyCost.Canonical;
+                var cost = selected.EnergyCost.CostsX ? Owner.GetEnergy() : selected.EnergyCost.GetAmountToSpend();
                 await CardCmd.Exhaust(choiceContext, selected);
                 await DamageCmd.Attack(cost * DynamicVars["Multiplier"].BaseValue)
                     .FromCardCompat(this, cardPlay)

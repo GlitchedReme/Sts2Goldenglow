@@ -1,7 +1,10 @@
+using System.Reflection;
 using Goldenglow.Orb;
 using Goldenglow.Patch;
 using Goldenglow.Ui;
+using HarmonyLib;
 using MegaCrit.Sts2.Core.Combat;
+using MegaCrit.Sts2.Core.Combat.History;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
@@ -14,8 +17,24 @@ namespace Goldenglow.Card;
 
 public static class GoldenglowOrbCmd
 {
-    public static async Task Channel(Player player, Creature target, OrbModel orb, int count = 1)
+    private static readonly MethodInfo AddHistoryEntryMethod = AccessTools.Method(typeof(CombatHistory), "Add", [typeof(ICombatState), typeof(CombatHistoryEntry)]);
+
+    public class MonsterOrbChanneledEntry(Creature generator, OrbModel orb, int roundNumber, CombatSide currentSide, CombatHistory history, IEnumerable<Player> players) : CombatHistoryEntry(generator, roundNumber, currentSide, history, players)
     {
+        public OrbModel Orb { get; } = orb;
+
+        public override string Description => Actor.ModelId.Entry + " channeled " + Orb.Id.Entry;
+    }
+
+    private static void MonsterOrbChanneled(ICombatState combatState, Player player, OrbModel orb)
+    {
+        AddHistoryEntryMethod.Invoke(CombatManager.Instance.History, [combatState, new MonsterOrbChanneledEntry(player.Creature, orb, combatState.RoundNumber, combatState.CurrentSide, CombatManager.Instance.History, combatState.Players)]);
+    }
+
+    public static async Task Channel(Player player, Creature? target, OrbModel orb, int count = 1)
+    {
+        if (CombatManager.Instance.IsOverOrEnding || target is null || orb is null) return;
+
         for (int i = 0; i < count; i++)
         {
             if (target.IsPlayer)
@@ -42,11 +61,12 @@ public static class GoldenglowOrbCmd
                     buoyMonster.Source ??= player;
                 MonsterOrbPatch.OwnerState[orb] = target;
                 mgr.ChannelOrb(orb);
+                MonsterOrbChanneled(target.CombatState!, player, orb);
             }
         }
     }
 
-    public static async Task Channel<TOrb>(Player player, Creature target, int count = 1) where TOrb : OrbModel
+    public static async Task Channel<TOrb>(Player player, Creature? target, int count = 1) where TOrb : OrbModel
     {
         await Channel(player, target, ModelDb.Orb<TOrb>().ToMutable(), count);
     }
@@ -65,7 +85,7 @@ public static class GoldenglowOrbCmd
     /// Channels buoy orbs to a target, dispatching to the player OrbQueue or the monster MonsterOrbManager.
     /// Used by bidirectional cards that can target either side.
     /// </summary>
-    public static async Task ChannelBuoy(Player player, Creature target, int count) => await Channel<BuoyOrb>(player, target, count);
+    public static async Task ChannelBuoy(Player player, Creature? target, int count) => await Channel<BuoyOrb>(player, target, count);
 
     public static MonsterOrbManager GetOrCreateMonsterOrbManager(Creature target)
     {
@@ -88,9 +108,9 @@ public static class GoldenglowOrbCmd
         return MonsterOrbManager.Instances.FirstOrDefault(m => m.Creature == target);
     }
 
-    public static async Task TransferOrbs(Player player, Creature source, Creature target, int count)
+    public static async Task TransferOrbs(Player player, Creature? source, Creature? target, int count)
     {
-        if (CombatManager.Instance.IsOverOrEnding) return;
+        if (CombatManager.Instance.IsOverOrEnding || target is null || source is null) return;
         if (source == target || count <= 0) return;
 
         var orbs = PopOrbs(source, count);

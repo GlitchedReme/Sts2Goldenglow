@@ -21,7 +21,7 @@ public class HairSpray() : AbstractGoldenglowCard(1, CardType.Skill, CardRarity.
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DynamicVar("Buff", 2)
+        new DynamicVar("Buff", 3)
     ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

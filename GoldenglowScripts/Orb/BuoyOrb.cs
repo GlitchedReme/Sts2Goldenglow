@@ -73,7 +73,6 @@ public class BuoyOrb : ModOrbTemplate
             GgEvokeActivated?.Invoke([holder]);
 #endif
             await CreatureCmd.Damage(choiceContext, holder, PassiveVal, ValueProp.Unpowered, holder);
-            AfterDamage();
         }
     }
 
@@ -94,21 +93,8 @@ public class BuoyOrb : ModOrbTemplate
             GgEvokeActivated?.Invoke([holder]);
 #endif
             await CreatureCmd.Damage(choiceContext, holder, EvokeVal, ValueProp.Unpowered, holder);
-            AfterDamage();
         }
         return [holder];
-    }
-
-    private void AfterDamage()
-    {
-        var holder = Holder ?? throw new InvalidOperationException("BuoyOrb has no Holder set");
-        var amount = holder.CombatState?.GetCreaturesOnSide(CombatSide.Player).Sum(c => c.GetPowerAmount<DroneCasterPower>()) ?? 0;
-        if (amount > 0)
-        {
-            var cap = ModelCapabilityRegistry.Create<OrbBoostCapability>();
-            cap.DynamicVars["Amount"].BaseValue = amount;
-            this.AddCapability(cap);
-        }
     }
 
     private static bool IsFriendly(Creature c) => c.IsPlayer || c.PetOwner != null;

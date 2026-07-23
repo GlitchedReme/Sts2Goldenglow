@@ -13,6 +13,8 @@ using STS2RitsuLib.Data;
 using STS2RitsuLib.Interop;
 using STS2RitsuLib.Networking.Sidecar;
 using STS2RitsuLib.Patching.Core;
+using STS2RitsuLib.Settings;
+using STS2RitsuLib.Telemetry;
 using STS2RitsuLib.Utils.Persistence;
 
 namespace Goldenglow;
@@ -62,8 +64,27 @@ public class Entry
         FmodStudioDeferredBankRegistration.RegisterBank("res://Goldenglow/audio/Goldenglow.bank");
         FmodStudioDeferredBankRegistration.RegisterStudioGuidMappings("res://Goldenglow/audio/GUIDs.txt");
 
+        TelemetryRegistry.RegisterApplicant(new()
+        {
+            ApplicantId = "reme.goldenglow",
+            OwnerModId = ModId,
+            DisplayName = "Goldenglow",
+            DisplayNameText = ModSettingsText.LocString("settings_ui", "GOLDENGLOW_NAME", "Goldenglow"),
+            Adapter = new PostHogTelemetryAdapter(
+                host: "https://telemetry.r9jji.icu",
+                projectApiKey: "proxy"
+            ),
+            Requests =
+            [
+                TelemetryRequest.BasicUsage(ModSettingsText.LocString("settings_ui", "GOLDENGLOW_TELEMETRY_USAGE", "Basic usage data")),
+                TelemetryRequest.ModInventory(ModSettingsText.LocString("settings_ui", "GOLDENGLOW_TELEMETRY_MODS", "Mod list")),
+                TelemetryRequest.Diagnostics(ModSettingsText.LocString("settings_ui", "GOLDENGLOW_TELEMETRY_DIAGNOSTICS", "Diagnostics")),
+                TelemetryRequest.RunHistory(ModSettingsText.LocString("settings_ui", "GOLDENGLOW_TELEMETRY_RUNS", "Run history"))
+            ],
+        });
+
         var profileStore = ModDataStore.For(ModId);
-        profileStore.Register<SkinState>(
+        profileStore.Register(
             key: "skin_prefs",
             fileName: "goldenglow_skin.json",
             scope: SaveScope.Profile,

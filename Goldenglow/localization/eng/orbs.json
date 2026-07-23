@@ -1,0 +1,11 @@
+{
+  "GOLDENGLOW_ORB_BUOY_ORB.description": "Orb: If the holder is friendly, gain [gold]Block[/gold]; otherwise, takes damage.",
+  "GOLDENGLOW_ORB_BUOY_ORB.smartDescription": "[gold]Passive:[/gold] At the end of turn, gain [blue]{Passive}[/blue] [gold]Block[/gold].\n[gold]Evoke:[/gold] Gain [blue]{Evoke}[/blue] [gold]Block[/gold].",
+  "GOLDENGLOW_ORB_BUOY_ORB.smartDescriptionOnMonster": "[gold]Passive:[/gold] At the end of turn, deal [blue]{Passive}[/blue] damage to [gold]{Owner}[/gold].\n[gold]Evoke:[/gold] Deal [blue]{Evoke}[/blue] damage to [gold]{Owner}[/gold].",
+  "GOLDENGLOW_ORB_BUOY_ORB.title": "Buoy",
+  "LIGHTNING_ORB.smartDescriptionOnMonster": "[gold]Passive:[/gold] At the end of turn, deal [blue]{Passive}[/blue] damage to [gold]{Owner}[/gold].\n[gold]Evoke:[/gold] Deal [blue]{Evoke}[/blue] damage to [gold]{Owner}[/gold].",
+  "FROST_ORB.smartDescriptionOnMonster": "[gold]Passive:[/gold] At the end of turn, all players gain [blue]{Passive}[/blue] [gold]Block[/gold].\n[gold]Evoke: All players[/gold] gain [blue]{Evoke}[/blue] [gold]Block[/gold].",
+  "DARK_ORB.smartDescriptionOnMonster": "[gold]Passive:[/gold] At the end of turn, increase this Orb's damage by [blue]{Passive}[/blue].\n[gold]Evoke:[/gold] Deal [blue]{Evoke}[/blue] damage to [gold]{Owner}[/gold].",
+  "PLASMA_ORB.smartDescriptionOnMonster": "[gold]Passive:[/gold] At the start of turn, all players gain {energyPrefix:energyIcons(1)}.\n[gold]Evoke: All players[/gold] gain {energyPrefix:energyIcons(2)}.\nPlasma is unaffected by [gold]Focus[/gold].",
+  "GLASS_ORB.smartDescriptionOnMonster": "[gold]Passive:[/gold] At the end of turn, deal [blue]{Passive}[/blue] damage to ALL enemies and reduce this Orb's value by [blue]1[/blue].\n[gold]Evoke:[/gold] Deal [blue]{Evoke}[/blue] damage to ALL enemies."
+}

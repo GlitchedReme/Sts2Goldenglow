@@ -19,7 +19,7 @@ public class PincerTactics() : AbstractGoldenglowCard(1, CardType.Attack, CardRa
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DamageVar(6, ValueProp.Move),
+        new DamageVar(7, ValueProp.Move),
         new RepeatVar(2)
     ];
 

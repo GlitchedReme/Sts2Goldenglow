@@ -10,9 +10,6 @@ using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace Goldenglow.Power;
 
-/// <summary>
-/// Whenever a BuoyOrb is evoked on an enemy, channel a BuoyOrb to the player.
-/// </summary>
 [RegisterPower]
 public sealed class BuoyRecoveryPower : AbstractGoldenglowPower
 {

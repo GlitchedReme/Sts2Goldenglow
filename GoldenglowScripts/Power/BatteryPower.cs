@@ -6,9 +6,6 @@ using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace Goldenglow.Power;
 
-/// <summary>
-/// For the next Amount turns, gains [E] at turn start.
-/// </summary>
 [RegisterPower]
 public sealed class BatteryPower : AbstractGoldenglowPower
 {    public override PowerInstanceType InstanceType => PowerInstanceType.Instanced;

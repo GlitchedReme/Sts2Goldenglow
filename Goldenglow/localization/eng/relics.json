@@ -1,0 +1,39 @@
+{
+  "GOLDENGLOW_RELIC_INSULATING_COMB.title": "Insulating Comb",
+  "GOLDENGLOW_RELIC_INSULATING_COMB.description": "At the start of combat, [gold]Channel[/gold] 1 [gold]Buoy[/gold] onto a random enemy.",
+  "GOLDENGLOW_RELIC_INSULATING_COMB.flavor": "Actually, it's still easy to shock the customers. Better keep a few spares!",
+
+  "GOLDENGLOW_RELIC_WIND_CHIME.title": "Wind Chime",
+  "GOLDENGLOW_RELIC_WIND_CHIME.description": "Every 3 turns, [gold]Attract[/gold] 1 card.",
+  "GOLDENGLOW_RELIC_WIND_CHIME.flavor": "A decoration for Miss Kazemaru. When the wind blows it tinkles, always carrying your thoughts far away on the breeze.",
+
+  "GOLDENGLOW_RELIC_HAIR_CAPE.title": "Hair Cape",
+  "GOLDENGLOW_RELIC_HAIR_CAPE.description": "At the start of combat, [gold]Channel[/gold] [blue]2[/blue] [gold]Buoys[/gold].",
+  "GOLDENGLOW_RELIC_HAIR_CAPE.flavor": "Hair shows a person's spirit, so it must be well tended!",
+
+  "GOLDENGLOW_RELIC_TECHNIQUE_NOTES.title": "Technique Notes",
+  "GOLDENGLOW_RELIC_TECHNIQUE_NOTES.description": "At the start of your turn, [gold]Pulse[/gold] once.",
+  "GOLDENGLOW_RELIC_TECHNIQUE_NOTES.flavor": "Lately I've spent two hours a day reviewing techniques and theory. I'll definitely get a good grade!",
+
+  "GOLDENGLOW_RELIC_COLOR_SWATCH.title": "Color Swatch",
+  "GOLDENGLOW_RELIC_COLOR_SWATCH.description": "At the start of combat, gain 1 random [gold]Exhaust[/gold] card.",
+  "GOLDENGLOW_RELIC_COLOR_SWATCH.flavor": "I've memorized the hair color of most Rhodes Island operators!",
+
+  "GOLDENGLOW_RELIC_INSULATING_SCISSORS.title": "Insulating Scissors",
+  "GOLDENGLOW_RELIC_INSULATING_SCISSORS.description": "At the start of combat, all characters [gold]Channel[/gold] 1 [gold]Buoy[/gold]. [gold]Buoy[/gold] effectiveness increases by [blue]1[/blue].",
+  "GOLDENGLOW_RELIC_INSULATING_SCISSORS.flavor": "Absolutely won't shock the customers! But they say the slight tingle energizes them. What a headache...",
+
+  "GOLDENGLOW_RELIC_CLEANING_TOOLS.title": "Cleaning Tools",
+  "GOLDENGLOW_RELIC_CLEANING_TOOLS.description": "When an enemy dies, [gold]Transfer[/gold] its [gold]Buoys[/gold].",
+  "GOLDENGLOW_RELIC_CLEANING_TOOLS.flavor": "Since adding the bar business, we've had to keep several sets of cleaning tools on hand.",
+
+  "GOLDENGLOW_RELIC_FLORAL_TONER.title": "Floral Toner",
+  "GOLDENGLOW_RELIC_FLORAL_TONER.description": "Whenever you [gold]Attract[/gold] a card, deal [blue]1[/blue] damage to a random enemy.",
+  "GOLDENGLOW_RELIC_FLORAL_TONER.flavor": "Skincare from Miss Lena for \"Green Spark\". Pat it gently on your face and you'll smell spring.",
+
+  "GOLDENGLOW_RELIC_NIGHT_SKY_PROJECTOR.title": "Night Sky Projector",
+  "GOLDENGLOW_RELIC_NIGHT_SKY_PROJECTOR.description": "Add 1 additional [gold]Exhaust[/gold] card to combat rewards.",
+  "GOLDENGLOW_RELIC_NIGHT_SKY_PROJECTOR.flavor": "It shows the beautiful wild night sky that Sister Quercus spoke of.",
+
+  "SEA_GLASS.GOLDENGLOW_CHARACTER_GOLDENGLOW.title": "Lightning Glass"
+}

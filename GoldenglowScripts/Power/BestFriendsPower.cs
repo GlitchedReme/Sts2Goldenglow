@@ -5,9 +5,6 @@ using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace Goldenglow.Power;
 
-/// <summary>
-/// Cards with Exhaust are played an additional time.
-/// </summary>
 [RegisterPower]
 public sealed class BestFriendsPower : AbstractGoldenglowPower
 {

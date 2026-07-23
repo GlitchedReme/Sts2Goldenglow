@@ -1,0 +1,11 @@
+{
+  "GOLDENGLOW_KEYWORD_ATTRACT.description": "Add the top card of the discard pile to your hand.",
+  "GOLDENGLOW_KEYWORD_ATTRACT.title": "Attract",
+  "GOLDENGLOW_KEYWORD_PULSE.description": "Deal damage to a random enemy. The damage of all your [gold]Pulses[/gold] this combat increases by 1.",
+  "GOLDENGLOW_KEYWORD_PULSE.title": "Pulse",
+  "GOLDENGLOW_KEYWORD_STATIC.description": "When played, trigger an additional effect once. Resets at the start of turn.",
+  "GOLDENGLOW_KEYWORD_STATIC.title": "Static",
+  "GOLDENGLOW_KEYWORD_TRANSFER.description": "If the target is a player, transfer their rightmost Orb to a random enemy; if an enemy, transfer it to yourself.",
+  "GOLDENGLOW_KEYWORD_TRANSFER.title": "Transfer",
+  "GOLDENGLOW_REFERENCE.title": "Art Sources"
+}

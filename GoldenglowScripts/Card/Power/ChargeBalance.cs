@@ -5,6 +5,8 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using STS2RitsuLib.Interop.AutoRegistration;
 using Goldenglow.Power;
 using STS2RitsuLib.Combat.CardTargeting;
+using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Models.Powers;
 
 namespace Goldenglow.Card;
 
@@ -12,8 +14,10 @@ namespace Goldenglow.Card;
 public class ChargeBalance() : AbstractGoldenglowCard(1, CardType.Power, CardRarity.Rare, CustomTargetType.Anyone)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new PowerVar<ChargeBalancePower>(2)
+        new PowerVar<ChargeBalancePower>(1)
     ];
+
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips => [HoverTipFactory.FromPower<FocusPower>()];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {

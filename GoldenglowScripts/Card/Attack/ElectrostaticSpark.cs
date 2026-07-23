@@ -14,7 +14,7 @@ public class ElectrostaticSpark() : AbstractGoldenglowCard(1, CardType.Attack, C
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         GoldenglowUtils.CreateAttractVar(1),
-        new DamageVar(7, ValueProp.Move)
+        new DamageVar(8, ValueProp.Move)
     ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

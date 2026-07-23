@@ -13,28 +13,23 @@ namespace Goldenglow.Card;
 public class MusicBox() : AbstractGoldenglowCard(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DamageVar(10, ValueProp.Move)
+        new DamageVar(9, ValueProp.Move),
+        new DynamicVar("OrbAmount", 2),
     ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips => [GoldenglowUtils.Transfer];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
+        var target = cardPlay.Target;
+        await GoldenglowOrbCmd.TransferOrbs(Owner, target, Owner.Creature, 2);
+
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCardCompat(this, cardPlay).Targeting(cardPlay.Target!).Execute(choiceContext);
-
-        var target = cardPlay.Target!;
-        await GoldenglowOrbCmd.TransferOrbs(Owner, Owner.Creature, target, 1);
-
-        var enemies = CombatState!.Enemies;
-        for (int i = 0; i < enemies.Count; i++)
-        {
-            if (enemies[i].IsDead || enemies[i].IsPlayer) continue;
-            await GoldenglowOrbCmd.TransferOrbs(Owner, enemies[i], Owner.Creature, 1);
-        }
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(4);
+        DynamicVars.Damage.UpgradeValueBy(2);
+        DynamicVars["OrbAmount"].UpgradeValueBy(1);
     }
 }

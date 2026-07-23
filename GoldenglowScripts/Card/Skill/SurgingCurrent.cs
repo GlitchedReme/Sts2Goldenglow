@@ -20,7 +20,7 @@ public class SurgingCurrent() : AbstractGoldenglowCard(1, CardType.Skill, CardRa
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new BlockVar(7, ValueProp.Move),
+        new BlockVar(9, ValueProp.Move),
         new CardsVar(1)
     ];
 

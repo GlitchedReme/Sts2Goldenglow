@@ -21,6 +21,8 @@ public class WarmHope() : AbstractGoldenglowCard(2, CardType.Skill, CardRarity.R
         new CardsVar(4)
     ];
 
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips => [HoverTipFactory.FromKeyword(CardKeyword.Exhaust)];
+
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var pool = Owner.Character.CardPool.GetUnlockedCards(Owner.UnlockState, Owner.RunState.CardMultiplayerConstraint).ToList();
@@ -30,7 +32,7 @@ public class WarmHope() : AbstractGoldenglowCard(2, CardType.Skill, CardRarity.R
         {
             CardCmd.ApplyKeyword(c, CardKeyword.Exhaust);
             c.EnergyCost.SetThisCombat(0);
-            await CardPileCmd.AddGeneratedCardToCombat(c, PileType.Discard, Owner, CardPilePosition.Top);
+            CardCmd.PreviewCardPileAdd(await CardPileCmd.AddGeneratedCardToCombat(c, PileType.Discard, Owner, CardPilePosition.Bottom));
         }
     }
 

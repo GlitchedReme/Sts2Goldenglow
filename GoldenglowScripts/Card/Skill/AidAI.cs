@@ -14,7 +14,7 @@ public class AidAI() : AbstractGoldenglowCard(-1, CardType.Skill, CardRarity.Unc
     protected override bool HasEnergyCostX => true;
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DynamicVar("Channel", 1)
+        new DynamicVar("Channel", 0)
     ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips => [HoverTipFactory.FromOrb<BuoyOrb>()];
@@ -22,7 +22,7 @@ public class AidAI() : AbstractGoldenglowCard(-1, CardType.Skill, CardRarity.Unc
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var xValue = ResolveEnergyXValue();
-        var count = xValue + (int)DynamicVars["Channel"].BaseValue;
+        var count = 2 * xValue + (int)DynamicVars["Channel"].BaseValue;
         await GoldenglowOrbCmd.ChannelBuoy(Owner, cardPlay.Target!, count);
     }
 

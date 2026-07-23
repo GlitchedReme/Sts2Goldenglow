@@ -80,9 +80,14 @@ internal class MonsterOrbModifyValuePatch : IPatchMethod
 
     internal static bool Prefix(OrbModel __instance, decimal result, ref decimal __result)
     {
-        if (MonsterOrbPatch.OwnerState.TryGetValue(__instance, out var owner) && owner != null && owner.CombatState != null)
+        if (MonsterOrbPatch.OwnerState.TryGetValue(__instance, out var owner))
         {
-            __result = Hook.ModifyOrbValue(owner.CombatState, __instance, result);
+            if (owner != null && owner.CombatState != null)
+            {
+                __result = Hook.ModifyOrbValue(owner.CombatState, __instance, result);
+                return false;
+            }
+            __result = result;
             return false;
         }
         return true;

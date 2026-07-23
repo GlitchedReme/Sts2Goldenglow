@@ -12,7 +12,7 @@ public class PreciseDiversion() : AbstractGoldenglowCard(1, CardType.Skill, Card
 {
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        var target = cardPlay.Target!;
+        var target = cardPlay.Target;
         await GoldenglowOrbCmd.ChannelBuoy(Owner, target, 1);
     }
 

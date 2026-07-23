@@ -8,10 +8,6 @@ using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace Goldenglow.Power;
 
-/// <summary>
-/// Whenever the owner takes attack damage, channel BuoyOrbs to the dealer.
-/// Amount = BuoyOrbs to channel per hit (stacks).
-/// </summary>
 [RegisterPower]
 public sealed class SparkCounterattackPower : AbstractGoldenglowPower
 {

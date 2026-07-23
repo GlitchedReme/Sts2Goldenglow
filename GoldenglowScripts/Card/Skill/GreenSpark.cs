@@ -54,5 +54,6 @@ public class GreenSpark() : AbstractGoldenglowCard(0, CardType.Skill, CardRarity
     protected override void OnUpgrade()
     {
         DynamicVars.Cards.UpgradeValueBy(1);
+        // AddKeyword(CardKeyword.Innate);
     }
 }

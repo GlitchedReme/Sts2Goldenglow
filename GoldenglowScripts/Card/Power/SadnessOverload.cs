@@ -11,7 +11,7 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 namespace Goldenglow.Card;
 
 [RegisterCard(typeof(GoldenglowCardPool))]
-public class SadnessOverload() : AbstractGoldenglowCard(2, CardType.Power, CardRarity.Rare, TargetType.Self), IHovertipShownInInspectOnly
+public class SadnessOverload() : AbstractGoldenglowCard(1, CardType.Power, CardRarity.Rare, TargetType.Self), IHovertipShownInInspectOnly
 {
     public IEnumerable<IHoverTip> HoverTipsShownInInspectOnly => [
         GoldenglowUtils.CreateReference("KurosuNeko @微博")
@@ -20,6 +20,8 @@ public class SadnessOverload() : AbstractGoldenglowCard(2, CardType.Power, CardR
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new CardsVar(2)
     ];
+
+    protected override IEnumerable<IHoverTip> AdditionalHoverTips => [GoldenglowUtils.Attract];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {

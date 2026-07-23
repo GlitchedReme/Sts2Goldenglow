@@ -1,5 +1,3 @@
-using System.Linq;
-using Godot;
 using GoldenglowCharacter = Goldenglow.Character.Goldenglow;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -19,6 +17,7 @@ using Goldenglow.Ui;
 using Goldenglow.Card;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
 using MegaCrit.Sts2.Core.Bindings.MegaSpine;
+using MegaCrit.Sts2.Core.Hooks;
 
 namespace Goldenglow.Core;
 
@@ -92,7 +91,8 @@ public class GoldenglowSingleton() : HookedSingletonModel(HookType.Combat)
 
     public override async Task BeforeDeath(Creature creature)
     {
-        if (MonsterOrbManager.MonsterOrbManagerState.TryGetValue(creature, out var manager) && manager != null)
+        if (creature == null || creature.CombatState == null) return;
+        if (MonsterOrbManager.MonsterOrbManagerState.TryGetValue(creature, out var manager) && manager != null && Hook.ShouldCreatureBeRemovedFromCombatAfterDeath(creature.CombatState, creature))
         {
             manager.Clear();
         }

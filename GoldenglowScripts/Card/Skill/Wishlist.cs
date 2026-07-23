@@ -13,7 +13,7 @@ using STS2RitsuLib.Utils;
 namespace Goldenglow.Card;
 
 [RegisterCard(typeof(GoldenglowCardPool))]
-public class Wishlist() : AbstractGoldenglowCard(1, CardType.Skill, CardRarity.Rare, TargetType.Self), ICardOnGeneratedAsReward
+public class Wishlist() : AbstractGoldenglowCard(0, CardType.Skill, CardRarity.Rare, TargetType.Self), ICardOnGeneratedAsReward
 {
     private const int GiftAmount = 2;
 
@@ -112,6 +112,7 @@ public class Wishlist() : AbstractGoldenglowCard(1, CardType.Skill, CardRarity.R
 
     protected override void OnUpgrade()
     {
-        EnergyCost.UpgradeBy(-1);
+        // EnergyCost.UpgradeBy(-1);
+        AddKeyword(CardKeyword.Innate);
     }
 }

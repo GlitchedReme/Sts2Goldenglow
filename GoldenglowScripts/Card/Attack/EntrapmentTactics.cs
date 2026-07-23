@@ -19,7 +19,7 @@ public class EntrapmentTactics() : AbstractGoldenglowCard(1, CardType.Attack, Ca
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DamageVar(5, ValueProp.Move),
+        new DamageVar(6, ValueProp.Move),
         new DynamicVar("Buoy", 1)
     ];
 

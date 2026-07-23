@@ -31,16 +31,16 @@
   "GOLDENGLOW_POWER_TEMP_HAND_SIZE.title": "扩容（临时）",
   "GOLDENGLOW_POWER_CAPACITY_EXPANSION_POWER.title": "扩容",
 
-  "GOLDENGLOW_POWER_CHARGE_BALANCE_POWER.description": "每当[gold]激发[/gold]时，所有充能球的效果提高。",
-  "GOLDENGLOW_POWER_CHARGE_BALANCE_POWER.smartDescription": "每当[gold]激发[/gold]时，所有充能球的效果提高[blue]{Amount}[/blue]点。",
+  "GOLDENGLOW_POWER_CHARGE_BALANCE_POWER.description": "每当[gold]激发[/gold]时，临时获得集中。",
+  "GOLDENGLOW_POWER_CHARGE_BALANCE_POWER.smartDescription": "每当[gold]激发[/gold]时，本回合获得[blue]{Amount}[/blue]点[gold]集中[/gold]。",
   "GOLDENGLOW_POWER_CHARGE_BALANCE_POWER.title": "电荷平衡",
 
-  "GOLDENGLOW_POWER_DRONE_CASTER_POWER.description": "[gold]浮标[/gold]在造成伤害后，其数值提高。",
-  "GOLDENGLOW_POWER_DRONE_CASTER_POWER.smartDescription": "[gold]浮标[/gold]在造成伤害后，其数值提高[blue]{Amount}[/blue]点。",
+  "GOLDENGLOW_POWER_DRONE_CASTER_POWER.description": "每当[gold]浮标[/gold]被[gold]生成[/gold]时，触发被动效果。",
+  "GOLDENGLOW_POWER_DRONE_CASTER_POWER.smartDescription": "每当[gold]浮标[/gold]被[gold]生成[/gold]时，触发[blue]{Amount}[/blue]次被动效果。",
   "GOLDENGLOW_POWER_DRONE_CASTER_POWER.title": "驭械",
 
-  "GOLDENGLOW_POWER_EXCITATION_POWER.description": "[gold]浮标[/gold]在你身上[gold]激发[/gold]后，对所有敌人造成伤害。",
-  "GOLDENGLOW_POWER_EXCITATION_POWER.smartDescription": "[gold]浮标[/gold]在你身上[gold]激发[/gold]后，对所有敌人造成[blue]{Amount}[/blue]点伤害。",
+  "GOLDENGLOW_POWER_EXCITATION_POWER.description": "[gold]充能球[/gold]在你身上[gold]激发[/gold]后，对所有敌人造成伤害。",
+  "GOLDENGLOW_POWER_EXCITATION_POWER.smartDescription": "[gold]充能球[/gold]在你身上[gold]激发[/gold]后，对所有敌人造成[blue]{Amount}[/blue]点伤害。",
   "GOLDENGLOW_POWER_EXCITATION_POWER.title": "励电器",
 
   "GOLDENGLOW_POWER_FRESH_PERFUME_POWER.description": "在接下来的回合开始时，抽一张牌。",

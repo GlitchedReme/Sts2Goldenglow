@@ -6,10 +6,6 @@ using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace Goldenglow.Power;
 
-/// <summary>
-/// Each turn start, a random character gains 1 orb slot.
-/// Amount stacks: each stack = one additional slot per turn.
-/// </summary>
 [RegisterPower]
 public sealed class AlternatorPower : AbstractGoldenglowPower
 {
