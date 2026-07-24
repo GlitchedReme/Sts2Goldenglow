@@ -20,7 +20,7 @@ public class GradualClippers() : AbstractGoldenglowCard(6, CardType.Attack, Card
     }
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DamageVar(27, ValueProp.Move),
+        new DamageVar(28, ValueProp.Move),
         new DynamicVar("Reduction", 0)
     ];
 
@@ -65,7 +65,7 @@ public class GradualClippers() : AbstractGoldenglowCard(6, CardType.Attack, Card
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(5);
+        DynamicVars.Damage.UpgradeValueBy(4);
         EnergyCost.UpgradeBy(-1);
     }
 }

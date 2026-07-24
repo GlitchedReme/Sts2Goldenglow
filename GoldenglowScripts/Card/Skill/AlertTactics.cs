@@ -23,8 +23,9 @@ public class AlertTactics() : AbstractGoldenglowCard(0, CardType.Skill, CardRari
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        int count = (int)DynamicVars["Buoy"].BaseValue;
-        await GoldenglowOrbCmd.ChannelBuoy(Owner, cardPlay.Target!, count);
+        var count = (int)DynamicVars["Buoy"].BaseValue;
+        for (var i = 0; i < count; i++)
+            await GoldenglowOrbCmd.ChannelBuoy(Owner, cardPlay.Target);
         if (DynamicVars.Cards.BaseValue > 0)
             await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.BaseValue, Owner);
     }

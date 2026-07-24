@@ -13,7 +13,7 @@ public sealed class RadiationLampPower : AbstractGoldenglowPower
 {
     public override async Task AfterOrbChanneled(PlayerChoiceContext choiceContext, Player player, OrbModel orb)
     {
-        if (player != Owner.Player || orb is not BuoyOrb) return;
+        if (orb is not BuoyOrb) return;
         var cap = ModelCapabilityRegistry.Create<OrbBoostCapability>();
         cap.DynamicVars["Amount"].BaseValue = Amount;
         orb.AddCapability(cap);

@@ -136,86 +136,19 @@ public class Goldenglow : ModCharacterTemplate<GoldenglowCardPool, GoldenglowRel
 
     protected override ModAnimStateMachine? SetupCustomMerchantAnimationStateMachine(Node merchantRoot, CharacterModel character)
     {
-        return BuildWorldSpineStateMachine("Merchant", merchantRoot, "Idle");
+        var spine = new MegaSprite(merchantRoot.GetChild(0));
+        return ModAnimStateMachineBuilder.Create()
+            .AddState("Idle", loop: true)
+            .Done()
+            .BuildSpine(spine);
     }
 
     protected override ModAnimStateMachine? SetupCustomRestSiteAnimationStateMachine(Node restSiteRoot, CharacterModel character)
     {
-        return BuildWorldSpineStateMachine("RestSite", restSiteRoot, "Sit");
-    }
-
-    private static ModAnimStateMachine? BuildWorldSpineStateMachine(string tag, Node root, string animId)
-    {
-        var child0 = root.GetChildCount() > 0 ? root.GetChild(0) : null;
-        if (child0 is null) return null;
-
-        var spine = new MegaSprite(child0);
-        if (!spine.IsAnimationStateReady() || !spine.HasAnimation(animId))
-            return null;
-
-        var machine = ModAnimStateMachineBuilder.Create()
-            .AddState(animId, loop: true)
+        var spine = new MegaSprite(restSiteRoot.GetChild(0));
+        return ModAnimStateMachineBuilder.Create()
+            .AddState("Sit", loop: true)
             .Done()
             .BuildSpine(spine);
-
-        // char_377's setup pose is scattered (authoring skeleton); apply the animation once to
-        // assemble the bones immediately.
-        ForceApply(spine);
-
-        // The merchant setup runs synchronously during NMerchantCharacter._Ready (via
-        // RunWhenSpineReady). The SpineSprite's native animation state is rebuilt shortly after
-        // _Ready (deferred to end-of-frame), discarding the track just set by BuildSpine. The rest
-        // site is unaffected because its setup runs later (NRestSiteRoom._Ready Postfix), after the
-        // rebuild has already settled. Detect the rebuild on the next frame and re-enter the state
-        // so the track lands on the stable animation state.
-        var t0AnimId = TryGetAnimStateInstanceId(child0);
-        var tree = child0.GetTree();
-        if (tree is not null && machine is { Current: { } initialState })
-        {
-            Godot.Callable handler = default;
-            void OnDeferredFrame()
-            {
-                tree.Disconnect("process_frame", handler);
-                if (!GodotObject.IsInstanceValid(child0))
-                    return;
-
-                var curId = TryGetAnimStateInstanceId(child0);
-                if (curId == t0AnimId)
-                    return;
-
-                Entry.Logger.Info($"[{tag}] anim state rebuilt (t0={t0AnimId} cur={curId}), re-entering '{initialState.Id}'");
-                machine.Start(initialState);
-                ForceApply(spine);
-            }
-            handler = Godot.Callable.From(OnDeferredFrame);
-            tree.Connect("process_frame", handler);
-        }
-
-        return machine;
-    }
-
-    private static void ForceApply(MegaSprite spine)
-    {
-        try
-        {
-            var st = spine.TryGetAnimationState();
-            var sk = spine.GetSkeleton();
-            if (st is { } s && sk is { } k)
-            {
-                s.Update(0f);
-                s.Apply(k);
-            }
-        }
-        catch { }
-    }
-
-    private static ulong? TryGetAnimStateInstanceId(Node spineNode)
-    {
-        try
-        {
-            var obj = spineNode.Call("get_animation_state").AsGodotObject();
-            return obj is not null && GodotObject.IsInstanceValid(obj) ? obj.GetInstanceId() : null;
-        }
-        catch { return null; }
     }
 }

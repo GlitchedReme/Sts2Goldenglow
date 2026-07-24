@@ -13,7 +13,11 @@ public class PreciseDiversion() : AbstractGoldenglowCard(1, CardType.Skill, Card
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var target = cardPlay.Target;
-        await GoldenglowOrbCmd.ChannelBuoy(Owner, target, 1);
+        var orb = await GoldenglowOrbCmd.ChannelBuoy(Owner, target);
+        if (orb is BuoyOrb { } buoy)
+        {
+            await buoy.Passive(choiceContext, null);
+        }
     }
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips => [HoverTipFactory.FromOrb<BuoyOrb>()];

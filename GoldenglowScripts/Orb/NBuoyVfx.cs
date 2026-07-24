@@ -1,5 +1,6 @@
 using System.Reflection;
 using HarmonyLib;
+using Godot;
 
 namespace Goldenglow.Orb;
 
@@ -16,5 +17,9 @@ public partial class NBuoyVfx : NOrbVfx
         FocusedParticlesField?.SetValue(this, GetNode<GParticleContainers>("FocusedParticles"));
         PassiveActivatedParticlesField?.SetValue(this, GetNode<GParticleContainers>("PassiveActivatedParticles"));
     }
+}
+#else
+public partial class NBuoyVfx : Node2D
+{
 }
 #endif

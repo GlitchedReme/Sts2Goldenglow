@@ -18,6 +18,8 @@ internal static class MonsterOrbPatch
     internal static AttachedState<OrbModel, Creature?> OwnerState = new(() => null);
 
     internal static bool IsMonster(NCreature creature) => !creature.Entity.IsPlayer && creature.Entity.PetOwner == null;
+
+    internal static bool ContainsGoldenglow(ICombatState? state) => state != null && state.Players.Any(p => p.Character is Character.Goldenglow);
 }
 
 internal class InitializeOrbManagerPatch : IPatchMethod
@@ -30,6 +32,7 @@ internal class InitializeOrbManagerPatch : IPatchMethod
     internal static void Prefix(NCreature __instance)
     {
         if (!MonsterOrbPatch.IsMonster(__instance)) return;
+        if (!MonsterOrbPatch.ContainsGoldenglow(__instance.Entity.CombatState)) return;
         Card.GoldenglowOrbCmd.GetOrCreateMonsterOrbManager(__instance.Entity);
         __instance.UpdateNavigation();
     }

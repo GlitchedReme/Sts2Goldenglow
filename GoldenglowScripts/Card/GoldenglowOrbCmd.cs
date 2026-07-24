@@ -31,44 +31,44 @@ public static class GoldenglowOrbCmd
         AddHistoryEntryMethod.Invoke(CombatManager.Instance.History, [combatState, new MonsterOrbChanneledEntry(player.Creature, orb, combatState.RoundNumber, combatState.CurrentSide, CombatManager.Instance.History, combatState.Players)]);
     }
 
-    public static async Task Channel(Player player, Creature? target, OrbModel orb, int count = 1)
+    public static async Task<OrbModel?> Channel(Player player, Creature? target, OrbModel orb)
     {
-        if (CombatManager.Instance.IsOverOrEnding || target is null || orb is null) return;
+        if (CombatManager.Instance.IsOverOrEnding || target is null || orb is null) return null;
 
-        for (int i = 0; i < count; i++)
+        if (target.IsPlayer)
         {
-            if (target.IsPlayer)
-            {
-                var p = target.Player;
-                if (p == null) return;
-                orb.Owner = null!;
-                if (orb is BuoyOrb buoy)
-                    buoy.Source ??= player;
-                await OrbCmd.Channel(new ThrowingPlayerChoiceContext(), orb, p);
-            }
-            else
-            {
-                var mgr = GetOrCreateMonsterOrbManager(target);
-                var orbs = mgr.GetOrbs();
-                if (mgr.Capacity > 0 && orbs.Count >= mgr.Capacity)
-                {
-                    await EvokeOldestOrb(orbs[0], target);
-                    if (target.IsDead) return;
-                    mgr.EvokeOrb(orbs[0]);
-                }
-                orb.Owner = null!;
-                if (orb is BuoyOrb buoyMonster)
-                    buoyMonster.Source ??= player;
-                MonsterOrbPatch.OwnerState[orb] = target;
-                mgr.ChannelOrb(orb);
-                MonsterOrbChanneled(target.CombatState!, player, orb);
-            }
+            var p = target.Player;
+            if (p == null) return null;
+            orb.Owner = null!;
+            if (orb is BuoyOrb buoy)
+                buoy.Source ??= player;
+            await OrbCmd.Channel(new ThrowingPlayerChoiceContext(), orb, p);
         }
+        else
+        {
+            var mgr = GetOrCreateMonsterOrbManager(target);
+            var orbs = mgr.GetOrbs();
+            if (mgr.Capacity > 0 && orbs.Count >= mgr.Capacity)
+            {
+                await EvokeOldestOrb(orbs[0], target);
+                if (target == null || target.IsDead) return null;
+                mgr.EvokeOrb(orbs[0]);
+            }
+            orb.Owner = null!;
+            if (orb is BuoyOrb buoyMonster)
+                buoyMonster.Source ??= player;
+            MonsterOrbPatch.OwnerState[orb] = target;
+            mgr.ChannelOrb(orb);
+            MonsterOrbChanneled(target.CombatState!, player, orb);
+            await Hook.AfterOrbChanneled(target.CombatState!, new ThrowingPlayerChoiceContext(), player, orb);
+        }
+
+        return orb;
     }
 
-    public static async Task Channel<TOrb>(Player player, Creature? target, int count = 1) where TOrb : OrbModel
+    public static async Task<OrbModel?> Channel<TOrb>(Player player, Creature? target) where TOrb : OrbModel
     {
-        await Channel(player, target, ModelDb.Orb<TOrb>().ToMutable(), count);
+        return await Channel(player, target, ModelDb.Orb<TOrb>().ToMutable());
     }
 
     private static async Task EvokeOldestOrb(OrbModel orb, Creature monster)
@@ -85,7 +85,7 @@ public static class GoldenglowOrbCmd
     /// Channels buoy orbs to a target, dispatching to the player OrbQueue or the monster MonsterOrbManager.
     /// Used by bidirectional cards that can target either side.
     /// </summary>
-    public static async Task ChannelBuoy(Player player, Creature? target, int count) => await Channel<BuoyOrb>(player, target, count);
+    public static async Task<OrbModel?> ChannelBuoy(Player player, Creature? target) => await Channel<BuoyOrb>(player, target);
 
     public static MonsterOrbManager GetOrCreateMonsterOrbManager(Creature target)
     {

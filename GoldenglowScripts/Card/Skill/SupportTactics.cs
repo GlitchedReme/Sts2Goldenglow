@@ -15,9 +15,9 @@ public class SupportTactics() : AbstractGoldenglowCard(1, CardType.Skill, CardRa
     public IEnumerable<IHoverTip> HoverTipsShownInInspectOnly => [
         GoldenglowUtils.CreateReference("Namie")
     ];
-    
-	public override CardMultiplayerConstraint MultiplayerConstraint => CardMultiplayerConstraint.MultiplayerOnly;
-    
+
+    public override CardMultiplayerConstraint MultiplayerConstraint => CardMultiplayerConstraint.MultiplayerOnly;
+
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new DynamicVar("Buoy", 2)
     ];
@@ -28,9 +28,10 @@ public class SupportTactics() : AbstractGoldenglowCard(1, CardType.Skill, CardRa
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        int count = (int)DynamicVars["Buoy"].BaseValue;
+        var count = (int)DynamicVars["Buoy"].BaseValue;
         foreach (var player in CombatState!.Players)
-            await GoldenglowOrbCmd.ChannelBuoy(Owner, player.Creature, count);
+            for (var i = 0; i < count; i++)
+                await GoldenglowOrbCmd.ChannelBuoy(Owner, player.Creature);
     }
 
     protected override void OnUpgrade()

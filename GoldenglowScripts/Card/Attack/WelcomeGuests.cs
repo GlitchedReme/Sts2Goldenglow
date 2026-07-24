@@ -12,19 +12,14 @@ using STS2RitsuLib.Scaffolding.Characters;
 namespace Goldenglow.Card;
 
 [RegisterCard(typeof(GoldenglowCardPool))]
-public class WelcomeGuests() : AbstractGoldenglowCard(energyCost, type, rarity, targetType), IHovertipShownInInspectOnly
+public class WelcomeGuests() : AbstractGoldenglowCard(1, CardType.Attack, CardRarity.Common, TargetType.AllEnemies), IHovertipShownInInspectOnly
 {
     public IEnumerable<IHoverTip> HoverTipsShownInInspectOnly => [
         GoldenglowUtils.CreateReference("dogdogbhh (白花花)")
     ];
 
-    private const int energyCost = 1;
-    private const CardType type = CardType.Attack;
-    private const CardRarity rarity = CardRarity.Uncommon;
-    private const TargetType targetType = TargetType.AllEnemies;
-
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DynamicVar("Multiplier", 7)
+        new DynamicVar("Multiplier", 6)
     ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

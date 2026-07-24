@@ -27,7 +27,7 @@ public class DroneStrike() : AbstractGoldenglowCard(1, CardType.Attack, CardRari
             .Targeting(cardPlay.Target!)
             .Execute(choiceContext);
         for (int j = 0; j < (int)DynamicVars["Buoy"].BaseValue; j++)
-            await GoldenglowOrbCmd.ChannelBuoy(Owner, cardPlay.Target!, 1);
+            await GoldenglowOrbCmd.ChannelBuoy(Owner, cardPlay.Target!);
     }
 
     protected override void OnUpgrade()

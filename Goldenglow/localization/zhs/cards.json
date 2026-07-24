@@ -115,7 +115,7 @@
   "GOLDENGLOW_CARD_PINCER_TACTICS.title": "钳形战术",
   "GOLDENGLOW_CARD_POLES_REPEL.description": "每有一个敌人，对所有敌人造成{Damage:diff()}点伤害。",
   "GOLDENGLOW_CARD_POLES_REPEL.title": "排斥",
-  "GOLDENGLOW_CARD_PRECISE_DIVERSION.description": "选择一个目标，\n使其[gold]生成[/gold]一个[gold]浮标[/gold]。",
+  "GOLDENGLOW_CARD_PRECISE_DIVERSION.description": "选择一个目标，\n使其[gold]生成[/gold]一个[gold]浮标[/gold]，\n并触发一次被动效果。",
   "GOLDENGLOW_CARD_PRECISE_DIVERSION.title": "精准导流",
   "GOLDENGLOW_CARD_RADIATION_LAMP.description": "每当[gold]浮标[/gold]被[gold]生成[/gold]时，使其效果提高{OrbBuff:diff()}点。",
   "GOLDENGLOW_CARD_RADIATION_LAMP.title": "放射灯",

@@ -1,7 +1,6 @@
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Relics;
-using MegaCrit.Sts2.Core.Factories;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Runs;
 using MegaCrit.Sts2.Core.Unlocks;
@@ -31,11 +30,11 @@ public class NightSkyProjector : ModRelicTemplate
             .ToList();
         if (pool.Count == 0) return false;
 
-        var rng = player.PlayerRng.Rewards;
-        var cards = CardFactory.GetDistinctForCombat(player, pool, 1, rng).ToList();
-        if (cards.Count == 0) return false;
+        var template = player.PlayerRng.Rewards.NextItem(pool);
+        if (template == null) return false;
 
-        cardRewardOptions.Add(new CardCreationResult(cards[0]));
+        var card = player.RunState.CreateCard(template, player);
+        cardRewardOptions.Add(new CardCreationResult(card));
         return true;
     }
 }

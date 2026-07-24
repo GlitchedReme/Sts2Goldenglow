@@ -27,7 +27,10 @@ public class DroneGroup() : AbstractGoldenglowCard(2, CardType.Skill, CardRarity
     {
         var amount = DynamicVars.ComputeDynamicValue("CalculatedChannels");
         var target = cardPlay.Target;
-        await ChannelBuoy(Owner, target, (int)amount);
+        for (var i = 0; i < amount; i++)
+        {
+            await ChannelBuoy(Owner, target);
+        }
     }
 
     protected override void OnUpgrade()

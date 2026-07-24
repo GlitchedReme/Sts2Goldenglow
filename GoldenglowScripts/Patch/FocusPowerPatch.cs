@@ -15,16 +15,18 @@ internal class FocusPowerModifyOrbValuePatch : IPatchMethod
     {
         var owner = __instance.Owner;
 
-        if (owner.IsPlayer)
-            return true;
-
-        if (!MonsterOrbPatch.OwnerState.TryGetValue(orb, out var orbOwner) || orbOwner != owner)
+        if (MonsterOrbPatch.OwnerState.TryGetValue(orb, out var orbOwner))
         {
-            __result = value;
+            if (orbOwner != owner)
+            {
+                __result = value;
+                return false;
+            }
+
+            __result = Math.Max(value + __instance.Amount, 0m);
             return false;
         }
 
-        __result = Math.Max(value + __instance.Amount, 0m);
-        return false;
+        return true;
     }
 }

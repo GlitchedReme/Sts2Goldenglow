@@ -22,6 +22,7 @@ public class HairCape : ModRelicTemplate
 
     public override async Task BeforeCombatStart()
     {
-        await GoldenglowOrbCmd.ChannelBuoy(Owner, Owner.Creature, 2);
+        await GoldenglowOrbCmd.ChannelBuoy(Owner, Owner.Creature);
+        await GoldenglowOrbCmd.ChannelBuoy(Owner, Owner.Creature);
     }
 }

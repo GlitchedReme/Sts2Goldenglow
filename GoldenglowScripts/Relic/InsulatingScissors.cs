@@ -29,13 +29,13 @@ public class InsulatingScissors : ModRelicTemplate
         foreach (var player in combatState.Players)
         {
             if (player.Creature.IsDead) continue;
-            await GoldenglowOrbCmd.ChannelBuoy(Owner, player.Creature, 1);
+            await GoldenglowOrbCmd.ChannelBuoy(Owner, player.Creature);
         }
 
         foreach (var enemy in combatState.Enemies)
         {
             if (enemy.IsDead) continue;
-            await GoldenglowOrbCmd.ChannelBuoy(Owner, enemy, 1);
+            await GoldenglowOrbCmd.ChannelBuoy(Owner, enemy);
         }
     }
 

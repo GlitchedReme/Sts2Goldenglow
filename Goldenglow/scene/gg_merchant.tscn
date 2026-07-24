@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://benwb88yv4ye3"]
+[gd_scene load_steps=3 format=3 uid="uid://benwb88yv4ye3"]
 
 [ext_resource type="SpineSkeletonDataResource" uid="uid://pd8kmolkrw6b" path="res://Goldenglow/image/character/default.tres" id="1_5rrd4"]
+[ext_resource type="Script" uid="uid://dh5tdwmv0nk84" path="res://GoldenglowScripts/Ui/SpinePlayer.cs" id="2_fuy8w"]
 
 [node name="Visuals" type="SpineSprite"]
 skeleton_data_res = ExtResource("1_5rrd4")
@@ -9,3 +10,6 @@ preview_animation = "Attack"
 preview_frame = false
 preview_time = 0.0
 scale = Vector2(0.83, 0.83)
+
+[node name="Player" type="Node" parent="."]
+script = ExtResource("2_fuy8w")

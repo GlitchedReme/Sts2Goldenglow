@@ -35,7 +35,7 @@ public class EntrapmentTactics() : AbstractGoldenglowCard(1, CardType.Attack, Ca
             var e = CombatState.Enemies[i];
             if (!e.IsDead && !e.IsPlayer)
                 for (int j = 0; j < count; j++)
-                    await GoldenglowOrbCmd.ChannelBuoy(Owner, e, 1);
+                    await GoldenglowOrbCmd.ChannelBuoy(Owner, e);
         }
     }
 

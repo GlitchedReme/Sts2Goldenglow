@@ -22,7 +22,11 @@ public class RageOfTheBeacons() : AbstractGoldenglowCard(0, CardType.Skill, Card
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await GoldenglowOrbCmd.ChannelBuoy(Owner, cardPlay.Target!, (int)((ComputedDynamicVar)DynamicVars["Buoy"]).Calculate());
+        var count = (int)DynamicVars.ComputeDynamicValue("Buoy");
+        for (var i = 0; i < count; i++)
+        {
+            await GoldenglowOrbCmd.ChannelBuoy(Owner, cardPlay.Target);
+        }
         await GoldenglowCmd.ApplyStatic(cardPlay.Card);
     }
 
