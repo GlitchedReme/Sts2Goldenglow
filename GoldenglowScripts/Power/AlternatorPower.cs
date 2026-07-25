@@ -1,5 +1,6 @@
 using Goldenglow.Card;
 using MegaCrit.Sts2.Core.Combat;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
 using STS2RitsuLib.Interop.AutoRegistration;
@@ -25,10 +26,11 @@ public sealed class AlternatorPower : AbstractGoldenglowPower
 
         for (int i = 0; i < Amount; i++)
         {
-            var target = allCreatures[Random.Shared.Next(allCreatures.Count)];
+            var target = Owner.CombatState?.RunState.Rng.CombatTargets.NextItem(allCreatures);
+            if (target == null) continue;
             if (target.IsPlayer && target.Player != null)
             {
-                await MegaCrit.Sts2.Core.Commands.OrbCmd.AddSlots(target.Player, 1);
+                await OrbCmd.AddSlots(target.Player, 1);
             }
             else if (!target.IsPlayer)
             {

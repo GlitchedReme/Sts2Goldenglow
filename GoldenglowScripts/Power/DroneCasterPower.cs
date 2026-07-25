@@ -1,3 +1,4 @@
+using Goldenglow.Card;
 using Goldenglow.Orb;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -13,7 +14,7 @@ public sealed class DroneCasterPower : AbstractGoldenglowPower
     {
         if (orb is not BuoyOrb buoy) return;
 
-        await buoy.Passive(choiceContext, null);
+        await GoldenglowOrbCmd.Passive(choiceContext, buoy, null);
         Flash();
     }
 }

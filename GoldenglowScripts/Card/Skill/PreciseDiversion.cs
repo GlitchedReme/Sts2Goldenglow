@@ -16,7 +16,7 @@ public class PreciseDiversion() : AbstractGoldenglowCard(1, CardType.Skill, Card
         var orb = await GoldenglowOrbCmd.ChannelBuoy(Owner, target);
         if (orb is BuoyOrb { } buoy)
         {
-            await buoy.Passive(choiceContext, null);
+            await GoldenglowOrbCmd.Passive(choiceContext, buoy, null);
         }
     }
 

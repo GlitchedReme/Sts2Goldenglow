@@ -1,5 +1,3 @@
-using Goldenglow.Capabilities;
-using STS2RitsuLib.Models.Capabilities;
 using Godot;
 using Goldenglow.Patch;
 using MegaCrit.Sts2.Core.Commands;
@@ -9,8 +7,6 @@ using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Interop.AutoRegistration;
 using STS2RitsuLib.Scaffolding.Content;
 using STS2RitsuLib.Scaffolding.Godot;
-using MegaCrit.Sts2.Core.Combat;
-using Goldenglow.Power;
 using MegaCrit.Sts2.Core.Entities.Players;
 
 namespace Goldenglow.Orb;

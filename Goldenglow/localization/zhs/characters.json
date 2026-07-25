@@ -1,7 +1,12 @@
 {
+  "GOLDENGLOW_CHARACTER_GOLDENGLOW.aromaPrinciple": "……这味道钻进鼻子，头发都要竖起来了。我还是离远一点吧。",
+  "GOLDENGLOW_CHARACTER_GOLDENGLOW.banter.alive.endTurnPing": "我帮上忙了吧……",
+  "GOLDENGLOW_CHARACTER_GOLDENGLOW.banter.dead.endTurnPing": "拜托你们啦。",
   "GOLDENGLOW_CHARACTER_GOLDENGLOW.cardsModifierDescription": "澄闪的卡牌现在会出现在奖励和商店中。",
   "GOLDENGLOW_CHARACTER_GOLDENGLOW.cardsModifierTitle": "澄闪卡牌",
   "GOLDENGLOW_CHARACTER_GOLDENGLOW.description": "理发师兼新手术师澄闪。\n正在放电和触电的轮回中苦恼。",
+  "GOLDENGLOW_CHARACTER_GOLDENGLOW.eventDeathPrevention": "呼……还好没倒下。大家还在等我呢，不能就这样结束。",
+  "GOLDENGLOW_CHARACTER_GOLDENGLOW.goldMonologue": "这些金币……够给理发室装修一番啦。唔，先收好，别又弄丢了。",
   "GOLDENGLOW_CHARACTER_GOLDENGLOW.possessiveAdjective": "她的",
   "GOLDENGLOW_CHARACTER_GOLDENGLOW.pronounObject": "她",
   "GOLDENGLOW_CHARACTER_GOLDENGLOW.pronounPossessive": "她的",

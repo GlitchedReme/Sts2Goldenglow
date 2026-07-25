@@ -95,7 +95,7 @@ public static class GoldenglowCmd
     public static int GetStaticStacks(CardModel? card)
     {
         if (card == null) return 0;
-        return card.GetOrCreateCapability<StaticCapability>().TimesPlayedThisTurn;
+        return card.TryGetCapability<StaticCapability>(out var cap) ? cap.TimesPlayedThisTurn : 0;
     }
 
     /// <summary>

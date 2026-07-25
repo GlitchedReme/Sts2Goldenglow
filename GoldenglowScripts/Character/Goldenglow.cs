@@ -61,10 +61,14 @@ public class Goldenglow : ModCharacterTemplate<GoldenglowCardPool, GoldenglowRel
             ),
         Audio: new(
             CharacterSelectSfx: "event:/goldenglow/sfx/char_select"
-        )
+        ),
         // Vfx: new(...),
-        // Multiplayer: new(...)
-        )
+        Multiplayer: new(
+            ArmPointingTexturePath: "res://Goldenglow/image/character/multiplayer_hand_pointer.png",
+            ArmPaperTexturePath: "res://Goldenglow/image/character/multiplayer_hand_paper.png",
+            ArmRockTexturePath: "res://Goldenglow/image/character/multiplayer_hand_rock.png",
+            ArmScissorsTexturePath: "res://Goldenglow/image/character/multiplayer_hand_scissors.png"
+        ))
     );
 
     public override float AttackAnimDelay => 0f;

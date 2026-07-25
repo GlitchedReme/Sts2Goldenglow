@@ -71,6 +71,14 @@ public static class GoldenglowOrbCmd
         return await Channel(player, target, ModelDb.Orb<TOrb>().ToMutable());
     }
 
+    public static async Task Passive(PlayerChoiceContext choiceContext, OrbModel orb, Creature? target)
+    {
+        if (CombatManager.Instance.IsOverOrEnding) return;
+        choiceContext.PushModel(orb);
+        await orb.Passive(choiceContext, target);
+        choiceContext.PopModel(orb);
+    }
+
     private static async Task EvokeOldestOrb(OrbModel orb, Creature monster)
     {
         var ctx = new ThrowingPlayerChoiceContext();

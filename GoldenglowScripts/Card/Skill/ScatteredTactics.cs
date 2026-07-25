@@ -40,7 +40,7 @@ public class ScatteredTactics() : AbstractGoldenglowCard(2, CardType.Skill, Card
         int n = (int)DynamicVars["Buoy"].BaseValue;
         for (int i = 0; i < n; i++)
         {
-            var target = allTargets[Random.Shared.Next(allTargets.Count)];
+            var target = Owner.RunState.Rng.CombatTargets.NextItem(allTargets);
             await GoldenglowOrbCmd.ChannelBuoy(Owner, target);
         }
     }

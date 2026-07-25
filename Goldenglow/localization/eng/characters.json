@@ -1,7 +1,12 @@
 {
+  "GOLDENGLOW_CHARACTER_GOLDENGLOW.aromaPrinciple": "...This smell tickles my nose—my hair's standing on end. I'd better keep my distance.",
+  "GOLDENGLOW_CHARACTER_GOLDENGLOW.banter.alive.endTurnPing": "I... I was of some help, right...?",
+  "GOLDENGLOW_CHARACTER_GOLDENGLOW.banter.dead.endTurnPing": "Please... it's up to you all now.",
   "GOLDENGLOW_CHARACTER_GOLDENGLOW.cardsModifierDescription": "Goldenglow cards will now appear in rewards and shops.",
   "GOLDENGLOW_CHARACTER_GOLDENGLOW.cardsModifierTitle": "Goldenglow Cards",
   "GOLDENGLOW_CHARACTER_GOLDENGLOW.description": "Goldenglow, hairdresser and novice Arts operator.\nTroubled by a cycle of discharging and getting shocked.",
+  "GOLDENGLOW_CHARACTER_GOLDENGLOW.eventDeathPrevention": "Phew... thank goodness I didn't fall. Everyone's still waiting for me—I can't let it end here.",
+  "GOLDENGLOW_CHARACTER_GOLDENGLOW.goldMonologue": "This much gold... it'd be enough to redo the salon. Um, I'll keep it safe—don't want to lose it again.",
   "GOLDENGLOW_CHARACTER_GOLDENGLOW.possessiveAdjective": "her",
   "GOLDENGLOW_CHARACTER_GOLDENGLOW.pronounObject": "her",
   "GOLDENGLOW_CHARACTER_GOLDENGLOW.pronounPossessive": "hers",

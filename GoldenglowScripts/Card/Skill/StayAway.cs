@@ -33,7 +33,7 @@ public class StayAway() : AbstractGoldenglowCard(0, CardType.Skill, CardRarity.C
             if (player?.PlayerCombatState == null) return;
             var orbQueue = player.PlayerCombatState.OrbQueue;
             for (int i = 0; i < orbQueue.Orbs.Count; i++)
-                await OrbCmd.Passive(choiceContext, orbQueue.Orbs[i], null);
+                await GoldenglowOrbCmd.Passive(choiceContext, orbQueue.Orbs[i], null);
         }
         else
         {
@@ -41,7 +41,7 @@ public class StayAway() : AbstractGoldenglowCard(0, CardType.Skill, CardRarity.C
             if (mgr == null) return;
             var orbs = mgr.GetOrbs();
             for (int i = 0; i < orbs.Count; i++)
-                await OrbCmd.Passive(choiceContext, orbs[i], null);
+                await GoldenglowOrbCmd.Passive(choiceContext, orbs[i], null);
         }
         await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.BaseValue, Owner);
     }

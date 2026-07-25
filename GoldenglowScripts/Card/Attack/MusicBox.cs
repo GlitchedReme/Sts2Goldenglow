@@ -22,7 +22,7 @@ public class MusicBox() : AbstractGoldenglowCard(1, CardType.Attack, CardRarity.
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var target = cardPlay.Target;
-        await GoldenglowOrbCmd.TransferOrbs(Owner, target, Owner.Creature, 2);
+        await GoldenglowOrbCmd.TransferOrbs(Owner, target, Owner.Creature, (int)DynamicVars["OrbAmount"].BaseValue);
 
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCardCompat(this, cardPlay).Targeting(cardPlay.Target!).Execute(choiceContext);
     }
