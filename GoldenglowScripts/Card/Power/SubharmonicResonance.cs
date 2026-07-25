@@ -11,7 +11,7 @@ using STS2RitsuLib.Interop.AutoRegistration;
 namespace Goldenglow.Card;
 
 [RegisterCard(typeof(GoldenglowCardPool))]
-public class SubharmonicResonance() : AbstractGoldenglowCard(3, CardType.Power, CardRarity.Ancient, TargetType.Self), IHovertipShownInInspectOnly
+public class SubharmonicResonance() : AbstractGoldenglowCard(2, CardType.Power, CardRarity.Ancient, TargetType.Self), IHovertipShownInInspectOnly
 {
     public IEnumerable<IHoverTip> HoverTipsShownInInspectOnly => [
         GoldenglowUtils.CreateReference("dogdogbhh (白花花)")

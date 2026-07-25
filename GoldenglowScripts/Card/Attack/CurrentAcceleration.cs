@@ -8,7 +8,6 @@ using MegaCrit.Sts2.Core.Nodes.Rooms;
 using MegaCrit.Sts2.Core.ValueProps;
 using Goldenglow.Vfx;
 using STS2RitsuLib.Interop.AutoRegistration;
-using STS2RitsuLib.Scaffolding.Content;
 
 namespace Goldenglow.Card;
 
@@ -18,8 +17,8 @@ public class CurrentAcceleration() : AbstractGoldenglowCard(1, CardType.Attack, 
     private const float StaggerInterval = 0.1f;
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DamageVar(4, ValueProp.Move),
-        new RepeatVar(3)
+        new DamageVar(3, ValueProp.Move),
+        new RepeatVar(4)
     ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

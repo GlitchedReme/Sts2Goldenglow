@@ -24,8 +24,3 @@ public abstract class TempHandSizePower<T> : ModTemporaryAppliedPowerTemplate<T,
 public sealed class CapacitorTempPower : TempHandSizePower<Capacitor>
 {
 }
-
-[RegisterPower]
-public sealed class DegaussingTempPower : TempHandSizePower<Degaussing>
-{
-}

@@ -23,7 +23,7 @@ public class SatelliteLanding() : AbstractGoldenglowCard(2, CardType.Attack, Car
     ];
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DamageVar(23, ValueProp.Move)
+        new DamageVar(24, ValueProp.Move)
     ];
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
@@ -43,6 +43,6 @@ public class SatelliteLanding() : AbstractGoldenglowCard(2, CardType.Attack, Car
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(5);
+        DynamicVars.Damage.UpgradeValueBy(6);
     }
 }

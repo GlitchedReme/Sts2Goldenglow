@@ -13,7 +13,7 @@ namespace Goldenglow.Card;
 public class MusicBox() : AbstractGoldenglowCard(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DamageVar(9, ValueProp.Move),
+        new DamageVar(10, ValueProp.Move),
         new DynamicVar("OrbAmount", 2),
     ];
 

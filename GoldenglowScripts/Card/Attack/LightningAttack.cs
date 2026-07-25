@@ -34,7 +34,7 @@ public class LightningAttack() : AbstractGoldenglowCard(1, CardType.Attack, Card
             if (selected != null)
             {
                 CardCmd.ApplyKeyword(selected, CardKeyword.Exhaust);
-                if (IsUpgraded && !selected.EnergyCost.CostsX)
+                if (!selected.EnergyCost.CostsX)
                     selected.EnergyCost.AddThisCombat(-1, reduceOnly: true);
             }
         }
@@ -42,5 +42,6 @@ public class LightningAttack() : AbstractGoldenglowCard(1, CardType.Attack, Card
 
     protected override void OnUpgrade()
     {
+        DynamicVars.Damage.UpgradeValueBy(3);
     }
 }

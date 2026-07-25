@@ -17,11 +17,9 @@ public class LightningArrester() : AbstractGoldenglowCard(1, CardType.Attack, Ca
         GoldenglowUtils.CreateReference("Watersnake (水蛇)")
     ];
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => IsUpgraded ? [
-        new DamageVar(10, ValueProp.Move)
-    ] : [
+    protected override IEnumerable<DynamicVar> CanonicalVars => [
         new DamageVar(10, ValueProp.Move),
-        GoldenglowUtils.CreateAttractVar(1),
+        new CardsVar(1)
     ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -31,19 +29,14 @@ public class LightningArrester() : AbstractGoldenglowCard(1, CardType.Attack, Ca
             .Targeting(cardPlay.Target!)
             .WithHitFx("vfx/vfx_attack_lightning")
             .Execute(choiceContext);
-        var drawPile = PileType.Draw.GetPile(Owner).Cards.ToList();
-        foreach (var card in drawPile.Where(card => card.Type == CardType.Power))
-        {
-            await CardCmd.Discard(choiceContext, card);
-        }
-        if (IsUpgraded)
-        {
-            await GoldenglowCmd.Attract(choiceContext, Owner, this);
-        }
+
+        for (int i = 0; i < DynamicVars.Cards.BaseValue; i++)
+            await GoldenglowCmd.DrawFiltered(choiceContext, Owner, card => card.Type == CardType.Power);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(3);
+        DynamicVars.Damage.UpgradeValueBy(2);
+        DynamicVars.Cards.UpgradeValueBy(1);
     }
 }
