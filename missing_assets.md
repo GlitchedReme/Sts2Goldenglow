@@ -9,15 +9,15 @@
 - [x] ChargeRelease - 电荷释放
 - [ ] ClusterTactics - 群聚战术
 - [x] CrystalClearSparkle - 澄净闪耀
-- [ ] CurrentAcceleration - 电流加速
+- [x] CurrentAcceleration - 电流加速
 - [ ] DroneStrike - 浮游打击
 - [ ] FireExit - 消防通道
 - [ ] HalfWaveRectifier - 半波整流
-- [ ] LeydenJar - 莱顿瓶
-- [ ] MillisecondPulsar - 毫秒脉冲
+- [x] LeydenJar - 莱顿瓶
+- [x] MillisecondPulsar - 毫秒脉冲
 - [x] NewLife - 新生
-- [ ] PolesRepel - 排斥
-- [ ] TargetLockOn - 锁定攻击
+- [x] PolesRepel - 排斥
+- [x] TargetLockOn - 锁定攻击
 - [x] Telepathy - 心电感应
 
 #### 技能牌 (20)
@@ -36,7 +36,7 @@
 - [ ] Selection - 选型
 - [ ] ShelteringTactics - 庇护战术
 - [ ] StaticCharge - 静电充能
-- [ ] StorageBox - 收纳箱
+- [x] StorageBox - 收纳箱
 - [ ] TeslaCoil - 特斯拉线圈
 - [ ] Thinning - 打薄
 - [ ] TransmissionChannel - 传电通道

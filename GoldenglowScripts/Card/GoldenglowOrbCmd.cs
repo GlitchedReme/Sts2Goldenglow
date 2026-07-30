@@ -33,7 +33,7 @@ public static class GoldenglowOrbCmd
 
     public static async Task<OrbModel?> Channel(Player player, Creature? target, OrbModel orb)
     {
-        if (CombatManager.Instance.IsOverOrEnding || target is null || orb is null) return null;
+        if (CombatManager.Instance.IsOverOrEnding || target is null || target.IsDead || orb is null) return null;
 
         if (target.IsPlayer)
         {

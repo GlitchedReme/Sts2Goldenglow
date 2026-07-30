@@ -52,6 +52,7 @@ public class BuoyOrb : ModOrbTemplate
     public override async Task Passive(PlayerChoiceContext choiceContext, Creature? target)
     {
         var holder = Holder ?? throw new InvalidOperationException("BuoyOrb has no Holder set");
+        if (holder.IsDead) return;
 
         PlayPassiveSfx();
 #if STS2_AT_LEAST_109_0
@@ -75,6 +76,7 @@ public class BuoyOrb : ModOrbTemplate
     public override async Task<IEnumerable<Creature>> Evoke(PlayerChoiceContext choiceContext)
     {
         var holder = Holder ?? throw new InvalidOperationException("BuoyOrb has no Holder set");
+        if (holder.IsDead) return [];
 
         PlayEvokeSfx();
         if (IsFriendly(holder))

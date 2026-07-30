@@ -114,6 +114,7 @@ public partial class MonsterOrbManager : Control
         foreach (OrbModel orb in _orbs.ToArray())
         {
             if (!_orbs.Contains(orb)) continue;
+            if (Creature.IsDead) break;
 
             if (await vanillaHandler(orb, Creature, choiceContext))
                 continue;
@@ -173,6 +174,8 @@ public partial class MonsterOrbManager : Control
         Scale = (absX > 1f) ? Vector2.One : Vector2.One * Mathf.Lerp(absX, 1f, 0.5f);
         Scale *= 0.85f;
         Position = visuals.OrbPosition.Position * Mathf.Min(visuals.Scale.X, 1.25f);
+        if (GlobalPosition.Y < 240f)
+            GlobalPosition = new Vector2(GlobalPosition.X, 240f);
     }
 
     /// <summary>Set how many orb slots this monster has. Creates or destroys visual slot nodes to match.</summary>

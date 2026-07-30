@@ -1,10 +1,9 @@
-using System.Threading.Tasks;
 using Goldenglow.Card;
 using Goldenglow.Patch;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
-using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace Goldenglow.Power;
@@ -22,8 +21,11 @@ public sealed class SubharmonicResonancePower : AbstractGoldenglowPower, IPowerC
             DynamicVars["Counter"].BaseValue = value;
             InvokeDisplayAmountChanged();
         }
-
     }
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => [
+        new DynamicVar("Counter", 0),
+    ];
 
     public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {

@@ -6,6 +6,8 @@ using STS2RitsuLib.Interop.AutoRegistration;
 using Goldenglow.Core;
 using MegaCrit.Sts2.Core.HoverTips;
 using Goldenglow.Patch;
+using STS2RitsuLib;
+using Godot;
 
 namespace Goldenglow.Card;
 
@@ -27,9 +29,14 @@ public class DanceOfCurrent() : AbstractGoldenglowCard(2, CardType.Skill, CardRa
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         int attractCount = (int)DynamicVars["Goldenglow_Attract"].BaseValue;
-        var attracted = await GoldenglowCmd.Attract(choiceContext, Owner, this);
+        int discardCount = PileType.Discard.GetPile(Owner).Cards.Count;
+        int wouldAttract = Math.Min(attractCount, discardCount);
+        int handBefore = PileType.Hand.GetPile(Owner).Cards.Count;
 
-        int overflow = Math.Abs(attractCount - attracted.Count);
+        await GoldenglowCmd.Attract(choiceContext, Owner, this);
+
+        int actuallyAttracted = PileType.Hand.GetPile(Owner).Cards.Count - handBefore;
+        int overflow = wouldAttract - actuallyAttracted;
         if (overflow > 0)
             await PlayerCmd.GainEnergy(overflow, Owner);
     }

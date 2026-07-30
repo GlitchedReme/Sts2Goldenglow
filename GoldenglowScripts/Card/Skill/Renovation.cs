@@ -3,6 +3,7 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
+using Goldenglow.Core;
 using STS2RitsuLib.Cards.DynamicVars;
 using STS2RitsuLib.Interop.AutoRegistration;
 
@@ -11,6 +12,8 @@ namespace Goldenglow.Card;
 [RegisterCard(typeof(GoldenglowCardPool))]
 public class Renovation() : AbstractGoldenglowCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
+    protected override HashSet<CardTag> CanonicalTags => [GoldenglowTags.Static];
+
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new DynamicVar("Buff", 8),
         ModCardVars.ComputedBlock("Block", 8,

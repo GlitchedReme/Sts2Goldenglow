@@ -18,6 +18,8 @@ public class ElectricShock() : AbstractGoldenglowCard(0, CardType.Attack, CardRa
         GoldenglowUtils.CreateReference("Namie")
     ];
 
+    protected override HashSet<CardTag> CanonicalTags => [GoldenglowTags.Static];
+
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new DynamicVar("Buff", 3),
         ModCardVars.ComputedDamage("Damage", 3, card => DynamicVars["Damage"].BaseValue + GoldenglowCmd.GetStaticStacks(card!) * card!.DynamicVars["Buff"].BaseValue, ValueProp.Move),

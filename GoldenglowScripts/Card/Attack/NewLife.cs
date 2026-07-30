@@ -18,6 +18,8 @@ public class NewLife() : AbstractGoldenglowCard(0, CardType.Attack, CardRarity.R
         GoldenglowUtils.CreateReference("Namie")
     ];
 
+    protected override HashSet<CardTag> CanonicalTags => [GoldenglowTags.Static];
+
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new DynamicVar("Threshold", 4),
         new DynamicVar("DamageBonus", 20),

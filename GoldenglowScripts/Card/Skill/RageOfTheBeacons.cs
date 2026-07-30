@@ -14,6 +14,8 @@ namespace Goldenglow.Card;
 [RegisterCard(typeof(GoldenglowCardPool))]
 public class RageOfTheBeacons() : AbstractGoldenglowCard(0, CardType.Skill, CardRarity.Rare, CustomTargetType.Anyone)
 {
+    protected override HashSet<CardTag> CanonicalTags => [GoldenglowTags.Static];
+
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         ModCardVars.Computed("Buoy", 1, card => DynamicVars["Buoy"].BaseValue + GoldenglowCmd.GetStaticStacks(card))
     ];

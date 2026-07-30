@@ -1,7 +1,7 @@
-[gd_resource type="AtlasTexture" load_steps=2 format=3 uid="uid://tch1ta"]
+[gd_resource type="AtlasTexture" load_steps=2 format=3 uid="uid://k2ffo1"]
 
 [ext_resource type="Texture2D" path="res://Goldenglow/image/power_atlas/power_atlas_0.png" id="1"]
 
 [resource]
 atlas = ExtResource("1")
-region = Rect2(4, 92, 84, 84)
+region = Rect2(1940, 4, 84, 84)

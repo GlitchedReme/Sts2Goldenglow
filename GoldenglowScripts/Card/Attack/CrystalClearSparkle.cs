@@ -19,6 +19,8 @@ public class CrystalClearSparkle() : AbstractGoldenglowCard(1, CardType.Attack, 
 {
     private const float StaggerInterval = 0.1f;
 
+    protected override HashSet<CardTag> CanonicalTags => [GoldenglowTags.Static];
+
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         ModCardVars.ComputedDamage("Damage", 2,
             card => 2 + GoldenglowCmd.GetStaticStacks(card),

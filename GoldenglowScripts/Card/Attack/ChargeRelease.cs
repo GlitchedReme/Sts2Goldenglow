@@ -22,6 +22,8 @@ public class ChargeRelease() : AbstractGoldenglowCard(1, CardType.Attack, CardRa
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips => [GoldenglowUtils.Static];
 
+    protected override HashSet<CardTag> CanonicalTags => [GoldenglowTags.Static];
+
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var damage = DynamicVars.ComputeDynamicValue("Damage");

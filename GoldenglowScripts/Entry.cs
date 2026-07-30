@@ -78,7 +78,7 @@ public class Entry
             [
                 TelemetryRequest.BasicUsage(ModSettingsText.LocString("settings_ui", "GOLDENGLOW_TELEMETRY_USAGE", "Basic usage data")),
                 TelemetryRequest.ModInventory(ModSettingsText.LocString("settings_ui", "GOLDENGLOW_TELEMETRY_MODS", "Mod list")),
-                TelemetryRequest.Diagnostics(ModSettingsText.LocString("settings_ui", "GOLDENGLOW_TELEMETRY_DIAGNOSTICS", "Diagnostics")),
+                // TelemetryRequest.Diagnostics(ModSettingsText.LocString("settings_ui", "GOLDENGLOW_TELEMETRY_DIAGNOSTICS", "Diagnostics")),
                 TelemetryRequest.RunHistory(ModSettingsText.LocString("settings_ui", "GOLDENGLOW_TELEMETRY_RUNS", "Run history"))
             ],
         });

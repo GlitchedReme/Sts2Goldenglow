@@ -4,8 +4,6 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
 using STS2RitsuLib.Interop.AutoRegistration;
-using STS2RitsuLib.Models.Capabilities;
-using Goldenglow.Capabilities;
 using Goldenglow.Core;
 using MegaCrit.Sts2.Core.HoverTips;
 using Goldenglow.Patch;
@@ -33,7 +31,7 @@ public class SurgingCurrent() : AbstractGoldenglowCard(1, CardType.Skill, CardRa
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, cardPlay);
         for (int i = 0; i < DynamicVars.Cards.BaseValue; i++)
         {
-            var drawn = await GoldenglowCmd.DrawFiltered(choiceContext, Owner, c => c.TryGetCapability<StaticCapability>(out _));
+            var drawn = await GoldenglowCmd.DrawFiltered(choiceContext, Owner, c => c.Tags.Contains(GoldenglowTags.Static));
             if (drawn == null)
                 break;
             await GoldenglowCmd.ApplyStatic(drawn, false);
