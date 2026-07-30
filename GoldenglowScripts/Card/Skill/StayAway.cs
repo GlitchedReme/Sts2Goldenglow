@@ -17,7 +17,7 @@ public class StayAway() : AbstractGoldenglowCard(0, CardType.Skill, CardRarity.C
     public IEnumerable<IHoverTip> HoverTipsShownInInspectOnly => [
         GoldenglowUtils.CreateReference("Namie")
     ];
-    
+
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [

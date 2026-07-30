@@ -15,8 +15,9 @@ public sealed class AlternatorPower : AbstractGoldenglowPower
         if (!participants.Contains(Owner)) return;
 
         var allCreatures = new List<Creature>();
-        if (combatState.Players.Count > 0)
-            allCreatures.Add(combatState.Players[0].Creature);
+        for (int i = 0; i < combatState.Players.Count; i++)
+            if (combatState.Players[i].Creature is { } && !combatState.Players[i].Creature.IsDead)
+                allCreatures.Add(combatState.Players[i].Creature);
         var enemies = combatState.Enemies;
         for (int i = 0; i < enemies.Count; i++)
             if (!enemies[i].IsDead)

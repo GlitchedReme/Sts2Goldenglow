@@ -47,8 +47,9 @@ public partial class NBuoyOrb : Sprite2D
         if (!IsInstanceValid(this)) return;
         foreach (var target in e)
         {
-            var lightning = BuoyLightning.Create(this, target.GetCreatureNode()!)!;
-            GoldenglowUtils.PlayVfx(target, lightning, GlobalPosition);
+            var lightning = BuoyLightning.Create(this, target.GetCreatureNode()!);
+            if (lightning != null)
+                GoldenglowUtils.PlayVfx(target, lightning, GlobalPosition);
             if (Orb?.Model != null)
             {
                 var source = (Orb.Model as BuoyOrb)?.Source;

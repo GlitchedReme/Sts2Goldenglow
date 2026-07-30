@@ -22,8 +22,8 @@ public class ElectricShock() : AbstractGoldenglowCard(0, CardType.Attack, CardRa
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new DynamicVar("Buff", 3),
-        ModCardVars.ComputedDamage("Damage", 3, card => DynamicVars["Damage"].BaseValue + GoldenglowCmd.GetStaticStacks(card!) * card!.DynamicVars["Buff"].BaseValue, ValueProp.Move),
-        ModCardVars.ComputedBlock("Block", 3, card => DynamicVars["Block"].BaseValue + GoldenglowCmd.GetStaticStacks(card!) * card!.DynamicVars["Buff"].BaseValue)
+        ModCardVars.ComputedDamage("Damage", 3, card => card!.DynamicVars["Damage"].BaseValue + GoldenglowCmd.GetStaticStacks(card!) * card!.DynamicVars["Buff"].BaseValue, ValueProp.Move),
+        ModCardVars.ComputedBlock("Block", 3, card => card!.DynamicVars["Block"].BaseValue + GoldenglowCmd.GetStaticStacks(card!) * card!.DynamicVars["Buff"].BaseValue)
     ];
 
     public override bool GainsBlock => true;

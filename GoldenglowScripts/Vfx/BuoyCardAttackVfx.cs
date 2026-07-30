@@ -87,8 +87,9 @@ public partial class BuoyCardAttackVfx : Node2D
 
         if (_target != null)
         {
-            var lightning = BuoyLightning.Create(this, _target.GetCreatureNode()!)!;
-            GoldenglowUtils.PlayVfx(_target, lightning, GlobalPosition);
+            var lightning = BuoyLightning.Create(this, _target.GetCreatureNode()!);
+            if (lightning != null)
+                GoldenglowUtils.PlayVfx(_target, lightning, GlobalPosition);
             var skin = SkinResources.GetSkinKey(_source);
             GoldenglowUtils.PlayVfx(_target, BuoyAttackVfx.Create(skin));
         }

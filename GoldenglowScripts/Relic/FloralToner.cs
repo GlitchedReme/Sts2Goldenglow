@@ -34,6 +34,6 @@ public class FloralToner : ModRelicTemplate, IOnCardAttracted
 
         var target = Owner.RunState.Rng.CombatTargets.NextItem(enemies);
         if (target != null)
-            await CreatureCmd.Damage(new ThrowingPlayerChoiceContext(), target, 1, ValueProp.Unpowered, Owner.Creature);
+            await CreatureCmd.Damage(new ThrowingPlayerChoiceContext(), target, 2, ValueProp.Unpowered, Owner.Creature);
     }
 }

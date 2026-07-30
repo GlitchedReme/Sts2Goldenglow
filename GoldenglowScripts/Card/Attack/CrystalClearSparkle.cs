@@ -15,7 +15,7 @@ using STS2RitsuLib.Interop.AutoRegistration;
 namespace Goldenglow.Card;
 
 [RegisterCard(typeof(GoldenglowCardPool))]
-public class CrystalClearSparkle() : AbstractGoldenglowCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.RandomEnemy)
+public class CrystalClearSparkle() : AbstractGoldenglowCard(0, CardType.Attack, CardRarity.Uncommon, TargetType.RandomEnemy)
 {
     private const float StaggerInterval = 0.1f;
 
@@ -75,6 +75,8 @@ public class CrystalClearSparkle() : AbstractGoldenglowCard(1, CardType.Attack, 
 
     protected override void OnUpgrade()
     {
-        EnergyCost.UpgradeBy(-1);
+        // EnergyCost.UpgradeBy(-1);
+        DynamicVars["Damage"].UpgradeValueBy(1);
+        DynamicVars["Repeat"].UpgradeValueBy(1);
     }
 }

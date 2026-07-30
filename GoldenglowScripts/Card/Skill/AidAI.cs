@@ -9,7 +9,7 @@ using STS2RitsuLib.Interop.AutoRegistration;
 namespace Goldenglow.Card;
 
 [RegisterCard(typeof(GoldenglowCardPool))]
-public class AidAI() : AbstractGoldenglowCard(-1, CardType.Skill, CardRarity.Uncommon, CustomTargetType.Anyone)
+public class AidAI() : AbstractGoldenglowCard(-1, CardType.Skill, CardRarity.Rare, CustomTargetType.Anyone)
 {
     protected override bool HasEnergyCostX => true;
 

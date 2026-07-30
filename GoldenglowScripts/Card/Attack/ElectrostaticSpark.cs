@@ -25,7 +25,7 @@ public class ElectrostaticSpark() : AbstractGoldenglowCard(1, CardType.Attack, C
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(2);
+        DynamicVars.Damage.UpgradeValueBy(1);
         DynamicVars["Goldenglow_Attract"].UpgradeValueBy(1);
     }
 }

@@ -3,7 +3,6 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using STS2RitsuLib.Combat.CardTargeting;
 using STS2RitsuLib.Interop.AutoRegistration;
-using STS2RitsuLib.Scaffolding.Content;
 using Goldenglow.Core;
 using Goldenglow.Orb;
 using MegaCrit.Sts2.Core.HoverTips;
@@ -17,7 +16,7 @@ public class RageOfTheBeacons() : AbstractGoldenglowCard(0, CardType.Skill, Card
     protected override HashSet<CardTag> CanonicalTags => [GoldenglowTags.Static];
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        ModCardVars.Computed("Buoy", 1, card => DynamicVars["Buoy"].BaseValue + GoldenglowCmd.GetStaticStacks(card))
+        ModCardVars.Computed("Buoy", 1, card => card == null ? 0 : card.DynamicVars["Buoy"].BaseValue + GoldenglowCmd.GetStaticStacks(card))
     ];
 
     protected override IEnumerable<IHoverTip> AdditionalHoverTips => [GoldenglowUtils.Static, HoverTipFactory.FromOrb<BuoyOrb>()];

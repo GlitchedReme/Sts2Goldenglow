@@ -13,7 +13,7 @@ namespace Goldenglow.Card;
 public class ScatterSparks() : AbstractGoldenglowCard(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DynamicVar("GainBlock", 4),
+        new DynamicVar("GainBlock", 6),
         new CardsVar(2)
     ];
 

@@ -11,9 +11,8 @@ using Goldenglow.Power;
 namespace Goldenglow.Card;
 
 [RegisterCard(typeof(GoldenglowCardPool))]
-public class BuoyRecovery() : AbstractGoldenglowCard(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
+public class BuoyRecovery() : AbstractGoldenglowCard(2, CardType.Power, CardRarity.Uncommon, TargetType.Self)
 {
-
     protected override IEnumerable<DynamicVar> CanonicalVars => [
     ];
 
@@ -25,6 +24,7 @@ public class BuoyRecovery() : AbstractGoldenglowCard(1, CardType.Power, CardRari
     }
 
     protected override void OnUpgrade()
-    {        EnergyCost.UpgradeBy(-1);
+    {
+        EnergyCost.UpgradeBy(-1);
     }
 }

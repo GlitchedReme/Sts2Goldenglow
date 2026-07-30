@@ -12,9 +12,8 @@ namespace Goldenglow.Card;
 [RegisterCard(typeof(GoldenglowCardPool))]
 public class DroneStrike() : AbstractGoldenglowCard(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
 {
-
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DamageVar(10, ValueProp.Move),
+        new DamageVar(9, ValueProp.Move),
         new DynamicVar("Buoy", 1)
     ];
 

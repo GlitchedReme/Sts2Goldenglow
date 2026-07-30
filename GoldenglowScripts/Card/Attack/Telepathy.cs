@@ -13,7 +13,7 @@ namespace Goldenglow.Card;
 public class Telepathy() : AbstractGoldenglowCard(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DamageVar(8, ValueProp.Move),
+        new DamageVar(9, ValueProp.Move),
         new CardsVar(1)
     ];
 

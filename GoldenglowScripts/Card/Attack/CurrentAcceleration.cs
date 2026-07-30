@@ -57,6 +57,7 @@ public class CurrentAcceleration() : AbstractGoldenglowCard(1, CardType.Attack, 
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Repeat.UpgradeValueBy(1);
+        DynamicVars.Damage.UpgradeValueBy(1);
+        // DynamicVars.Repeat.UpgradeValueBy(1);
     }
 }

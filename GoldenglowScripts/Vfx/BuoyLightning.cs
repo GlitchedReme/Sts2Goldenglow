@@ -17,7 +17,7 @@ public partial class BuoyLightning : Node2D
 
     public static BuoyLightning? Create(Node2D source, NCreature target)
     {
-        if (TestMode.IsOn)
+        if (TestMode.IsOn || target == null)
             return null;
 
         var vfx = PreloadManager.Cache.GetScene(ScenePath).Instantiate<BuoyLightning>();
