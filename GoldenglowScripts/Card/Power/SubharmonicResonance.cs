@@ -23,7 +23,7 @@ public class SubharmonicResonance() : AbstractGoldenglowCard(2, CardType.Power, 
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await PowerCmd.Apply<SubharmonicResonancePower>(choiceContext, Owner.Creature, 2, Owner.Creature, this);
+        await PowerCmd.Apply<SubharmonicResonancePower>(choiceContext, Owner.Creature, 1, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

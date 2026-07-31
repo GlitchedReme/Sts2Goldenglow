@@ -38,7 +38,9 @@ public class CrystalClearSparkle() : AbstractGoldenglowCard(0, CardType.Attack, 
 
         var rng = Owner.RunState.Rng.CombatTargets;
         var hits = (int)DynamicVars.ComputeDynamicValue("Repeat");
-        var damage = (int)DynamicVars.ComputeDynamicValue("Damage");
+        var damage = DynamicVars.ComputeDynamicValue("Damage");
+
+        await using var attackContext = await GoldenglowCompat.CreateAttackContextAsync(CombatState!, choiceContext, cardPlay);
 
         var delay = 0f;
         var tasks = new List<Task>();
@@ -54,10 +56,7 @@ public class CrystalClearSparkle() : AbstractGoldenglowCard(0, CardType.Attack, 
             var vfx = BuoyCardAttackVfx.Create(pos, Owner, target, async () =>
             {
                 if (target == null) return;
-                await DamageCmd.Attack(damage)
-                    .FromCardCompat(this, cardPlay)
-                    .Targeting(target)
-                    .Execute(choiceContext);
+                await attackContext.DamageWithHit(choiceContext, target, damage, ValueProp.Move, Owner.Creature, this, cardPlay);
             }, delay);
 
             if (vfx != null)

@@ -20,6 +20,13 @@ internal static class MonsterOrbPatch
     internal static bool IsMonster(NCreature creature) => !creature.Entity.IsPlayer && creature.Entity.PetOwner == null;
 
     internal static bool ContainsGoldenglow(ICombatState? state) => state != null && state.Players.Any(p => p.Character is Character.Goldenglow);
+
+    internal static Creature? GetHolder(OrbModel orb)
+    {
+        if (OwnerState.TryGetValue(orb, out var creature) && creature != null)
+            return creature;
+        return Ui.MonsterOrbManager.Instances.FirstOrDefault(m => m.GetOrbs().Contains(orb))?.Creature;
+    }
 }
 
 internal class InitializeOrbManagerPatch : IPatchMethod
@@ -50,7 +57,7 @@ internal class OrbTipOnMonsterPatch : IPatchMethod
         if (__instance.Owner != null && !MonsterOrbPatch.OwnerState.TryGetValue(__instance, out _))
             return true;
 
-        var owner = MonsterOrbPatch.OwnerState[__instance];
+        var owner = MonsterOrbPatch.GetHolder(__instance);
         var extraHoverTips = Traverse.Create(__instance)
             .Property<IEnumerable<IHoverTip>>("ExtraHoverTips").Value;
         var list = extraHoverTips?.ToList() ?? [];
@@ -59,8 +66,7 @@ internal class OrbTipOnMonsterPatch : IPatchMethod
         if (hasSmart && __instance.IsMutable)
         {
             var smart = new LocString("orbs", $"{__instance.Id.Entry}.smartDescriptionOnMonster");
-            if (owner != null)
-                smart.Add("Owner", owner.Name);
+            smart.Add("Owner", owner?.Name ?? "???");
             smart.Add("Passive", __instance.PassiveVal);
             smart.Add("Evoke", __instance.EvokeVal);
             list.Add(new HoverTip(__instance, smart));

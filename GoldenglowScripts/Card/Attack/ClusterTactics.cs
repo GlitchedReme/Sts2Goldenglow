@@ -52,6 +52,8 @@ public class ClusterTactics() : AbstractGoldenglowCard(1, CardType.Attack, CardR
 
         var handSize = DynamicVars.ComputeDynamicValue("Amount");
 
+        await using var attackContext = await GoldenglowCompat.CreateAttackContextAsync(CombatState!, choiceContext, cardPlay);
+
         var delay = 0f;
         var tasks = new List<Task>();
         for (int i = 0; i < handSize; i++)
@@ -60,10 +62,7 @@ public class ClusterTactics() : AbstractGoldenglowCard(1, CardType.Attack, CardR
             var vfx = BuoyCardAttackVfx.Create(pos, Owner, target, async () =>
             {
                 if (target == null) return;
-                await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-                    .FromCardCompat(this, cardPlay)
-                    .Targeting(target)
-                    .Execute(choiceContext);
+                await attackContext.DamageWithHit(choiceContext, target, DynamicVars.Damage.BaseValue, DynamicVars.Damage.Props, Owner.Creature, this, cardPlay);
             }, delay);
 
             if (vfx != null)

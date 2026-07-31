@@ -40,6 +40,7 @@ public static class GoldenglowOrbCmd
             var p = target.Player;
             if (p == null) return null;
             orb.Owner = null!;
+            MonsterOrbPatch.OwnerState.Remove(orb);
             if (orb is BuoyOrb buoy)
                 buoy.Source ??= player;
             await OrbCmd.Channel(new ThrowingPlayerChoiceContext(), orb, p);
@@ -155,7 +156,7 @@ public static class GoldenglowOrbCmd
             {
                 var orb = snapshot[i];
                 mgr.EvokeOrb(orb);
-                MonsterOrbPatch.OwnerState[orb] = null;
+                MonsterOrbPatch.OwnerState.Remove(orb);
                 result.Add(orb);
             }
         }

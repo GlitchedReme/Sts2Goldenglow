@@ -4,7 +4,7 @@ using Godot;
 
 namespace Goldenglow.Orb;
 
-#if STS2_AT_LEAST_109_0
+#if STS2_AT_LEAST_110_0
 public partial class NBuoyVfx : NOrbVfx
 {
     private static readonly FieldInfo? FocusedParticlesField = AccessTools.Field(typeof(NOrbVfx), "_focusedParticles");

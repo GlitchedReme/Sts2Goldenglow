@@ -61,7 +61,7 @@ public static class GoldenglowCmd
             var target = hit ?? player.RunState.Rng.CombatTargets.NextItem(hittableEnemies);
             if (target != null)
             {
-#if STS2_AT_LEAST_109_0
+#if STS2_AT_LEAST_110_0
                 await CreatureCmd.Damage(new ThrowingPlayerChoiceContext(), target, amount, ValueProp.Unpowered, player.Creature, cardSource, cardPlay);
 #else
                 await CreatureCmd.Damage(new ThrowingPlayerChoiceContext(), target, amount, ValueProp.Unpowered, player.Creature, cardSource);

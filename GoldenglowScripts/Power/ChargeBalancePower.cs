@@ -12,7 +12,8 @@ public sealed class ChargeBalancePower : AbstractGoldenglowPower
 {
     public override async Task AfterOrbEvoked(PlayerChoiceContext choiceContext, OrbModel orb, IEnumerable<Creature> targets)
     {
-        if (!(orb.Owner?.Creature == Owner || (MonsterOrbPatch.OwnerState.TryGetValue(orb, out var creature) && creature == Owner))) return;
+        var holder = MonsterOrbPatch.GetHolder(orb) ?? orb.Owner?.Creature;
+        if (holder != Owner) return;
         await PowerCmd.Apply<PermanentMagnetTempPower>(choiceContext, Owner, Amount, Applier, null);
         Flash();
     }

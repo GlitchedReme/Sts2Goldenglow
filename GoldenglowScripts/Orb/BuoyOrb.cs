@@ -18,7 +18,7 @@ public class BuoyOrb : ModOrbTemplate
 
     public Player? Source { get; set; }
 
-#if !STS2_AT_LEAST_109_0
+#if !STS2_AT_LEAST_110_0
     internal event Action<Creature[]>? GgEvokeActivated;
 #endif
 
@@ -55,7 +55,7 @@ public class BuoyOrb : ModOrbTemplate
         if (holder.IsDead) return;
 
         PlayPassiveSfx();
-#if STS2_AT_LEAST_109_0
+#if STS2_AT_LEAST_110_0
         ActivatePassive();
 #endif
         if (IsFriendly(holder))
@@ -64,7 +64,7 @@ public class BuoyOrb : ModOrbTemplate
         }
         else
         {
-#if STS2_AT_LEAST_109_0
+#if STS2_AT_LEAST_110_0
             ActivateEvoke([holder]);
 #else
             GgEvokeActivated?.Invoke([holder]);
@@ -85,7 +85,7 @@ public class BuoyOrb : ModOrbTemplate
         }
         else
         {
-#if STS2_AT_LEAST_109_0
+#if STS2_AT_LEAST_110_0
             ActivateEvoke([holder]);
 #else
             GgEvokeActivated?.Invoke([holder]);

@@ -6,8 +6,8 @@
         Sts2ApiCompat value. Each symbol means "the host API is at least this version".
 
         Usage in source:
-            #if STS2_AT_LEAST_109_0
-            // new API path (0.109.0+)
+            #if STS2_AT_LEAST_110_0
+            // new API path (0.110.0+)
             #else
             // legacy API path (0.107.1)
             #endif
@@ -18,12 +18,12 @@
     -->
 
     <PropertyGroup>
-        <_GoldenglowSupportedApiVersions>0.107.1;0.109.0</_GoldenglowSupportedApiVersions>
-        <_GoldenglowSupportedApiList>|0.107.1|0.109.0|</_GoldenglowSupportedApiList>
+        <_GoldenglowSupportedApiVersions>0.107.1;0.110.0</_GoldenglowSupportedApiVersions>
+        <_GoldenglowSupportedApiList>|0.107.1|0.110.0|</_GoldenglowSupportedApiList>
     </PropertyGroup>
 
     <PropertyGroup>
-        <DefineConstants Condition="$([MSBuild]::VersionGreaterThanOrEquals('$(Sts2ApiCompat)', '0.109.0'))">$(DefineConstants);STS2_AT_LEAST_109_0</DefineConstants>
+        <DefineConstants Condition="$([MSBuild]::VersionGreaterThanOrEquals('$(Sts2ApiCompat)', '0.110.0'))">$(DefineConstants);STS2_AT_LEAST_110_0</DefineConstants>
     </PropertyGroup>
 
     <Target Name="ValidateGoldenglowCompatTarget" BeforeTargets="CoreCompile">

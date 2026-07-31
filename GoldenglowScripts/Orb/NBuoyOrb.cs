@@ -23,7 +23,7 @@ public partial class NBuoyOrb : Sprite2D
         }
 
         RefreshSkin();
-#if STS2_AT_LEAST_109_0
+#if STS2_AT_LEAST_110_0
         Orb.Model.EvokeActivated += OnEvokeActivated;
 #else
         if (Orb.Model is BuoyOrb buoyOrb)
@@ -33,7 +33,7 @@ public partial class NBuoyOrb : Sprite2D
 
     public override void _ExitTree()
     {
-#if STS2_AT_LEAST_109_0
+#if STS2_AT_LEAST_110_0
         if (Orb?.Model != null)
             Orb.Model.EvokeActivated -= OnEvokeActivated;
 #else

@@ -37,8 +37,8 @@ public sealed class LiquidSoapPower : AbstractGoldenglowPower, IPowerCustomTextP
         {
             await CardPileCmd.Draw(choiceContext, Amount, Owner.Player);
             Flash();
-            InvokeDisplayAmountChanged();
             Counter = 0;
+            InvokeDisplayAmountChanged();
         }
     }
 }

@@ -84,8 +84,8 @@
   "GOLDENGLOW_POWER_ELECTROSTATIC_FIELD_POWER.remoteDescription": "本回合每当目标受到伤害，[gold]{ApplierName}[/gold]获得[blue]{Amount}[/blue]点[gold]格挡[/gold]。",
   "GOLDENGLOW_POWER_ELECTROSTATIC_FIELD_POWER.title": "静电场",
 
-  "GOLDENGLOW_POWER_SUBHARMONIC_RESONANCE_POWER.description": "你每打出2张牌，[gold]脉冲[/gold]一次。",
-  "GOLDENGLOW_POWER_SUBHARMONIC_RESONANCE_POWER.smartDescription": "你每打出[blue]{Amount}[/blue]张牌，[gold]脉冲[/gold]一次。",
+  "GOLDENGLOW_POWER_SUBHARMONIC_RESONANCE_POWER.description": "你每打出2张牌，进行一次[gold]脉冲[/gold]。",
+  "GOLDENGLOW_POWER_SUBHARMONIC_RESONANCE_POWER.smartDescription": "你每打出[blue]2[/blue]张牌，进行[blue]{Amount}[/blue]次[gold]脉冲[/gold]。",
   "GOLDENGLOW_POWER_SUBHARMONIC_RESONANCE_POWER.title": "亚谐共振",
 
   "GOLDENGLOW_POWER_TECHNIQUE_POWER.description": "你的回合开始时，打出一张耗能为0的牌的复制。",

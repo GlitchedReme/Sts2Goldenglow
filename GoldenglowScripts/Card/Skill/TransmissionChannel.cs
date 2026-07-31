@@ -23,9 +23,12 @@ public class TransmissionChannel() : AbstractGoldenglowCard(0, CardType.Skill, C
             if (target.Player?.PlayerCombatState?.OrbQueue.Orbs is not { Count: > 0 }) return;
             var enemies = CombatState?.HittableEnemies;
             if (enemies is not { Count: > 0 }) return;
-            var enemy = Owner.RunState.Rng.CombatTargets.NextItem(enemies);
-            if (enemy == null) return;
-            await GoldenglowOrbCmd.TransferOrbs(Owner, target, enemy, 1);
+            for (int i = 0; i < target.Player!.PlayerCombatState!.OrbQueue.Orbs.Count; i++)
+            {
+                var enemy = Owner.RunState.Rng.CombatTargets.NextItem(enemies);
+                if (enemy == null) return;
+                await GoldenglowOrbCmd.TransferOrbs(Owner, target, enemy, 1);
+            }
         }
         else
         {

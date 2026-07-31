@@ -21,12 +21,12 @@ public class PolesRepel() : AbstractGoldenglowCard(1, CardType.Attack, CardRarit
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var enemyCount = CombatState!.HittableEnemies.Count;
-        for (int i = 0; i < enemyCount; i++)
-            await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-                .FromCardCompat(this, cardPlay)
-                .TargetingAllOpponents(CombatState!)
-                .WithHitFx("vfx/vfx_attack_lightning")
-                .Execute(choiceContext);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
+            .WithHitCount(enemyCount)
+            .FromCardCompat(this, cardPlay)
+            .TargetingAllOpponents(CombatState!)
+            .WithHitFx("vfx/vfx_attack_lightning")
+            .Execute(choiceContext);
     }
 
     protected override void OnUpgrade()

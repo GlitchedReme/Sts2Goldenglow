@@ -32,17 +32,14 @@ public sealed class SubharmonicResonancePower : AbstractGoldenglowPower, IPowerC
         if (cardPlay.Card.Owner != Owner.Player) return;
 
         Counter++;
-        if (Counter >= Amount)
+        if (Counter >= 2)
         {
-            await GoldenglowCmd.Pulse(Owner.Player, null, null);
+            for (int i = 0; i < Amount; i++)
+            {
+                await GoldenglowCmd.Pulse(Owner.Player, null, null);
+            }
             Flash();
-            Counter -= Amount;
+            Counter -= 2;
         }
-    }
-
-    public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
-    {
-        if (player != Owner.Player) return;
-        Counter = 0;
     }
 }

@@ -9,7 +9,7 @@ namespace Goldenglow.Power;
 [RegisterPower]
 public sealed class BeautifulHairstylePower : AbstractGoldenglowPower
 {
-#if STS2_AT_LEAST_109_0
+#if STS2_AT_LEAST_110_0
     public override decimal ModifyDamageAdditive(Creature? target, decimal amount, ValueProp props, Creature? dealer, CardModel? cardSource, CardPlay? cardPlay)
 #else
     public override decimal ModifyDamageAdditive(Creature? target, decimal amount, ValueProp props, Creature? dealer, CardModel? cardSource)

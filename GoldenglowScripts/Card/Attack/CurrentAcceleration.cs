@@ -30,6 +30,8 @@ public class CurrentAcceleration() : AbstractGoldenglowCard(1, CardType.Attack, 
         var basePos = targetNode?.VfxSpawnPosition ?? Vector2.Zero;
         var hits = (int)DynamicVars.Repeat.BaseValue;
 
+        await using var attackContext = await GoldenglowCompat.CreateAttackContextAsync(CombatState!, choiceContext, cardPlay);
+
         var delay = 0f;
         var tasks = new List<Task>();
         for (int i = 0; i < hits; i++)
@@ -37,10 +39,7 @@ public class CurrentAcceleration() : AbstractGoldenglowCard(1, CardType.Attack, 
             var pos = basePos + Vector2.Right.Rotated(MathF.PI + Random.Shared.NextSingle() * MathF.PI) * (200f + Random.Shared.NextSingle() * 200f);
             var vfx = BuoyCardAttackVfx.Create(pos, Owner, target, async () =>
             {
-                await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-                    .FromCardCompat(this, cardPlay)
-                    .Targeting(target)
-                    .Execute(choiceContext);
+                await attackContext.DamageWithHit(choiceContext, target, DynamicVars.Damage.BaseValue, DynamicVars.Damage.Props, Owner.Creature, this, cardPlay);
             }, delay);
 
             if (vfx != null)

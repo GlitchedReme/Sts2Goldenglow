@@ -25,7 +25,7 @@ public class SunkInThought() : AbstractGoldenglowCard(1, CardType.Skill, CardRar
         await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.BaseValue, Owner);
     }
 
-#if STS2_AT_LEAST_109_0
+#if STS2_AT_LEAST_110_0
     protected override CardLocation GetResultLocationForCardPlay()
     {
         var loc = base.GetResultLocationForCardPlay();
